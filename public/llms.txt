@@ -1,0 +1,85 @@
+# AFDE — AI Financial Decision Engine
+> Turn raw business data into validated financial decisions.
+
+AFDE is a financial intelligence application for CFOs, finance teams, and founders. It combines a financial calculation engine with structured AI interpretation, anomaly detection, and an autonomous agent that recommends corrective actions with human approval.
+
+## Key capabilities
+- KPI calculation (revenue, margins, break-even, unit economics)
+- Cash flow analysis (runway, working capital, inventory turns)
+- Anomaly detection (Z-score outliers, business rules, pattern shifts)
+- Revenue forecasting (linear, exponential smoothing, moving average)
+- Budget variance analysis with CFO-style commentary
+- Industry benchmarking (percentile rankings, A-F grading)
+- Covenant monitoring (DSCR, leverage, current ratio)
+- Autonomous agent with human-in-the-loop approval
+- AI financial copilot (question answering from validated data)
+- Configurable notification rules with webhook delivery
+
+## Use cases
+- Monthly financial reporting (95% faster)
+- Channel profitability analysis
+- Break-even sensitivity modeling
+- Cash runway monitoring
+- Budget vs actual variance tracking
+- Debt covenant compliance
+
+## Blog (55 articles)
+- Why Profit Doesn't Equal Cash Flow: https://afde.vercel.app/blog/profit-vs-cash-flow
+- The Dashboard Trap: Why More Data Doesn't Mean Better Decisions: https://afde.vercel.app/blog/dashboard-trap
+- How to Calculate Your Break-Even Point in 5 Minutes: https://afde.vercel.app/blog/break-even-in-5-minutes
+- AI in Finance: Why Interpretation Beats Calculation: https://afde.vercel.app/blog/ai-vs-finance
+- 3 Red Flags Your Business Is Running Out of Cash: https://afde.vercel.app/blog/cash-red-flags
+- El dashboard que todo CEO necesita en 2026: https://afde.vercel.app/blog/dashboard-ceo-2026
+- Herramientas que un CFO moderno debería dominar: https://afde.vercel.app/blog/herramientas-cfo-moderno
+- Forecasting para gerentes financieros: de Excel a la IA: https://afde.vercel.app/blog/forecasting-gerentes-financieros
+- Flujo de caja para emprendedores: guía de supervivencia: https://afde.vercel.app/blog/flujo-caja-emprendedores
+- Automatización de reporting: la tarea que el controller debería delegar: https://afde.vercel.app/blog/automatizacion-reporting-controller
+- Cómo usar una calculadora de punto de equilibrio: https://afde.vercel.app/blog/calculadora-punto-equilibrio
+- Calculadora de flujo de caja: proyecta tu efectivo en minutos: https://afde.vercel.app/blog/calculadora-flujo-caja
+- Simulador de escenarios financieros: cómo prepararte para lo peor: https://afde.vercel.app/blog/simulador-escenarios-financieros
+- ¿Qué es Business Intelligence y por qué tu empresa lo necesita?: https://afde.vercel.app/blog/que-es-business-intelligence
+- Cómo crear un dashboard financiero que realmente sirva: https://afde.vercel.app/blog/crear-dashboard-financiero
+- Ratios financieros que todo dueño de empresa debería conocer: https://afde.vercel.app/blog/ratios-financieros-esenciales
+- Análisis vertical y horizontal: cómo detectar problemas antes de que exploten: https://afde.vercel.app/blog/analisis-vertical-horizontal
+- Utilidad vs flujo de caja: la diferencia que quiebra empresas: https://afde.vercel.app/blog/utilidad-vs-flujo-caja
+- Cómo proyectar tu flujo de efectivo sin errores: https://afde.vercel.app/blog/proyectar-flujo-efectivo
+- Cómo elaborar un presupuesto empresarial en 7 pasos: https://afde.vercel.app/blog/elaborar-presupuesto-empresarial
+- Los 5 errores más comunes al hacer presupuestos: https://afde.vercel.app/blog/errores-comunes-presupuestos
+- Forecasting financiero: cómo predecir ingresos sin ser adivino: https://afde.vercel.app/blog/forecasting-financiero-guia
+- Cómo usar IA para mejorar tus pronósticos financieros: https://afde.vercel.app/blog/ia-para-forecasting-financiero
+- KPIs financieros que todo CEO debe revisar cada semana: https://afde.vercel.app/blog/kpi-ceo-semanal
+- KPIs para startups: métricas que importan antes de levantar capital: https://afde.vercel.app/blog/kpi-startups-metricas
+- Cómo leer un balance general sin ser contador: https://afde.vercel.app/blog/leer-balance-general
+- Estado de resultados: qué te dice y qué te oculta: https://afde.vercel.app/blog/estado-resultados-explicado
+- EBITDA explicado sin tecnicismos: https://afde.vercel.app/blog/ebitda-explicado
+- ROI, ROE y ROA: cómo medir lo que tu dinero produce: https://afde.vercel.app/blog/roi-roe-roa
+- Costos fijos vs variables: el error que distorsiona tus márgenes: https://afde.vercel.app/blog/costos-fijos-variables
+- Costeo ABC: cuando el costeo tradicional ya no alcanza: https://afde.vercel.app/blog/costeo-abc-explicado
+- Cómo la inteligencia artificial está transformando las finanzas: https://afde.vercel.app/blog/ia-transformando-finanzas
+- ¿Puede la IA reemplazar a un analista financiero?: https://afde.vercel.app/blog/ia-reemplazar-analista
+- El dashboard del CFO moderno: qué métricas importan: https://afde.vercel.app/blog/dashboard-cfo-moderno
+- Cómo tomar decisiones financieras basadas en datos: https://afde.vercel.app/blog/decisiones-financieras-datos
+- MRR, ARR, CAC y LTV explicados para founders: https://afde.vercel.app/blog/saas-metrics-explicadas
+- Churn y burn rate: las métricas que matan startups: https://afde.vercel.app/blog/churn-burn-rate-startups
+- Estrategias de pricing: cómo fijar precios sin dejar dinero en la mesa: https://afde.vercel.app/blog/estrategias-pricing
+- Ratios de liquidez y solvencia: cómo saber si tu empresa es sólida: https://afde.vercel.app/blog/ratios-liquidez-solvencia
+- ERP financiero: cómo elegir el software correcto: https://afde.vercel.app/blog/elegir-erp-financiero
+- VAN y TIR explicados en español simple: https://afde.vercel.app/blog/van-tir-explicado
+- Automatización financiera: qué procesos delegar a las máquinas: https://afde.vercel.app/blog/automatizacion-financiera
+- Simulación de escenarios financieros con IA: https://afde.vercel.app/blog/escenarios-financieros-ia
+- KPIs financieros para retail: lo que importa más allá de las ventas: https://afde.vercel.app/blog/kpi-retail
+- Flujo de caja para constructoras: cómo sobrevivir a los ciclos largos: https://afde.vercel.app/blog/flujo-caja-constructoras
+- Rentabilidad en restaurantes: más allá del ticket promedio: https://afde.vercel.app/blog/rentabilidad-restaurantes
+- Dashboard financiero para hoteles: métricas que sí predicen ocupación: https://afde.vercel.app/blog/dashboard-hoteles
+- Cómo medir la rentabilidad real de una clínica: https://afde.vercel.app/blog/rentabilidad-clinicas
+- Burn rate para startups SaaS: cuánto te queda antes de quedarte sin caja: https://afde.vercel.app/blog/burn-rate-saas
+- Costeo en manufactura: del costo estándar al ABC: https://afde.vercel.app/blog/costeo-manufactura
+- Forecast de ventas para e-commerce sin hojas de cálculo infinitas: https://afde.vercel.app/blog/forecast-ecommerce
+- Flujo de caja para inmobiliarias: cómo gestionar cobros impredecibles: https://afde.vercel.app/blog/flujo-caja-inmobiliarias
+- Contabilidad para emprendedores: lo mínimo que necesitas saber: https://afde.vercel.app/blog/contabilidad-emprendedores
+- Costos operativos en transporte: el margen que se te escapa: https://afde.vercel.app/blog/costos-transporte
+- Planificación financiera para agroindustria: estacionalidad y riesgo: https://afde.vercel.app/blog/planificacion-agroindustria
+
+## Links
+- App: https://afde.vercel.app/app
+- Blog: https://afde.vercel.app/blog

@@ -1,0 +1,9 @@
+{
+  "name": "AFDE - AI Financial Decision Engine",
+  "short_name": "AFDE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0e14",
+  "theme_color": "#2d8cf0",
+  "icons": []
+}

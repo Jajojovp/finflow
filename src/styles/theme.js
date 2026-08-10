@@ -1,0 +1,28 @@
+export const THEME = {
+  colors: {
+    bg: '#0B0F19',
+    surface: '#111827',
+    surfaceHover: '#1F2937',
+    border: '#374151',
+    borderLight: '#4B5563',
+    primary: '#3B82F6',
+    primaryLight: '#60A5FA',
+    primaryDark: '#2563EB',
+    success: '#10B981',
+    successLight: '#34D399',
+    danger: '#EF4444',
+    dangerLight: '#F87171',
+    warning: '#F59E0B',
+    warningLight: '#FBBF24',
+    accent: '#8B5CF6',
+    accentLight: '#A78BFA',
+    text: '#F9FAFB',
+    textMuted: '#9CA3AF',
+    textDim: '#6B7280',
+  },
+  fonts: {
+    display: "'Plus Jakarta Sans', sans-serif",
+    body: "'Inter', sans-serif",
+    mono: "'JetBrains Mono', monospace",
+  },
+}

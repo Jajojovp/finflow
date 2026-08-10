@@ -1,0 +1,26 @@
+# AI Crawlers — explicitly allowed for GEO visibility
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# All other crawlers
+User-agent: *
+Allow: /
+Allow: /app
+Allow: /blog
+Disallow: /app#  (prevent fragment URLs)
+
+# Sitemaps
+Sitemap: https://afde.vercel.app/sitemap.xml
+Sitemap: https://afde.vercel.app/blog-sitemap.xml
