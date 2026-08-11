@@ -51,7 +51,7 @@ export default function Dashboard() {
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <MetricCard label="Total revenue" value={kpis.totalRevenue} icon={DollarSign} tone="primary" delta={kpis.revenueGrowth} />
-            <MetricCard label="Net margin" value={kpis.netMargin} format="percent" icon={Percent} tone="success" delta={kpis.marginDelta} />
+            <MetricCard label="Net margin" value={kpis.netMargin} format="percent" icon={Percent} tone="success" delta={kpis.marginDelta} deltaUnit="pp" />
             <MetricCard label="Cash position" value={kpis.cashPosition} icon={Wallet} tone="accent" />
             <MetricCard label="Cash runway" value={kpis.runwayMonths} format="months" icon={TrendingUp} tone="neutral" hint="months at current burn" />
           </div>

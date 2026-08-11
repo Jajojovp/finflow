@@ -56,10 +56,41 @@ export const MathUtils = {
     return { slope, intercept };
   },
 
-  /** Percentage change between two numbers. Guards against divide-by-zero. */
+  /** Percentage change between two numbers. Returns null for degenerate/NaN inputs. */
   pctChange(prev, curr) {
-    if (!Number.isFinite(prev) || prev === 0) return 0;
+    if (!Number.isFinite(prev) || !Number.isFinite(curr) || prev === 0) return null;
     return (curr - prev) / Math.abs(prev);
+  },
+
+  /** Safe division. Returns fallback when denominator is 0, null, or NaN. */
+  safeDivide(numerator, denominator, fallback = null) {
+    if (denominator === 0 || denominator === null || Number.isNaN(denominator)) return fallback;
+    return numerator / denominator;
+  },
+
+  /** t_{0.975} quantile for a given degrees of freedom, with linear interpolation. */
+  studentTQuantile(dof) {
+    const table = {
+      2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 6: 2.447, 7: 2.365,
+      8: 2.306, 9: 2.262, 10: 2.228, 11: 2.201, 12: 2.179, 13: 2.16,
+      14: 2.145, 15: 2.131, 16: 2.12, 17: 2.11, 18: 2.101, 19: 2.093,
+      20: 2.086, 25: 2.06, 30: 2.042, 40: 2.021,
+    };
+    if (dof < 2) return 4.303;
+    if (dof > 40) return 1.96;
+    if (Number.isFinite(dof) && Number.isInteger(dof) && Object.prototype.hasOwnProperty.call(table, dof)) {
+      return table[dof];
+    }
+    const keys = Object.keys(table).map(Number).sort((a, b) => a - b);
+    let lo = keys[0];
+    let hi = keys[keys.length - 1];
+    for (let i = 0; i < keys.length; i++) {
+      if (keys[i] <= dof) lo = keys[i];
+      if (keys[i] >= dof) { hi = keys[i]; break; }
+    }
+    if (lo === hi) return table[lo];
+    const t = (dof - lo) / (hi - lo);
+    return table[lo] + t * (table[hi] - table[lo]);
   },
 
   clamp(value, min, max) {
