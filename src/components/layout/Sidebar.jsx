@@ -14,13 +14,13 @@ export default function Sidebar({ collapsed = false, onNavigate }) {
   return (
     <aside
       className={clsx(
-        'h-full bg-bg-surface border-r border-border flex flex-col transition-all duration-200',
+        'h-full bg-bg-surface border-r border-border flex flex-col transition-[width] duration-200',
         collapsed ? 'w-16' : 'w-56',
       )}
       aria-label="Primary navigation"
     >
       <div className="h-16 flex items-center gap-2 px-4 border-b border-border shrink-0">
-        <span className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-sm shrink-0">
+        <span className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-black font-bold text-sm shrink-0">
           F
         </span>
         {!collapsed && <span className="font-display font-bold text-text tracking-tight">FinFlow</span>}
@@ -36,7 +36,7 @@ export default function Sidebar({ collapsed = false, onNavigate }) {
               onClick={onNavigate}
               className={({ isActive }) =>
                 clsx(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                  'min-h-11 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                   isActive
                     ? 'bg-primary/10 text-primary-light border border-primary/30'
                     : 'text-text-muted hover:text-text hover:bg-bg-hover border border-transparent',

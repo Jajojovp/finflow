@@ -17,10 +17,6 @@ Allow: /
 # All other crawlers
 User-agent: *
 Allow: /
-Allow: /app
-Allow: /blog
-Disallow: /app#  (prevent fragment URLs)
 
 # Sitemaps
-Sitemap: https://afde.vercel.app/sitemap.xml
-Sitemap: https://afde.vercel.app/blog-sitemap.xml
+Sitemap: https://finflow-jajojovps-projects.vercel.app/sitemap.xml

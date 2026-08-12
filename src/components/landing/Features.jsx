@@ -1,6 +1,6 @@
 import React from 'react';
 import { Calculator, Waves, TrendingUp, AlertTriangle, Bot, Bell } from 'lucide-react';
-import Card from '../ui/Card';
+import FadeIn from '../animations/FadeIn';
 
 const FEATURES = [
   {
@@ -35,30 +35,46 @@ const FEATURES = [
   },
 ];
 
+/**
+ * Features — Dark Luxe grid of FinFlow capabilities.
+ *
+ * Six glass-surface cards with gold icon tiles that invert to a solid gold
+ * fill on hover, plus a soft gold glow. Header carries a mono eyebrow, the
+ * real section title and subtitle.
+ *
+ * @returns {import('react').ReactElement}
+ */
 export default function Features() {
   return (
-    <section id="features" className="bg-bg py-20 sm:py-24">
+    <section id="features" aria-labelledby="features-title" className="bg-bg py-24 lg:py-28">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="font-display font-bold text-text text-3xl sm:text-4xl">
+        <FadeIn className="text-center max-w-2xl mx-auto mb-14">
+          <p className="text-primary font-mono text-xs uppercase tracking-[0.2em] mb-3">
+            Capabilities
+          </p>
+          <h2 id="features-title" className="font-display font-bold text-text text-3xl sm:text-4xl">
             Everything a modern finance team needs
           </h2>
           <p className="mt-4 text-text-muted">
             One platform from raw transactions to executive-grade decisions — without spreadsheets sprawl.
           </p>
-        </div>
+        </FadeIn>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {FEATURES.map((f) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+          {FEATURES.map((f, i) => {
             const Icon = f.icon;
             return (
-              <Card key={f.title} hover className="group">
-                <span className="inline-flex w-10 h-10 rounded-lg bg-primary/10 text-primary-light items-center justify-center mb-3 group-hover:bg-primary group-hover:text-white transition-colors">
-                  <Icon size={20} />
-                </span>
-                <h3 className="font-display font-semibold text-text text-base mb-1">{f.title}</h3>
-                <p className="text-sm text-text-muted">{f.description}</p>
-              </Card>
+              <FadeIn key={f.title} delay={i * 100} duration={800} className="h-full">
+                <div className="h-full rounded-2xl border border-border bg-bg-surface p-6 transition-all duration-300 group hover:border-primary/40 hover:shadow-glow-primary/20">
+                  <span className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center transition-colors duration-300 group-hover:bg-primary/20 group-hover:text-primary-light">
+                    <Icon size={20} aria-hidden="true" />
+                  </span>
+                  <h3 className="font-display font-semibold text-text text-base mt-4">
+                    {f.title}
+                  </h3>
+                  <p className="text-sm text-text-muted mt-1.5">{f.description}</p>
+                </div>
+              </FadeIn>
             );
           })}
         </div>

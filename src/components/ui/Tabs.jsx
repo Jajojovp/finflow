@@ -25,9 +25,9 @@ export function Tabs({ tabs, defaultIndex = 0, onChange, className, tabClassName
             aria-selected={active === index}
             onClick={() => select(index)}
             className={clsx(
-              'px-3 py-1.5 text-sm font-medium rounded-md transition-colors whitespace-nowrap',
+              'min-h-11 px-3 py-1.5 text-sm font-medium rounded-md transition-colors whitespace-nowrap',
               active === index
-                ? 'bg-primary text-white'
+                ? 'bg-primary text-black'
                 : 'text-text-muted hover:text-text hover:bg-bg-hover',
               tabClassName,
             )}

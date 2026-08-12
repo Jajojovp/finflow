@@ -1,0 +1,679 @@
+{
+  "generatedAt": "2026-08-12T00:40:22.786Z",
+  "baseUrl": "http://localhost:4173/",
+  "viewports": {
+    "mobile-iphone-se": {
+      "width": 375,
+      "height": 812,
+      "navMs": 3104,
+      "status": 200,
+      "overflowX": 0,
+      "fullScrollH": 5166,
+      "consoleErrors": [],
+      "a11y": {
+        "hasMain": true,
+        "h1Count": 1,
+        "h1Text": "Turn raw data intoconfident financial decisions",
+        "headingLevels": 17,
+        "navLandmarkLabel": "Main navigation",
+        "navInteractive": [
+          {
+            "tag": "a",
+            "label": "FinFlow home",
+            "href": "/"
+          },
+          {
+            "tag": "a",
+            "label": "Features",
+            "href": "#features"
+          },
+          {
+            "tag": "a",
+            "label": "How it works",
+            "href": "#how-it-works"
+          },
+          {
+            "tag": "a",
+            "label": "Dashboard",
+            "href": "/dashboard"
+          },
+          {
+            "tag": "a",
+            "label": "Open appOpen app",
+            "href": "/dashboard"
+          },
+          {
+            "tag": "button",
+            "label": "Toggle menu",
+            "href": null
+          }
+        ],
+        "interactiveWithoutName": 0,
+        "hasVideo": false,
+        "videoReadyState": null,
+        "videoPaused": null,
+        "hasToggle": true,
+        "toggleVisible": true
+      },
+      "perf": {
+        "ttfb": 15,
+        "domContentLoaded": 3850,
+        "loadEventEnd": 3870,
+        "transferSize": 887,
+        "encodedBodySize": 587,
+        "lcp": 10540,
+        "lcpInfo": {
+          "startTime": 10540,
+          "size": 29532,
+          "url": null,
+          "tag": "p",
+          "className": "mt-6 text-text-muted text-base sm:text-lg max-w-xl",
+          "rect": {
+            "w": 327,
+            "h": 96
+          }
+        },
+        "lcpEntries": [
+          {
+            "startTime": 7356,
+            "size": 750,
+            "url": null,
+            "tag": "span",
+            "className": "font-display font-semibold tracking-tight leading-none text-sm",
+            "rect": {
+              "w": 47,
+              "h": 14
+            }
+          },
+          {
+            "startTime": 10540,
+            "size": 29532,
+            "url": null,
+            "tag": "p",
+            "className": "mt-6 text-text-muted text-base sm:text-lg max-w-xl",
+            "rect": {
+              "w": 327,
+              "h": 96
+            }
+          }
+        ],
+        "clsAvgFixed": 0,
+        "inpMax": 0
+      },
+      "screenshots": {
+        "viewport": "landing-mobile-iphone-se-375x812.png",
+        "full": "landing-mobile-iphone-se-375x812-full.png"
+      }
+    },
+    "tablet-ipad": {
+      "width": 768,
+      "height": 1024,
+      "navMs": 1533,
+      "status": 200,
+      "overflowX": 0,
+      "fullScrollH": 3859,
+      "consoleErrors": [],
+      "a11y": {
+        "hasMain": true,
+        "h1Count": 1,
+        "h1Text": "Turn raw data intoconfident financial decisions",
+        "headingLevels": 17,
+        "navLandmarkLabel": "Main navigation",
+        "navInteractive": [
+          {
+            "tag": "a",
+            "label": "FinFlow home",
+            "href": "/"
+          },
+          {
+            "tag": "a",
+            "label": "Features",
+            "href": "#features"
+          },
+          {
+            "tag": "a",
+            "label": "How it works",
+            "href": "#how-it-works"
+          },
+          {
+            "tag": "a",
+            "label": "Dashboard",
+            "href": "/dashboard"
+          },
+          {
+            "tag": "a",
+            "label": "Open appOpen app",
+            "href": "/dashboard"
+          },
+          {
+            "tag": "button",
+            "label": "Toggle menu",
+            "href": null
+          }
+        ],
+        "interactiveWithoutName": 0,
+        "hasVideo": false,
+        "videoReadyState": null,
+        "videoPaused": null,
+        "hasToggle": true,
+        "toggleVisible": true
+      },
+      "perf": {
+        "ttfb": 11,
+        "domContentLoaded": 460,
+        "loadEventEnd": 460,
+        "transferSize": 887,
+        "encodedBodySize": 587,
+        "lcp": 5612,
+        "lcpInfo": {
+          "startTime": 5612,
+          "size": 45924,
+          "url": null,
+          "tag": "h2",
+          "className": "font-display font-extrabold text-text text-3xl sm:text-4xl",
+          "rect": {
+            "w": 638,
+            "h": 80
+          }
+        },
+        "lcpEntries": [
+          {
+            "startTime": 876,
+            "size": 1120,
+            "url": null,
+            "tag": "a",
+            "className": "hidden md:inline-flex min-h-11 items-center text-text-muted hover:text-text tran",
+            "rect": {
+              "w": 69,
+              "h": 44
+            }
+          },
+          {
+            "startTime": 5612,
+            "size": 45924,
+            "url": null,
+            "tag": "h2",
+            "className": "font-display font-extrabold text-text text-3xl sm:text-4xl",
+            "rect": {
+              "w": 638,
+              "h": 80
+            }
+          }
+        ],
+        "clsAvgFixed": 0,
+        "inpMax": 0
+      },
+      "screenshots": {
+        "viewport": "landing-tablet-ipad-768x1024.png",
+        "full": "landing-tablet-ipad-768x1024-full.png"
+      }
+    },
+    "laptop": {
+      "width": 1024,
+      "height": 768,
+      "navMs": 1967,
+      "status": 200,
+      "overflowX": 0,
+      "fullScrollH": 3315,
+      "consoleErrors": [],
+      "a11y": {
+        "hasMain": true,
+        "h1Count": 1,
+        "h1Text": "Turn raw data intoconfident financial decisions",
+        "headingLevels": 17,
+        "navLandmarkLabel": "Main navigation",
+        "navInteractive": [
+          {
+            "tag": "a",
+            "label": "FinFlow home",
+            "href": "/"
+          },
+          {
+            "tag": "a",
+            "label": "Features",
+            "href": "#features"
+          },
+          {
+            "tag": "a",
+            "label": "How it works",
+            "href": "#how-it-works"
+          },
+          {
+            "tag": "a",
+            "label": "Dashboard",
+            "href": "/dashboard"
+          },
+          {
+            "tag": "a",
+            "label": "Open appOpen app",
+            "href": "/dashboard"
+          },
+          {
+            "tag": "button",
+            "label": "Toggle menu",
+            "href": null
+          }
+        ],
+        "interactiveWithoutName": 0,
+        "hasVideo": true,
+        "videoReadyState": 4,
+        "videoPaused": false,
+        "hasToggle": true,
+        "toggleVisible": false
+      },
+      "perf": {
+        "ttfb": 11,
+        "domContentLoaded": 258,
+        "loadEventEnd": 258,
+        "transferSize": 887,
+        "encodedBodySize": 587,
+        "lcp": 7772,
+        "lcpInfo": {
+          "startTime": 7772,
+          "size": 20001,
+          "url": null,
+          "tag": "p",
+          "className": "text-sm text-text-muted mt-1.5",
+          "rect": {
+            "w": 182,
+            "h": 60
+          }
+        },
+        "lcpEntries": [
+          {
+            "startTime": 656,
+            "size": 1280,
+            "url": null,
+            "tag": "a",
+            "className": "inline-flex min-h-11 items-center text-text-muted hover:text-text transition-col",
+            "rect": {
+              "w": 79,
+              "h": 44
+            }
+          },
+          {
+            "startTime": 7772,
+            "size": 20001,
+            "url": null,
+            "tag": "p",
+            "className": "text-sm text-text-muted mt-1.5",
+            "rect": {
+              "w": 182,
+              "h": 60
+            }
+          }
+        ],
+        "clsAvgFixed": 0.0002,
+        "inpMax": 0
+      },
+      "screenshots": {
+        "viewport": "landing-laptop-1024x768.png",
+        "full": "landing-laptop-1024x768-full.png"
+      }
+    },
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "navMs": 2403,
+      "status": 200,
+      "overflowX": 0,
+      "fullScrollH": 3407,
+      "consoleErrors": [],
+      "a11y": {
+        "hasMain": true,
+        "h1Count": 1,
+        "h1Text": "Turn raw data intoconfident financial decisions",
+        "headingLevels": 17,
+        "navLandmarkLabel": "Main navigation",
+        "navInteractive": [
+          {
+            "tag": "a",
+            "label": "FinFlow home",
+            "href": "/"
+          },
+          {
+            "tag": "a",
+            "label": "Features",
+            "href": "#features"
+          },
+          {
+            "tag": "a",
+            "label": "How it works",
+            "href": "#how-it-works"
+          },
+          {
+            "tag": "a",
+            "label": "Dashboard",
+            "href": "/dashboard"
+          },
+          {
+            "tag": "a",
+            "label": "Open appOpen app",
+            "href": "/dashboard"
+          },
+          {
+            "tag": "button",
+            "label": "Toggle menu",
+            "href": null
+          }
+        ],
+        "interactiveWithoutName": 0,
+        "hasVideo": true,
+        "videoReadyState": 4,
+        "videoPaused": false,
+        "hasToggle": true,
+        "toggleVisible": false
+      },
+      "perf": {
+        "ttfb": 10,
+        "domContentLoaded": 236,
+        "loadEventEnd": 237,
+        "transferSize": 887,
+        "encodedBodySize": 587,
+        "lcp": 6360,
+        "lcpInfo": {
+          "startTime": 6360,
+          "size": 33150,
+          "url": null,
+          "tag": "h2",
+          "className": "font-display font-bold text-text text-3xl sm:text-4xl",
+          "rect": {
+            "w": 672,
+            "h": 40
+          }
+        },
+        "lcpEntries": [
+          {
+            "startTime": 1420,
+            "size": 1280,
+            "url": null,
+            "tag": "a",
+            "className": "inline-flex min-h-11 items-center text-text-muted hover:text-text transition-col",
+            "rect": {
+              "w": 79,
+              "h": 44
+            }
+          },
+          {
+            "startTime": 6360,
+            "size": 33150,
+            "url": null,
+            "tag": "h2",
+            "className": "font-display font-bold text-text text-3xl sm:text-4xl",
+            "rect": {
+              "w": 672,
+              "h": 40
+            }
+          }
+        ],
+        "clsAvgFixed": 0.0001,
+        "inpMax": 0
+      },
+      "screenshots": {
+        "viewport": "landing-desktop-1440x900.png",
+        "full": "landing-desktop-1440x900-full.png"
+      }
+    }
+  },
+  "anchors": {
+    "features": {
+      "found": true,
+      "tag": "SECTION",
+      "offsetTopBefore": 900,
+      "visibleTopAfter": 0,
+      "inViewport": true,
+      "click": {
+        "attempted": true,
+        "after": {
+          "hash": "#features",
+          "scrollY": 900
+        },
+        "targetAfterClick": {
+          "top": 0,
+          "inViewport": true
+        }
+      }
+    },
+    "how-it-works": {
+      "found": true,
+      "tag": "SECTION",
+      "offsetTopBefore": 1696,
+      "visibleTopAfter": 0,
+      "inViewport": true,
+      "click": {
+        "attempted": true,
+        "after": {
+          "hash": "#how-it-works",
+          "scrollY": 1696
+        },
+        "targetAfterClick": {
+          "top": 0,
+          "inViewport": true
+        }
+      }
+    }
+  },
+  "routes": {
+    "dashboard": {
+      "foundLinks": [
+        {
+          "label": "Dashboard",
+          "visible": true
+        },
+        {
+          "label": "Open appOpen app",
+          "visible": true
+        },
+        {
+          "label": "Open the appOpen the app",
+          "visible": true
+        },
+        {
+          "label": "Get started freeGet started fr",
+          "visible": true
+        },
+        {
+          "label": "Dashboard",
+          "visible": true
+        }
+      ],
+      "clickedIdx": 0,
+      "errorsBefore": [],
+      "after": {
+        "url": "http://localhost:4173/dashboard",
+        "hasMain": false,
+        "title": "FinFlow — Financial Intelligence",
+        "bodyText": "FFinFlowDashboardAnalysisForecastSettingsFinFlow v2.0DashboardACFinancial overviewLatest KPIs, cash flow trend and monthly performance.ExportTotal revenue$7,284,000.007.2%Net margin32.96%2.2ppCash pos"
+      },
+      "errorsAfter": []
+    }
+  },
+  "reducedMotion": {
+    "matchesReducedMotion": true,
+    "hasVideo": false,
+    "heroBgColor": "rgb(5, 5, 5)",
+    "heroBackground": "none"
+  },
+  "keyboard": {
+    "focusTrace": [
+      {
+        "tag": "a",
+        "label": "FinFlow home",
+        "href": "/",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(245, 197, 24)",
+        "boxShadow": "none",
+        "hasVisibleOutline": true,
+        "hasVisibleRingBox": false,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "button",
+        "label": "Toggle menu",
+        "href": null,
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "rgb(5, 5, 5) 0px 0px 0px 2px, rgb(245, 197, 24) 0px 0px 0px ",
+        "hasVisibleOutline": false,
+        "hasVisibleRingBox": true,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "a",
+        "label": "Open the appOpen the app",
+        "href": "/dashboard",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "rgba(5, 5, 5, 0.176) 0px 0px 0px 0.351216px, rgba(245, 197, ",
+        "hasVisibleOutline": false,
+        "hasVisibleRingBox": true,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "a",
+        "label": "See how it worksSee how it works",
+        "href": "#features",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "rgb(5, 5, 5) 0px 0px 0px 2px, rgb(245, 197, 24) 0px 0px 0px ",
+        "hasVisibleOutline": false,
+        "hasVisibleRingBox": true,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "a",
+        "label": "Get started freeGet started free",
+        "href": "/dashboard",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "rgba(5, 5, 5, 0.173) 0px 0px 0px 0.348529px, rgba(245, 197, ",
+        "hasVisibleOutline": false,
+        "hasVisibleRingBox": true,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "a",
+        "label": "See forecastingSee forecasting",
+        "href": "/forecast",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgba(0, 0, 0, 0)",
+        "boxShadow": "rgb(5, 5, 5) 0px 0px 0px 2px, rgb(245, 197, 24) 0px 0px 0px ",
+        "hasVisibleOutline": false,
+        "hasVisibleRingBox": true,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "a",
+        "label": "FinFlow home",
+        "href": "/",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(245, 197, 24)",
+        "boxShadow": "none",
+        "hasVisibleOutline": true,
+        "hasVisibleRingBox": false,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "a",
+        "label": "Go to Dashboard",
+        "href": "/dashboard",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(245, 197, 24)",
+        "boxShadow": "none",
+        "hasVisibleOutline": true,
+        "hasVisibleRingBox": false,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "a",
+        "label": "Go to Analysis",
+        "href": "/analysis",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(245, 197, 24)",
+        "boxShadow": "none",
+        "hasVisibleOutline": true,
+        "hasVisibleRingBox": false,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "a",
+        "label": "Go to Forecast",
+        "href": "/forecast",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(245, 197, 24)",
+        "boxShadow": "none",
+        "hasVisibleOutline": true,
+        "hasVisibleRingBox": false,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "a",
+        "label": "Go to Settings",
+        "href": "/settings",
+        "offsetParent": true,
+        "outlineStyle": "solid",
+        "outlineWidth": "2px",
+        "outlineColor": "rgb(245, 197, 24)",
+        "boxShadow": "none",
+        "hasVisibleOutline": true,
+        "hasVisibleRingBox": false,
+        "hasVisibleFocus": true
+      },
+      {
+        "tag": "body",
+        "label": "FinFlowFeaturesHow it worksDashboardOpen",
+        "href": null,
+        "offsetParent": false,
+        "outlineStyle": "none",
+        "outlineWidth": "3px",
+        "outlineColor": "rgb(250, 250, 247)",
+        "boxShadow": "none",
+        "hasVisibleOutline": false,
+        "hasVisibleRingBox": false,
+        "hasVisibleFocus": false
+      }
+    ],
+    "trapHit": false,
+    "toggleBefore": true,
+    "afterOpen": {
+      "menuVisible": true,
+      "expanded": "true",
+      "menuLinks": [
+        "Features",
+        "How it works",
+        "Dashboard",
+        "Open appOpen app"
+      ]
+    },
+    "afterEscape": {
+      "menuVisible": false,
+      "expanded": "false"
+    },
+    "afterToggleClose": {
+      "menuVisible": true,
+      "expanded": "true",
+      "menuPresent": true
+    }
+  },
+  "axe": "NOT_RUN"
+}

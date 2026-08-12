@@ -27,7 +27,7 @@ FinFlow unifies KPI calculation, cash-flow analysis, forecasting, anomaly detect
 ┌─────────────────────────────────────────────────────────────┐
 │                        FinFlow                              │
 ├─────────────────────────────────────────────────────────────┤
-│  FRONTEND (React 18 + Vite 5 + Tailwind)                   │
+│  FRONTEND (React 18 + Vite 6.4 + Tailwind)                 │
 │  ├─ Landing (marketing)                                     │
 │  ├─ Dashboard (KPIs · charts · cash position)               │
 │  ├─ Analysis  (anomalies · benchmarks · variances)          │
@@ -117,9 +117,10 @@ src/
 
 ---
 
-## 🎨 Design System
+## 🎨 Design System — Dark Luxe
 
-- **Dark-first fintech theme** — deep navy `#0B0F19` background
+- **Dark Luxe fintech theme** — deep premium aesthetic with rich shadows, subtle gradients, and refined spatial hierarchy
+- **Dark-first** — deep navy `#0B0F19` background with layered surface tones
 - **Electric blue primary** `#3B82F6` for trust and action
 - **Typography** — Plus Jakarta Sans (display) · Inter (body) · JetBrains Mono (data)
 - **Accessible** — WCAG 2.2 AA contrast, focus-visible rings, reduced-motion support
@@ -147,8 +148,8 @@ vercel --prod
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 18 · React Router 6 |
-| Build | Vite 5 · Tailwind CSS 3 |
+| Frontend | React 18 · React Router 7 |
+| Build | Vite 6.4 · Tailwind CSS 3 |
 | Charts | Recharts 2 |
 | Icons | Lucide React |
 | Utilities | clsx · date-fns |

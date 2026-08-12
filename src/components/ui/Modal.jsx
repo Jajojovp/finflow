@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import clsx from 'clsx';
@@ -21,32 +21,41 @@ export default function Modal({
   closeOnBackdrop = true,
   className,
 }) {
+  const dialogRef = useRef(null);
+
   useEffect(() => {
-    if (!open) return;
-    const onKey = (e) => {
-      if (e.key === 'Escape') onClose?.();
-    };
-    document.addEventListener('keydown', onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [open, onClose]);
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (open) {
+      if (!dialog.open) dialog.showModal();
+      document.body.style.overflow = 'hidden';
+    } else {
+      if (dialog.open) dialog.close();
+      document.body.style.overflow = '';
+    }
+  }, [open]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const handleClose = () => onClose?.();
+    dialog.addEventListener('close', handleClose);
+    return () => dialog.removeEventListener('close', handleClose);
+  }, [onClose]);
 
   if (!open) return null;
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in"
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={dialogRef}
       aria-label={title}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in bg-transparent [&::backdrop]:bg-black/60 [&::backdrop]:backdrop-blur-sm"
     >
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+      <button
+        type="button"
+        className="absolute inset-0 w-full h-full cursor-default"
         onClick={closeOnBackdrop ? onClose : undefined}
+        aria-label="Close modal"
       />
       <div
         className={clsx(
@@ -73,7 +82,7 @@ export default function Modal({
         <div className="flex-1 overflow-y-auto p-5">{children}</div>
         {footer && <div className="flex items-center justify-end gap-3 p-5 border-t border-border">{footer}</div>}
       </div>
-    </div>,
+    </dialog>,
     document.body,
   );
 }

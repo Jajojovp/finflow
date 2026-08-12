@@ -43,8 +43,6 @@ class EventBusClass {
       try {
         handler(payload);
       } catch (err) {
-        // Never let one handler break the bus.
-        // eslint-disable-next-line no-console
         console.error(`[EventBus] handler error for "${event}":`, err);
       }
     }

@@ -32,7 +32,7 @@ export default function Analysis() {
       {!isMobile && <Sidebar />}
       {isMobile && sidebarOpen && (
         <div className="fixed inset-0 z-40 flex">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setSidebarOpen(false)} />
+          <button type="button" className="absolute inset-0 bg-black/60 w-full h-full" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar" />
           <div className="relative"><Sidebar onNavigate={() => setSidebarOpen(false)} /></div>
         </div>
       )}

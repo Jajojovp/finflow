@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" role="img" aria-label="FinFlow financial intelligence dashboard visualization">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17130a"/>
+      <stop offset="0.55" stop-color="#080808"/>
+      <stop offset="1" stop-color="#050505"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#c9a200"/>
+      <stop offset="1" stop-color="#ffdf4d"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <path d="M0 870 C300 760 450 900 720 770 S1180 560 1450 700 S1730 780 1920 610" fill="none" stroke="#f5c518" stroke-opacity=".22" stroke-width="8"/>
+  <path d="M0 930 C300 820 470 960 760 830 S1190 650 1460 770 S1760 850 1920 700" fill="none" stroke="url(#gold)" stroke-opacity=".55" stroke-width="4"/>
+  <circle cx="1450" cy="700" r="12" fill="#ffdf4d"/>
+</svg>

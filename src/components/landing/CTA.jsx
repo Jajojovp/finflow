@@ -1,36 +1,37 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
-import Button from '../ui/Button';
+import FadeIn from '../animations/FadeIn';
+import TextRollButton from './TextRollButton';
 
+/**
+ * CTA — Dark Luxe closing call-to-action.
+ *
+ * A rounded gold-tinted card with the real FinFlow pitch, primary "Get
+ * started free" action and a secondary glass link into the forecast demo.
+ *
+ * @returns {import('react').ReactElement}
+ */
 export default function CTA() {
   return (
-    <section className="bg-bg py-20 sm:py-24">
+    <section aria-labelledby="cta-title" className="bg-bg py-24 lg:py-28">
       <div className="max-w-5xl mx-auto px-6">
-        <div className="relative overflow-hidden rounded-2xl gradient-primary p-10 sm:p-14 text-center">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.15),transparent_50%)] pointer-events-none" />
-          <div className="relative">
-            <h2 className="font-display font-extrabold text-white text-3xl sm:text-4xl">
+        <FadeIn duration={1000}>
+          <div className="rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-bg-surface to-bg-surface p-8 sm:p-10 lg:p-16 text-center shadow-glow-primary/30">
+            <h2 id="cta-title" className="font-display font-extrabold text-text text-3xl sm:text-4xl">
               Start making confident financial decisions
             </h2>
-            <p className="mt-4 text-white/90 max-w-xl mx-auto">
+            <p className="mt-4 text-text-muted max-w-xl mx-auto">
               Join the FinFlow beta and replace spreadsheet chaos with one source of truth.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link to="/dashboard">
-                <Button size="lg" variant="secondary" className="w-full sm:w-auto">
-                  Get started free
-                  <ArrowRight size={18} />
-                </Button>
-              </Link>
-              <Link to="/forecast">
-                <Button size="lg" variant="ghost" className="w-full sm:w-auto text-white hover:bg-white/10">
-                  See forecasting
-                </Button>
-              </Link>
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <TextRollButton variant="primary" href="/dashboard">
+                Get started free
+              </TextRollButton>
+              <TextRollButton variant="glass" href="/forecast">
+                See forecasting
+              </TextRollButton>
             </div>
           </div>
-        </div>
+        </FadeIn>
       </div>
     </section>
   );

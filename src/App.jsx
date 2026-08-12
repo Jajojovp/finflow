@@ -1,8 +1,8 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import Landing from './pages/Landing';
 
-const Landing = lazy(() => import('./pages/Landing'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Analysis = lazy(() => import('./pages/Analysis'));
 const Forecast = lazy(() => import('./pages/Forecast'));

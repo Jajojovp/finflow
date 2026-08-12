@@ -69,7 +69,6 @@ class NotificationServiceClass {
       try {
         channel.send(record);
       } catch (err) {
-        // eslint-disable-next-line no-console
         console.error('[NotificationService] channel error:', err);
       }
     }
