@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://finflow-jajojovps-projects.vercel.app/</loc>
+    <loc>https://afde-complete.vercel.app/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://finflow-jajojovps-projects.vercel.app/dashboard</loc>
+    <loc>https://afde-complete.vercel.app/dashboard</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://finflow-jajojovps-projects.vercel.app/analysis</loc>
+    <loc>https://afde-complete.vercel.app/analysis</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://finflow-jajojovps-projects.vercel.app/forecast</loc>
+    <loc>https://afde-complete.vercel.app/forecast</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://finflow-jajojovps-projects.vercel.app/settings</loc>
+    <loc>https://afde-complete.vercel.app/settings</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

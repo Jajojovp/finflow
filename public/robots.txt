@@ -19,4 +19,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://finflow-jajojovps-projects.vercel.app/sitemap.xml
+Sitemap: https://afde-complete.vercel.app/sitemap.xml
