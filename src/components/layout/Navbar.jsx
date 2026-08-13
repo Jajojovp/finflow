@@ -11,7 +11,12 @@ const TITLES = {
   '/settings': 'Settings',
 };
 
-export default function Navbar({ onMenuClick }) {
+/**
+ * Navbar — top bar with page title, search and notification icons.
+ *
+ * @param {{ onMenuClick?: () => void, menuTriggerRef?: React.RefObject }} props
+ */
+export default function Navbar({ onMenuClick, menuTriggerRef }) {
   const location = useLocation();
   const isMobile = useIsMobile();
   const title = TITLES[location.pathname] || 'FinFlow';
@@ -21,6 +26,7 @@ export default function Navbar({ onMenuClick }) {
       <div className="flex items-center gap-3">
         {isMobile && (
           <button
+            ref={menuTriggerRef}
             type="button"
             onClick={onMenuClick}
             aria-label="Open menu"

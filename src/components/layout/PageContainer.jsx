@@ -1,10 +1,16 @@
 import React from 'react';
 import clsx from 'clsx';
 
+/**
+ * PageContainer — standard wrapper for internal pages.
+ * Provides heading, description, optional action bar, and main-content landmark for skip link.
+ *
+ * @param {{ title?: string, description?: string, actions?: import('react').ReactNode, children: import('react').ReactNode, className?: string, maxWidth?: string }} props
+ */
 export default function PageContainer({ title, description, actions, children, className, maxWidth = 'full' }) {
   const widthClass = maxWidth === 'full' ? 'w-full' : 'max-w-4xl mx-auto';
   return (
-    <div className={clsx('px-4 sm:px-6 py-6', widthClass, className)}>
+    <main id="main-content" tabIndex={-1} className={clsx('px-4 sm:px-6 py-6 outline-none', widthClass, className)}>
       {(title || actions) && (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
@@ -15,6 +21,6 @@ export default function PageContainer({ title, description, actions, children, c
         </div>
       )}
       {children}
-    </div>
+    </main>
   );
 }

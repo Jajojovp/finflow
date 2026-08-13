@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Bell, Bot, Database, Shield } from 'lucide-react';
 import Sidebar from '../components/layout/Sidebar';
 import Navbar from '../components/layout/Navbar';
@@ -20,20 +20,23 @@ export default function Settings() {
     forecastRisks: false,
     weeklyDigest: true,
   });
+  const menuTriggerRef = useRef(null);
 
   const toggle = (key) => setNotifications((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  const handleSidebarClose = useCallback(() => {
+    setSidebarOpen(false);
+    menuTriggerRef.current?.focus();
+  }, []);
 
   return (
     <div className="min-h-screen bg-bg flex">
       {!isMobile && <Sidebar />}
-      {isMobile && sidebarOpen && (
-        <div className="fixed inset-0 z-40 flex">
-          <button type="button" className="absolute inset-0 bg-black/60 w-full h-full" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar" />
-          <div className="relative"><Sidebar onNavigate={() => setSidebarOpen(false)} /></div>
-        </div>
+      {isMobile && (
+        <Sidebar open={sidebarOpen} onClose={handleSidebarClose} />
       )}
       <div className="flex-1 min-w-0 flex flex-col">
-        <Navbar onMenuClick={() => setSidebarOpen(true)} />
+        <Navbar onMenuClick={() => setSidebarOpen(true)} menuTriggerRef={menuTriggerRef} />
         <PageContainer title="Settings" description="Company profile, notifications and agent configuration.">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <Card>

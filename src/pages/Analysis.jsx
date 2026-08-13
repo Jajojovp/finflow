@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef, useCallback } from 'react';
 import { AlertTriangle, Activity, Gauge } from 'lucide-react';
 import Sidebar from '../components/layout/Sidebar';
 import Navbar from '../components/layout/Navbar';
@@ -20,6 +20,7 @@ export default function Analysis() {
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [tab, setTab] = useState(0);
+  const menuTriggerRef = useRef(null);
 
   const anomalies = useMemo(() => AnomalyService.detect(MONTHLY_FINANCIALS), []);
   const benchmarks = useMemo(() => BenchmarkService.compare(MONTHLY_FINANCIALS, INDUSTRY_BENCHMARKS), []);
@@ -27,17 +28,19 @@ export default function Analysis() {
 
   const anomalyCount = anomalies.filter((a) => a.severity !== 'info').length;
 
+  const handleSidebarClose = useCallback(() => {
+    setSidebarOpen(false);
+    menuTriggerRef.current?.focus();
+  }, []);
+
   return (
     <div className="min-h-screen bg-bg flex">
       {!isMobile && <Sidebar />}
-      {isMobile && sidebarOpen && (
-        <div className="fixed inset-0 z-40 flex">
-          <button type="button" className="absolute inset-0 bg-black/60 w-full h-full" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar" />
-          <div className="relative"><Sidebar onNavigate={() => setSidebarOpen(false)} /></div>
-        </div>
+      {isMobile && (
+        <Sidebar open={sidebarOpen} onClose={handleSidebarClose} />
       )}
       <div className="flex-1 min-w-0 flex flex-col">
-        <Navbar onMenuClick={() => setSidebarOpen(true)} />
+        <Navbar onMenuClick={() => setSidebarOpen(true)} menuTriggerRef={menuTriggerRef} />
         <PageContainer
           title="Financial analysis"
           description="Anomalies, benchmark gaps and budget variances side by side."

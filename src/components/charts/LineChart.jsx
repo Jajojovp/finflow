@@ -10,8 +10,7 @@ import {
   Legend,
 } from 'recharts';
 import { fmt } from '../../utils/formatters';
-
-const PALETTE = ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444'];
+import { CHART_COLORS, SERIES_PALETTE } from '../../utils/chartTokens';
 
 function ChartTooltip({ active, payload, label, valueFormatter }) {
   if (!active || !payload?.length) return null;
@@ -46,7 +45,7 @@ export default function LineChart({
       type={curve}
       dataKey={s.key}
       name={s.name || s.key}
-      stroke={s.color || PALETTE[i % PALETTE.length]}
+      stroke={s.color || SERIES_PALETTE[i % SERIES_PALETTE.length]}
       strokeWidth={2}
       dot={showDots ? { r: 3 } : false}
       activeDot={{ r: 5 }}
@@ -57,10 +56,10 @@ export default function LineChart({
   return (
     <ResponsiveContainer width="100%" height={height}>
       <RLineChart data={data} margin={{ top: 8, right: 12, bottom: 4, left: 4 }}>
-        {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={false} />}
-        <XAxis dataKey={xKey} stroke="#6B7280" tick={{ fontSize: 12 }} tickLine={false} axisLine={false} />
-        <YAxis stroke="#6B7280" tick={{ fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={valueFormatter} width={64} />
-        <Tooltip content={<ChartTooltip valueFormatter={valueFormatter} />} cursor={{ stroke: '#374151', strokeWidth: 1 }} />
+        {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} vertical={false} />}
+        <XAxis dataKey={xKey} stroke={CHART_COLORS.axis} tick={{ fontSize: 12 }} tickLine={false} axisLine={false} />
+        <YAxis stroke={CHART_COLORS.axis} tick={{ fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={valueFormatter} width={64} />
+        <Tooltip content={<ChartTooltip valueFormatter={valueFormatter} />} cursor={{ stroke: CHART_COLORS.grid, strokeWidth: 1 }} />
         {showLegend && <Legend wrapperStyle={{ fontSize: 12 }} />}
         {lines}
       </RLineChart>

@@ -118,7 +118,11 @@ export const KPICalculator = {
     const totalInterest = MathUtils.sum(data.map((d) => d.interest));
     /** §7.1 Tax Expense agregado. */
     const totalTax = MathUtils.sum(data.map((d) => d.tax));
-    /** §7.1 Net Margin = Net Income / Revenue; null si no calculable. */
+    /**
+     * §7.1 Net Margin = Net Income / Revenue (agregado del período completo).
+     * Diferencia con marginDelta: netMargin es el margen promedio del período,
+     * mientras que marginDelta es la variación month-over-month en puntos porcentuales.
+     */
     const netMargin = divide(netIncome, totalRevenue);
 
     /** §7.1 Revenue Growth = pctChange(prev, last); null si no hay prev o prev=0. */
@@ -138,10 +142,18 @@ export const KPICalculator = {
     const cashPosition = fin(last.cash);
     /** §7.4 Net burn mensual promedio = mean(últimos 6 de expenses − revenue). */
     const monthlyBurn = MathUtils.mean(data.slice(-6).map((d) => d.expenses - d.revenue));
-    /** §7.4 Runway = cash / |burn| (1 decimal) cuando hay burn; null si no aplica. */
+    /**
+     * §7.4 Runway en meses (1 decimal).
+     * - Negativo o zero burn: retorna Infinity (empresa rentable — no hay preocupación de runway).
+     * - Burn positivo: cash / |burn|.
+     * - null si falta cash o burn no es calculable.
+     * La UI debe interpretar Infinity como "Profitable — no runway concern".
+     */
     const runwayMonths = monthlyBurn < 0 && Number.isFinite(cashPosition)
       ? MathUtils.round(cashPosition / Math.abs(monthlyBurn), 1)
-      : null;
+      : monthlyBurn >= 0 && cashPosition != null
+        ? Infinity
+        : null;
 
     // ── §7.2 Balance (posicional, al cierre del último mes) ──────────────
     const lastCash = fin(last.cash);

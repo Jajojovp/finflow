@@ -22,11 +22,13 @@ export default function Modal({
   className,
 }) {
   const dialogRef = useRef(null);
+  const previousFocusRef = useRef(null);
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
     if (open) {
+      previousFocusRef.current = document.activeElement;
       if (!dialog.open) dialog.showModal();
       document.body.style.overflow = 'hidden';
     } else {
@@ -38,7 +40,12 @@ export default function Modal({
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-    const handleClose = () => onClose?.();
+    const handleClose = () => {
+      onClose?.();
+      requestAnimationFrame(() => {
+        previousFocusRef.current?.focus();
+      });
+    };
     dialog.addEventListener('close', handleClose);
     return () => dialog.removeEventListener('close', handleClose);
   }, [onClose]);
@@ -55,7 +62,7 @@ export default function Modal({
         type="button"
         className="absolute inset-0 w-full h-full cursor-default"
         onClick={closeOnBackdrop ? onClose : undefined}
-        aria-label="Close modal"
+        aria-hidden="true"
       />
       <div
         className={clsx(
@@ -73,8 +80,8 @@ export default function Modal({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
-            className="shrink-0 p-1.5 rounded-md text-text-muted hover:text-text hover:bg-bg-hover transition-colors"
+            aria-label="Close modal"
+            className="shrink-0 min-h-11 min-w-11 p-0 flex items-center justify-center rounded-md text-text-muted hover:text-text hover:bg-bg-hover transition-colors"
           >
             <X size={18} />
           </button>

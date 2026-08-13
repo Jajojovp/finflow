@@ -11,7 +11,7 @@ export default {
         danger:   { DEFAULT: '#EF4444', light: '#F87171' },
         warning:  { DEFAULT: '#F59E0B', light: '#FBBF24' },
         accent:   { DEFAULT: '#F5C518', light: '#FFDF4D' },                     // accent = dorado (armonía)
-        text:     { DEFAULT: '#FAFAF7', muted: '#A1A1A8', dim: '#6E6E76' },
+        text:     { DEFAULT: '#FAFAF7', muted: '#A1A1A8', dim: '#8B8B93' },
       },
       fontFamily: {
         display: ['DM Serif Display', 'serif'],

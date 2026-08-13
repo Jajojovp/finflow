@@ -47,6 +47,7 @@ const MIN_POINTS = 5;
 const EMPTY_FORECAST = {
   points: [],
   method: 'insufficient-data',
+  reason: 'Need at least 5 monthly observations for reliable forecasting',
   expectedGrowth: 0,
   sigma: 0,
   slope: 0,

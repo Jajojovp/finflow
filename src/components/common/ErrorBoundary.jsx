@@ -29,6 +29,14 @@ export class ErrorBoundary extends Component {
     }
   }
 
+  handleTryAgain = () => {
+    this.setState({ hasError: false, error: null });
+  };
+
+  handleGoHome = () => {
+    window.location.href = '/';
+  };
+
   render() {
     const { hasError, error } = this.state;
     const { fallback, children } = this.props;
@@ -42,13 +50,32 @@ export class ErrorBoundary extends Component {
             {error != null && (
               <p className="text-xs font-mono text-danger-light break-all mb-4">{error.message}</p>
             )}
-            <button
-              type="button"
-              onClick={() => window.location.reload()}
-              className="inline-flex min-h-11 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-black transition-colors hover:bg-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
-            >
-              Reload
-            </button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={this.handleTryAgain}
+                aria-label="Try again without reloading the page"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-black transition-colors hover:bg-primary-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+              >
+                Try again
+              </button>
+              <button
+                type="button"
+                onClick={this.handleGoHome}
+                aria-label="Go to home page"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-text transition-colors hover:bg-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+              >
+                Go to home
+              </button>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                aria-label="Reload the page"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-text-muted transition-colors hover:bg-bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg"
+              >
+                Reload page
+              </button>
+            </div>
           </div>
         </div>
       );

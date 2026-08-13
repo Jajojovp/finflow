@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef, useCallback } from 'react';
 import { DollarSign, TrendingUp, Wallet, Percent } from 'lucide-react';
 import Sidebar from '../components/layout/Sidebar';
 import Navbar from '../components/layout/Navbar';
@@ -17,6 +17,7 @@ import { CashFlowService } from '../services/financial/CashFlowService';
 export default function Dashboard() {
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const menuTriggerRef = useRef(null);
 
   const kpis = useMemo(() => KPICalculator.fromMonthly(MONTHLY_FINANCIALS), []);
   const cashSeries = useMemo(
@@ -30,20 +31,20 @@ export default function Dashboard() {
     expenses: d.expenses,
   }));
 
+  const handleSidebarClose = useCallback(() => {
+    setSidebarOpen(false);
+    menuTriggerRef.current?.focus();
+  }, []);
+
   return (
     <div className="min-h-screen bg-bg flex">
       {!isMobile && <Sidebar />}
-      {isMobile && sidebarOpen && (
-        <div className="fixed inset-0 z-40 flex">
-          <button type="button" className="absolute inset-0 bg-black/60 w-full h-full" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar" />
-          <div className="relative">
-            <Sidebar onNavigate={() => setSidebarOpen(false)} />
-          </div>
-        </div>
+      {isMobile && (
+        <Sidebar open={sidebarOpen} onClose={handleSidebarClose} />
       )}
 
       <div className="flex-1 min-w-0 flex flex-col">
-        <Navbar onMenuClick={() => setSidebarOpen(true)} />
+        <Navbar onMenuClick={() => setSidebarOpen(true)} menuTriggerRef={menuTriggerRef} />
         <PageContainer
           title="Financial overview"
           description="Latest KPIs, cash flow trend and monthly performance."

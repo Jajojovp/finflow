@@ -74,7 +74,7 @@ export default function MetricCard({
         )}
       </div>
       <div className="flex items-baseline gap-2">
-        <span className={clsx('font-display font-bold text-text text-2xl tabular-nums', loading && 'animate-pulse')}>
+        <span className={clsx('font-mono font-bold text-text text-2xl tabular-nums', loading && 'animate-pulse')}>
           {formatted}
         </span>
         {formattedDelta != null && !loading && (
@@ -116,6 +116,8 @@ function formatValue(value, format, unit) {
       return fmt.number(value);
     case 'days':
       return fmt.days(value);
+    case 'months':
+      return fmt.number(value, 1) + ' mo';
     case 'custom':
       return unit ? `${value}${unit}` : String(value);
     default:

@@ -10,8 +10,7 @@ import {
   Legend,
 } from 'recharts';
 import { fmt } from '../../utils/formatters';
-
-const PALETTE = ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#60A5FA'];
+import { CHART_COLORS, SERIES_PALETTE } from '../../utils/chartTokens';
 
 function ChartTooltip({ active, payload, label, valueFormatter }) {
   if (!active || !payload?.length) return null;
@@ -47,7 +46,7 @@ export default function BarChart({
         dataKey={s.key}
         name={s.name || s.key}
         stackId={stacked ? 'a' : undefined}
-        fill={s.color || PALETTE[i % PALETTE.length]}
+        fill={s.color || SERIES_PALETTE[i % SERIES_PALETTE.length]}
         radius={stacked ? 0 : [4, 4, 0, 0]}
         maxBarSize={48}
       />
@@ -57,16 +56,16 @@ export default function BarChart({
   return (
     <ResponsiveContainer width="100%" height={height}>
       <RBarChart data={data} layout={layout} margin={{ top: 8, right: 12, bottom: 4, left: 4 }}>
-        {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="#374151" vertical={layout !== 'horizontal'} horizontal={layout === 'horizontal'} />}
+        {showGrid && <CartesianGrid strokeDasharray="3 3" stroke={CHART_COLORS.grid} vertical={layout !== 'horizontal'} horizontal={layout === 'horizontal'} />}
         {layout === 'horizontal' ? (
           <>
-            <XAxis dataKey={xKey} stroke="#6B7280" tick={{ fontSize: 12 }} tickLine={false} axisLine={false} />
-            <YAxis stroke="#6B7280" tick={{ fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={valueFormatter} width={64} />
+            <XAxis dataKey={xKey} stroke={CHART_COLORS.axis} tick={{ fontSize: 12 }} tickLine={false} axisLine={false} />
+            <YAxis stroke={CHART_COLORS.axis} tick={{ fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={valueFormatter} width={64} />
           </>
         ) : (
           <>
-            <XAxis type="number" stroke="#6B7280" tick={{ fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={valueFormatter} />
-            <YAxis dataKey={xKey} type="category" stroke="#6B7280" tick={{ fontSize: 12 }} tickLine={false} axisLine={false} width={120} />
+            <XAxis type="number" stroke={CHART_COLORS.axis} tick={{ fontSize: 12 }} tickLine={false} axisLine={false} tickFormatter={valueFormatter} />
+            <YAxis dataKey={xKey} type="category" stroke={CHART_COLORS.axis} tick={{ fontSize: 12 }} tickLine={false} axisLine={false} width={120} />
           </>
         )}
         <Tooltip content={<ChartTooltip valueFormatter={valueFormatter} />} cursor={{ fill: 'rgba(55,65,81,0.3)' }} />
