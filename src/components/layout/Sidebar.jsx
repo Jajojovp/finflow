@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Activity, BarChart2, TrendingUp, Settings, X } from 'lucide-react';
 import clsx from 'clsx';
+import { useIsMobile } from '../../hooks/useMediaQuery';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: Activity },
@@ -11,19 +12,24 @@ const NAV_ITEMS = [
 ];
 
 /**
- * Sidebar — primary navigation with responsive overlay mode for mobile.
+ * Sidebar — primary navigation.
+ *
+ * On desktop (>768px) renders as a static sidebar.
+ * On mobile (≤768px) renders as an overlay drawer controlled by `open`/`onClose`.
  *
  * @param {{ collapsed?: boolean, onNavigate?: () => void, open?: boolean, onClose?: () => void }} props
  */
 export default function Sidebar({ collapsed = false, onNavigate, open = false, onClose }) {
+  const isMobile = useIsMobile();
   const sidebarRef = useRef(null);
   const firstLinkRef = useRef(null);
 
-  const isOverlay = open !== undefined;
+  // Overlay mode: only on mobile when open=true
+  const isOverlay = isMobile && open;
 
   // Focus trap + Escape key for overlay mode
   useEffect(() => {
-    if (!isOverlay || !open) return;
+    if (!isOverlay) return;
 
     const sidebar = sidebarRef.current;
     if (!sidebar) return;
@@ -65,7 +71,14 @@ export default function Sidebar({ collapsed = false, onNavigate, open = false, o
       clearTimeout(timer);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOverlay, open, onClose]);
+  }, [isOverlay, onClose]);
+
+  // Lock body scroll when overlay is open
+  useEffect(() => {
+    if (!isOverlay) return;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOverlay]);
 
   const handleNavClick = useCallback(() => {
     onNavigate?.();
@@ -94,7 +107,7 @@ export default function Sidebar({ collapsed = false, onNavigate, open = false, o
             type="button"
             onClick={onClose}
             aria-label="Close navigation menu"
-            className="p-1 rounded-md text-text-muted hover:bg-bg-hover hover:text-text transition-colors"
+            className="min-h-11 min-w-11 flex items-center justify-center rounded-md text-text-muted hover:bg-bg-hover hover:text-text transition-colors"
           >
             <X size={18} />
           </button>
@@ -102,15 +115,13 @@ export default function Sidebar({ collapsed = false, onNavigate, open = false, o
       </div>
 
       <nav className="flex-1 p-3 space-y-1">
-        {NAV_ITEMS.map((item, idx) => {
+        {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           return (
             <NavLink
               key={item.to}
-              ref={idx === 0 ? firstLinkRef : undefined}
               to={item.to}
               onClick={handleNavClick}
-              tabIndex={isOverlay ? 0 : undefined}
               className={({ isActive }) =>
                 clsx(
                   'min-h-11 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
@@ -128,12 +139,12 @@ export default function Sidebar({ collapsed = false, onNavigate, open = false, o
       </nav>
 
       <div className="p-3 border-t border-border text-xs text-text-dim">
-        {(!collapsed || isOverlay) && <span>FinFlow v2.0</span>}
+        {(!collapsed || isOverlay) && <span>FinFlow v3.0</span>}
       </div>
     </aside>
   );
 
-  // Overlay mode: render with backdrop
+  // Mobile overlay mode: render with backdrop
   if (isOverlay) {
     return (
       <div className="fixed inset-0 z-40 flex">
@@ -151,6 +162,11 @@ export default function Sidebar({ collapsed = false, onNavigate, open = false, o
     );
   }
 
-  // Static mode (desktop)
+  // Mobile closed: render nothing
+  if (isMobile && !open) {
+    return null;
+  }
+
+  // Desktop static mode
   return sidebarContent;
 }
