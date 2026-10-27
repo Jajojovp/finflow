@@ -6,3 +6,6 @@ dist/
 *.local
 .vercel
 *.log
+qa/
+outputs/
+__pycache__/

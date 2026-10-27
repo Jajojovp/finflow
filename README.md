@@ -1,3 +1,15 @@
+# Versión integrada · 2.1
+
+Esta evolución parte del historial original de **Jajojovp/finflow** y conserva su motor financiero. Mantiene el diseño claro, la navegación y los tres perfiles de la aplicación publicada en [finflow.sysora.io](https://finflow.sysora.io).
+
+En **Empresa o Asesor → Resultados** se pueden consultar los servicios originales de indicadores, flujo de caja, pronósticos, anomalías, comparaciones, covenants, variaciones y propuestas, alimentados por los movimientos de cada entidad. El balance, presupuesto de ventas y límites se editan en ese mismo panel. La evidencia y los supuestos se pueden exportar.
+
+El almacenamiento sigue siendo local (`finflow-open-v1`); la actualización conserva los registros que ya existían en el mismo dominio. No hay autenticación, sincronización entre dispositivos ni conexiones bancarias. Las referencias de comparación son metas declaradas, no estadísticas sectoriales verificadas. Las propuestas solo registran decisiones locales.
+
+Consulta [la integración y criterios de aceptación](docs/INTEGRATION-2026-10.md) y [la verificación](docs/INTEGRATION-VERIFICATION.md). El código se ofrece bajo MIT; GSAP conserva su licencia propia.
+
+---
+
 # FinFlow — Financial Intelligence Engine
 
 > **Decision clarity in real-time.** AI-powered financial decision engine for modern businesses.

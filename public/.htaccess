@@ -1,0 +1,9 @@
+DirectoryIndex index.html
+Options -Indexes
+AddType application/javascript .mjs
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  <FilesMatch "\.(html|mjs|css)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
