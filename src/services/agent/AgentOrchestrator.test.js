@@ -39,7 +39,7 @@ describe('AgentOrchestrator', () => {
       series: MONTHLY_FINANCIALS,
       capabilities: [CAPABILITIES.TRIGGER_CASH_SWEEP],
     });
-    expect(result.summary.kpis.runwayMonths).toBe(14.1);
+    expect(result.summary.kpis.runwayMonths).toBe(Infinity);
     expect(result.summary.kpis.runwayMonths).toBeGreaterThan(6);
     expect(result.actions).toHaveLength(0);
     expect(result.actions.some((action) => action.capability === CAPABILITIES.TRIGGER_CASH_SWEEP)).toBe(false);

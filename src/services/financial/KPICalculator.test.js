@@ -74,13 +74,12 @@ describe('KPICalculator.fromMonthly — Growth / runway', () => {
     expect(snapshot.marginDelta).toBeCloseTo((netMarginLast - netMarginPrev) * 100, 3);
   });
 
-  it('runwayMonths finito > 10 (burn promedio 6 meses, caja última)', () => {
-    expect(Number.isFinite(snapshot.runwayMonths)).toBe(true);
-    expect(snapshot.runwayMonths).toBeGreaterThan(10);
+  it('runwayMonths infinito cuando la operación genera caja (burn negativo)', () => {
+    expect(snapshot.runwayMonths).toBe(Infinity);
     const burn = MONTHLY_FINANCIALS.slice(-6).map((m) => m.expenses - m.revenue);
     const monthlyBurn = burn.reduce((a, b) => a + b, 0) / burn.length;
     expect(monthlyBurn).toBe(-251500);
-    expect(snapshot.runwayMonths).toBeCloseTo(14.1, 1);
+    expect(snapshot.monthlyBurn).toBe(monthlyBurn);
   });
 });
 

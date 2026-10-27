@@ -92,11 +92,12 @@ export const KPICalculator = {
     /** Σ expenses del período (cogs + opex + daa + interest + tax). */
     const totalExpenses = MathUtils.sum(data.map((d) => d.expenses));
     /** §7.1 Net Income = Revenue − Expenses. */
-    const netIncome = totalRevenue - totalExpenses;
+    const totalOtherIncome = MathUtils.sum(data.map((d) => d.otherIncome));
+    const netIncome = totalRevenue + totalOtherIncome - totalExpenses;
 
     /** §7.1 COGS agregado; null si la serie no tiene dato de cogs. */
     const cogsValues = data.map((d) => d.cogs);
-    const hasCogs = cogsValues.some((v) => Number.isFinite(v));
+    const hasCogs = cogsValues.every((v) => Number.isFinite(v));
     const totalCogs = hasCogs ? MathUtils.sum(cogsValues) : null;
     /** §7.1 Gross Profit = Revenue − COGS; null si COGS es null. */
     const grossProfit = totalCogs == null ? null : totalRevenue - totalCogs;
@@ -129,9 +130,9 @@ export const KPICalculator = {
     const revenueGrowth = prev ? MathUtils.pctChange(prev.revenue, last.revenue) : null;
 
     /** §7.1 Net margin del último período (netIncome/revenue del mes). */
-    const netMarginLast = last.revenue > 0 ? (last.revenue - last.expenses) / last.revenue : null;
+    const netMarginLast = last.revenue > 0 ? (last.revenue + (last.otherIncome || 0) - last.expenses) / last.revenue : null;
     /** §7.1 Net margin del período anterior (si existe). */
-    const netMarginPrev = prev && prev.revenue > 0 ? (prev.revenue - prev.expenses) / prev.revenue : null;
+    const netMarginPrev = prev && prev.revenue > 0 ? (prev.revenue + (prev.otherIncome || 0) - prev.expenses) / prev.revenue : null;
     /** §7.1 Margin Delta en puntos porcentuales = (netMargin_last − netMargin_prev) × 100. */
     const marginDelta = netMarginLast != null && netMarginPrev != null
       ? (netMarginLast - netMarginPrev) * 100
@@ -141,17 +142,17 @@ export const KPICalculator = {
     /** §7.4 Caja al cierre del último período. */
     const cashPosition = fin(last.cash);
     /** §7.4 Net burn mensual promedio = mean(últimos 6 de expenses − revenue). */
-    const monthlyBurn = MathUtils.mean(data.slice(-6).map((d) => d.expenses - d.revenue));
+    const monthlyBurn = MathUtils.mean(data.slice(-6).map((d) => Number.isFinite(d.cashBurn) ? d.cashBurn : d.expenses - d.revenue));
     /**
      * §7.4 Runway en meses (1 decimal).
-     * - Negativo o zero burn: retorna Infinity (empresa rentable — no hay preocupación de runway).
+     * - Burn negativo o cero: retorna Infinity (sin consumo neto en la muestra).
      * - Burn positivo: cash / |burn|.
      * - null si falta cash o burn no es calculable.
-     * La UI debe interpretar Infinity como "Profitable — no runway concern".
+     * Infinity no garantiza liquidez futura; solo indica ausencia de consumo neto.
      */
-    const runwayMonths = monthlyBurn < 0 && Number.isFinite(cashPosition)
-      ? MathUtils.round(cashPosition / Math.abs(monthlyBurn), 1)
-      : monthlyBurn >= 0 && cashPosition != null
+    const runwayMonths = monthlyBurn > 0 && Number.isFinite(cashPosition)
+      ? MathUtils.round(Math.max(0, cashPosition) / monthlyBurn, 1)
+      : monthlyBurn <= 0 && cashPosition != null
         ? Infinity
         : null;
 
@@ -189,6 +190,7 @@ export const KPICalculator = {
       // §7.1 Income Statement
       /** §7.1 Σ revenue del período. */
       totalRevenue,
+      totalOtherIncome,
       /** §7.1 Σ expenses del período. */
       totalExpenses,
       /** §7.1 Net Income = Revenue − Expenses. */
