@@ -16,6 +16,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - Signo invertido del consumo en autonomía de caja, tratamiento de otros ingresos y propagación de costes faltantes.
 - Exclusión de datos futuros y meses ausentes en las proyecciones.
+- Actualización de herramientas de desarrollo heredadas vulnerables; auditoría completa sin hallazgos.
 
 ## [Unreleased]
 

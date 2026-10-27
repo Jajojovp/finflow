@@ -8,6 +8,8 @@ El almacenamiento sigue siendo local (`finflow-open-v1`); la actualización cons
 
 Consulta [la integración y criterios de aceptación](docs/INTEGRATION-2026-10.md) y [la verificación](docs/INTEGRATION-VERIFICATION.md). El código se ofrece bajo MIT; GSAP conserva su licencia propia.
 
+Para desarrollar esta versión utiliza Node 22.12 o posterior compatible con `package.json`. Los apartados siguientes se conservan como documentación de la versión original; las capacidades publicadas y sus límites se describen arriba.
+
 ---
 
 # FinFlow — Financial Intelligence Engine

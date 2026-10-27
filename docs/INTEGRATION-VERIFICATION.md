@@ -25,5 +25,5 @@ Estado de resultados de gestión, no contabilidad completa por devengo. Los sald
 - 76 pruebas Vitest y 10 pruebas Node aprobadas.
 - Recorridos anteriores y nuevos comprobados con Playwright, sin errores de JavaScript; persistencia y separación de entidades verificadas.
 - Compilación de producción Vite correcta. El módulo de análisis y los gráficos se cargan al abrir Resultados.
-- Auditoría de dependencias de producción sin vulnerabilidades reportadas.
+- Auditoría completa `npm audit --audit-level=low`: cero vulnerabilidades reportadas, incluidas herramientas de desarrollo. Vitest actualizado a 4.1.12 y Vite a 6.4.5 en el lockfile; los tests originales permanecen activos.
 - La base `4ee8ed6` permanece como ancestro de la rama de integración; las páginas históricas y la documentación original permanecen en el código fuente.
