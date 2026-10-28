@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project uses [Semantic Versioning](https://semver.org/).
 
+## Mobile [1.0.0] - 2026-10-28
+
+### Added
+
+- App Expo para iOS y Android dentro del repositorio original, con Router, controles nativos, paleta clara y almacenamiento SQLite local.
+- Perfiles Personal, Empresa y Asesor, clientes independientes, movimientos editables y recuperables, resultados, equilibrio, indicadores originales, objetivos, simulación y lecciones.
+- Importación CSV y respaldo JSON con validación, conservación de ajustes y comprobaciones de límites antes de guardar.
+- Pruebas de aislamiento, fórmulas compartidas, importaciones, recuperación y persistencia; instrucciones reproducibles y límites de validación física documentados.
+
 ## [2.1.1] - 2026-10-28
 
 ### Fixed
