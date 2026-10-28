@@ -14,6 +14,8 @@ El entorno local mantiene las herramientas y su configuración en `%USERPROFILE%
 .\scripts\build-android.ps1
 ```
 
+En Windows, utiliza un checkout con ruta corta, por ejemplo `C:/ffn`, e instala sus dependencias en `mobile/`. Ninja puede fallar al generar archivos C++ si el proyecto está dentro de una ruta larga como Documentos. En esta entrega se utilizó una copia de compilación aislada con el mismo commit; la firma permanece en el directorio privado del usuario.
+
 El script genera una clave RSA propia de FinFlow si todavía no existe; reutiliza la existente en futuras compilaciones. La guarda en `%USERPROFILE%/.finflow/signing/`, con acceso restringido al usuario actual y contraseña protegida con DPAPI de Windows. No se envía a Expo, GitHub ni al hosting y no se incluye en el repositorio. Antes de reinstalar Windows o migrar de ordenador, el titular debe respaldar la clave y sus credenciales de forma segura para conservar la posibilidad de actualizar la app.
 
 La compilación `release` utiliza esa clave y verifica la firma del APK contra el certificado esperado. No utiliza la clave de depuración del ejemplo Expo. El resultado ARM64 y su recibo se guardan en `outputs/android/`; la verificación en teléfono físico sigue siendo un paso separado.
