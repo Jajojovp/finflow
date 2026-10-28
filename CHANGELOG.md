@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project uses [Semantic Versioning](https://semver.org/).
 
+## [2.2.0] - 2026-10-28
+
+### Added
+
+- Página de descargas e instalación para Android, iPhone y web, enlazada desde el sitio y la aplicación.
+- Manifiesto e iconos para añadir la web a la pantalla de inicio; la apertura conserva el perfil local.
+- Configuración de distribución Expo y compilación local de APK con firma propia, verificación de certificado y recibo de publicación.
+- Catálogo de descargas que mantiene pendientes los canales sin un instalador verificado; pruebas de validación de URL, firma y metadatos.
+
 ## Mobile [1.0.0] - 2026-10-28
 
 ### Added

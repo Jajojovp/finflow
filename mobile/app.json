@@ -9,9 +9,12 @@
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
+      "icon": "./assets/finflow-ios-icon.png",
+      "buildNumber": "1",
       "bundleIdentifier": "io.sysora.finflow"
     },
     "android": {
+      "versionCode": 1,
       "package": "io.sysora.finflow",
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {

@@ -2,4 +2,5 @@
 // the original financial services within its Results section.
 import './workspace/styles.css';
 import './workspace/intelligence.css';
+import './workspace/downloads.css';
 import './workspace/app.mjs';

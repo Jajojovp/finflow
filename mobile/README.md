@@ -18,6 +18,10 @@ El script de Windows utiliza el Node compatible instalado con Codex cuando el No
 
 Abre Expo Go en el teléfono y usa la dirección que indique Expo CLI. El teléfono y el ordenador deben poder comunicarse en la misma red. La vista web de desarrollo se abre en el puerto que indique el servidor; sirve para revisar la interfaz, no sustituye una prueba en el dispositivo.
 
+## Instaladores y distribución
+
+Consulta [DISTRIBUTION.md](../docs/DISTRIBUTION.md) para generar el APK de Android localmente sin una cuenta Expo. La página web `/descargar/` muestra únicamente publicaciones verificadas. En iPhone se ofrece la app web instalable mientras falta la cuenta Apple Developer para distribuir la app iOS nativa. `eas.json` deja preparados los perfiles futuros, sin crear cuentas ni iniciar servicios de pago.
+
 ## Funciones
 
 - Perfiles Personal, Empresa y Asesor, con espacios independientes y clientes adicionales.
