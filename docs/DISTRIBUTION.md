@@ -8,6 +8,8 @@ La compilación local utiliza Node 24, OpenJDK 17, Android SDK 37.0, Build Tools
 
 El entorno local mantiene las herramientas y su configuración en `%USERPROFILE%/.cache/finflow-android/`. Con ese entorno preparado, desde `mobile/` en PowerShell 7:
 
+`tools-config.json` contiene únicamente las rutas `javaHome` y `androidHome`, por ejemplo `{"javaHome":"C:/tools/jdk-17","androidHome":"C:/tools/android-sdk"}`. Puede utilizarse otra ubicación pasando `-ToolsConfig RUTA` al script.
+
 ```powershell
 .\scripts\build-android.ps1
 ```

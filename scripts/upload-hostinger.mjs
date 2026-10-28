@@ -17,8 +17,13 @@ process.stdin.on('data',async chunk=>{
   const headers={'X-Auth':c.auth_key,'X-Auth-Rest':c.rest_auth_key,'Tus-Resumable':'1.0.0','Upload-Offset':'0'};
   const created=await fetch(url,{method:'POST',redirect:'error',headers:{...headers,'Upload-Length':String(bytes.length)}});
   if(created.status!==201)throw new Error(`Upload create returned HTTP ${created.status}.`);
-  const patched=await fetch(url,{method:'PATCH',redirect:'error',headers:{...headers,'Content-Type':'application/offset+octet-stream'},body:bytes});
-  if(patched.status!==204||Number(patched.headers.get('Upload-Offset'))!==bytes.length)throw new Error(`Upload verification failed (HTTP ${patched.status}).`);
+  const chunkSize=8*1024*1024;
+  for(let offset=0;offset<bytes.length;offset+=chunkSize){
+   const end=Math.min(offset+chunkSize,bytes.length);
+   const patched=await fetch(url,{method:'PATCH',redirect:'error',headers:{...headers,'Upload-Offset':String(offset),'Content-Type':'application/offset+octet-stream'},body:bytes.subarray(offset,end)});
+   if(patched.status!==204||Number(patched.headers.get('Upload-Offset'))!==end)throw new Error(`Upload verification failed (HTTP ${patched.status}).`);
+   console.log(JSON.stringify({uploadedBytes:end,totalBytes:bytes.length}));
+  }
   console.log(JSON.stringify({uploaded:destination,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),status:'verified'}));
   process.exit(0);
  }catch(error){console.error(error.message.replace(/https?:\/\/\S+/g,'[endpoint]'));process.exit(1);}
