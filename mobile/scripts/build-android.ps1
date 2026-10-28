@@ -19,7 +19,7 @@ $env:GRADLE_USER_HOME = Join-Path $env:USERPROFILE '.cache\finflow-android\gradl
 $signingDir = Join-Path $env:USERPROFILE '.finflow\signing'
 New-Item -ItemType Directory -Path $signingDir -Force | Out-Null
 $sid = [Security.Principal.WindowsIdentity]::GetCurrent().User.Value
-& icacls $signingDir /inheritance:r /grant:r "${sid}:(OI)(CI)F" | Out-Null
+& icacls $signingDir /inheritance:r /grant:r "*${sid}:(OI)(CI)F" | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'Could not protect the signing directory' }
 $keyStore = Join-Path $signingDir 'finflow-release.jks'
 $passwordPath = Join-Path $signingDir 'password.dpapi'
