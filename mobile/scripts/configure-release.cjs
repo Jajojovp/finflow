@@ -18,7 +18,29 @@ if (!text.includes('FINFLOW_STORE_FILE')) {
   const tail = text.slice(start).replace(/(release\s*\{[\s\S]*?)signingConfig signingConfigs\.debug/, '$1signingConfig signingConfigs.finflowRelease');
   if (tail === text.slice(start)) throw new Error('Release signing could not be configured');
   text = text.slice(0, start) + tail;
-  fs.writeFileSync(target, text);
 }
 if (!text.includes('signingConfig signingConfigs.finflowRelease')) throw new Error('Release must use its own signing key');
+if (!text.includes('// FinFlow Windows CMake paths')) {
+  text += `
+// FinFlow Windows CMake paths
+if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+    android {
+        externalNativeBuild {
+            cmake {
+                buildStagingDirectory new File(rootDir.parentFile.parentFile, 'cxx')
+            }
+        }
+        defaultConfig {
+            externalNativeBuild {
+                cmake {
+                    arguments.removeAll { it.startsWith('-DCMAKE_OBJECT_PATH_MAX=') }
+                    arguments '-DCMAKE_OBJECT_PATH_MAX=240'
+                }
+            }
+        }
+    }
+}
+`;
+}
+fs.writeFileSync(target, text);
 console.log('FinFlow release signing configured; credentials are read from the build environment.');
