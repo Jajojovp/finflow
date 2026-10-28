@@ -1,10 +1,10 @@
 # Distribución de FinFlow
 
-La página pública es `/descargar/`, enlazada desde la web y la barra lateral de la aplicación. Mantiene el diseño claro y GSAP. Un instalador solo aparece como descargable cuando el catálogo declara una publicación completa; Android exige URL del mismo dominio, versión, tamaño y huellas SHA-256 del archivo y su certificado.
+La página pública es `/descargar/`, enlazada desde la web y la barra lateral de la aplicación. Mantiene el diseño claro y GSAP. Un instalador solo aparece como descargable cuando el catálogo declara una publicación completa; Android exige URL del mismo dominio o del dominio canónico `finflow.sysora.io`, versión, tamaño y huellas SHA-256 del archivo y su certificado. El Site puede enlazar ese mismo archivo canónico sin duplicar el binario.
 
 ## Android sin cuenta Expo
 
-La compilación local utiliza Node 24, OpenJDK 17, Android SDK 37, Build Tools 37.0.0, NDK 27.1.12297006 y CMake 3.22.1. Google cambió las herramientas de línea de comandos en octubre de 2026: el Android CLI actual usa rutas de paquete como `platforms/android-37`. La licencia del SDK se acepta únicamente después de la autorización de su titular.
+La compilación local utiliza Node 24, OpenJDK 17, Android SDK 37.0, Build Tools 37.0.0, NDK 27.1.12297006 y CMake 3.22.1. Google cambió las herramientas de línea de comandos en octubre de 2026: el Android CLI actual usa rutas de paquete como `platforms/android-37.0`. La licencia del SDK se acepta únicamente después de la autorización de su titular.
 
 El entorno local mantiene las herramientas y su configuración en `%USERPROFILE%/.cache/finflow-android/`. Con ese entorno preparado, desde `mobile/` en PowerShell 7:
 

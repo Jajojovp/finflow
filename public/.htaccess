@@ -1,9 +1,9 @@
-DirectoryIndex index.html
-Options -Indexes
-AddType application/javascript .mjs
+<IfModule mod_mime.c>
+  AddType application/vnd.android.package-archive .apk
+</IfModule>
 <IfModule mod_headers.c>
-  Header set X-Content-Type-Options "nosniff"
-  <FilesMatch "\.(html|mjs|css)$">
-    Header set Cache-Control "no-cache"
+  <FilesMatch "\.apk$">
+    Header set Content-Disposition "attachment"
+    Header set X-Content-Type-Options "nosniff"
   </FilesMatch>
 </IfModule>

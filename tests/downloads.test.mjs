@@ -8,6 +8,7 @@ test('only a complete signed APK release can enable downloading', () => {
   for (const change of [{status:'pending'}, {sha256:null}, {certificateSha256:null}, {bytes:0}, {version:'unknown'}]) assert.equal(releaseAction('android',{...apk,...change},origin),null);
 });
 test('download URLs reject other hosts, protocols and paths', () => {
+  assert.equal(releaseAction('android',{...apk,url:origin+apk.url},'https://finflow-open.earlypine4.chatgpt.site'), origin+apk.url);
   for (const url of ['https://evil.example/finflow.apk','javascript:alert(1)','http://finflow.sysora.io/downloads/finflow-1.0.0.apk','/downloads/../app.apk','/downloads/finflow-1.0.0.apk?redirect=evil']) assert.equal(releaseAction('android',{...apk,url},origin),null);
 });
 test('iOS channels are Apple URLs and pending releases never become links', () => {

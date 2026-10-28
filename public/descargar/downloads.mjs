@@ -12,7 +12,7 @@ function showRelease(platform, entry) {
   link.textContent = platform === 'android' ? 'Descargar APK de Android ↓' : 'Abrir distribución de Apple ↗';
   if (platform === 'android') link.download = `finflow-${entry.version}.apk`;
   const meta = document.createElement('p'); meta.className = 'artifact-meta';
-  meta.textContent = platform === 'android' ? `${(entry.bytes / 1024 / 1024).toFixed(1)} MB · Firma verificada · SHA-256 del archivo:` : 'Instala desde el canal oficial de Apple.';
+  meta.textContent = platform === 'android' ? `${(entry.bytes / 1024 / 1024).toFixed(1)} MB · Android 7 o posterior · ARM64 · Firma verificada · SHA-256 del archivo:` : 'Instala desde el canal oficial de Apple.';
   if (platform === 'android') { const checksum = document.createElement('code'); checksum.textContent = entry.sha256; meta.append(checksum); }
   box.replaceChildren(status, meta, link);
 }
