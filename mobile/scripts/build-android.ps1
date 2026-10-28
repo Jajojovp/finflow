@@ -13,6 +13,8 @@ $env:ANDROID_SDK_ROOT = $tools.androidHome
 $env:PATH = "$(Split-Path $taskNode);$env:JAVA_HOME\bin;$env:PATH"
 $env:EXPO_NO_TELEMETRY = '1'
 $env:NODE_ENV = 'production'
+$env:NODE_OPTIONS = '--max-old-space-size=1536'
+$env:CMAKE_BUILD_PARALLEL_LEVEL = '1'
 $env:GRADLE_USER_HOME = Join-Path $env:USERPROFILE '.cache\finflow-android\gradle'
 $signingDir = Join-Path $env:USERPROFILE '.finflow\signing'
 New-Item -ItemType Directory -Path $signingDir -Force | Out-Null
@@ -49,7 +51,7 @@ try {
   if ($LASTEXITCODE -ne 0) { throw 'Release signing configuration failed' }
   Push-Location 'android'
   try {
-    & '.\gradlew.bat' ':app:assembleRelease' '-PreactNativeArchitectures=arm64-v8a' '--no-daemon' '--max-workers=2' '-Dorg.gradle.jvmargs=-Xmx4096m -Dfile.encoding=UTF-8'
+    & '.\gradlew.bat' ':app:assembleRelease' '-PreactNativeArchitectures=arm64-v8a' '--no-daemon' '--max-workers=1' '-Dorg.gradle.parallel=false' '-Pkotlin.compiler.execution.strategy=in-process' '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8'
     if ($LASTEXITCODE -ne 0) { throw 'Android release build failed' }
   } finally { Pop-Location }
   $apk = Join-Path $mobileRoot 'android\app\build\outputs\apk\release\app-release.apk'
