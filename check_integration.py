@@ -11,6 +11,7 @@ with sync_playwright() as p:
     errors=[]
     page.on('pageerror',lambda e: errors.append(str(e)))
     page.goto(BASE+'#app/business/results',wait_until='networkidle')
+    page.get_by_text('Explorar el análisis avanzado',exact=True).click()
     panel=page.get_by_role('region',name='Motor financiero original')
     expect(panel).to_be_visible()
     expect(panel).to_contain_text('Sin consumo neto')
@@ -25,6 +26,7 @@ with sync_playwright() as p:
     panel.get_by_role('button',name='Marcar para seguimiento',exact=True).first.click()
     expect(panel).to_contain_text('Marcada para seguimiento')
     page.reload(wait_until='networkidle')
+    page.get_by_text('Explorar el análisis avanzado',exact=True).click()
     panel.get_by_role('button',name='Controles y propuestas',exact=True).click()
     expect(panel).to_contain_text('Marcada para seguimiento')
     panel.get_by_role('button',name='Proyección y caja',exact=True).click()
@@ -41,9 +43,11 @@ with sync_playwright() as p:
     assert evidence['analysis']['current']['totalRevenue']==52000
     assert evidence['parameters']['limits']['currentRatio']==10
     page.goto(BASE+'#app/advisor/results',wait_until='networkidle')
+    page.get_by_text('Explorar el análisis avanzado',exact=True).click()
     expect(panel.locator('.analysis-kpi').filter(has_text='Razón corriente')).to_contain_text('N/D')
     expect(panel).not_to_contain_text('variación 2.000')
     page.goto(BASE+'#app/business/results',wait_until='networkidle')
+    page.get_by_text('Explorar el análisis avanzado',exact=True).click()
     expect(panel.locator('.analysis-kpi').filter(has_text='Razón corriente')).to_contain_text('8,3')
     page.wait_for_timeout(600)
     page.screenshot(path=str(OUT/'integrated-results-desktop.png'),full_page=True)

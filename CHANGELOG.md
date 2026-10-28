@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project uses [Semantic Versioning](https://semver.org/).
 
+## [2.1.1] - 2026-10-28
+
+### Fixed
+
+- Restaurada la jerarquía de la primera versión clara; los resúmenes y resultados vuelven a ocupar el inicio y el análisis avanzado se abre a demanda.
+- DM Sans se sirve localmente con su licencia para mantener la tipografía aprobada sin depender de Google Fonts.
+
 ## [2.1.0] - 2026-10-27
 
 ### Added

@@ -9,3 +9,4 @@ dist/
 qa/
 outputs/
 __pycache__/
+.agents/skills/
