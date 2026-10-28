@@ -11,6 +11,7 @@ Utiliza Expo SDK 58 y las guías oficiales de `expo/skills`, revisión `8a0dc4fa
 - 87 pruebas Vitest: los servicios originales y 11 casos de datos móviles. Cubren separación de perfiles/clientes, fórmulas compartidas, validación, CSV, identificadores, archivo, recuperación y límites de respaldo.
 - 10 pruebas Node de las fórmulas de caja, resultados, equilibrio, escenarios y CSV.
 - TypeScript estricto sin errores; `expo install --check` sin incompatibilidades.
+- ESLint web: cero errores y seis advertencias existentes (roles de accesibilidad e importaciones sin uso). Reconoce los módulos `.mjs` y el global GSAP del navegador; conserva las reglas suaves del proyecto.
 - Expo Doctor: 20 de 20 comprobaciones aprobadas.
 - Exportaciones Metro/Hermes de iOS y Android, más la vista web de producción. Exportar estos recursos no genera una instalación firmada ni demuestra ejecución en un dispositivo.
 

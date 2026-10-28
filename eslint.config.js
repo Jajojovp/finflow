@@ -12,7 +12,7 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 export default [
   js.configs.recommended,
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.{js,jsx,mjs}'],
     languageOptions: {
       parserOptions: {
         ecmaVersion: 'latest',
@@ -79,5 +79,9 @@ export default [
       'jsx-a11y/scope': 'warn',
       'jsx-a11y/tabindex-no-positive': 'warn',
     },
+  },
+  {
+    files: ['src/workspace/app.mjs'],
+    languageOptions: { globals: { gsap: 'readonly' } },
   },
 ];
