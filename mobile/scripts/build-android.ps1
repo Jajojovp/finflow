@@ -3,6 +3,9 @@ $ErrorActionPreference = 'Stop'
 $mobileRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $repositoryRoot = (Resolve-Path (Join-Path $mobileRoot '..')).Path
 $tools = Get-Content -LiteralPath $ToolsConfig | ConvertFrom-Json
+$appConfig = (Get-Content -LiteralPath (Join-Path $mobileRoot 'app.json') | ConvertFrom-Json).expo
+$releaseVersion = $appConfig.version
+$buildStarted = Get-Date
 $taskNode = (Get-Command node).Source
 if ([int]((& $taskNode -p 'process.versions.node').Split('.')[0]) -lt 24) {
   $taskNode = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe'
@@ -59,6 +62,12 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Android release build failed' }
   } finally { Pop-Location }
   $apk = Join-Path $mobileRoot 'android\app\build\outputs\apk\release\app-release.apk'
+  if (!(Test-Path -LiteralPath $apk) -or (Get-Item -LiteralPath $apk).LastWriteTime -lt $buildStarted) { throw 'Build did not produce a fresh APK; refusing a cached artifact' }
+  $apkHash = (Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
+  if ($apkHash -eq 'b32aea2e3db757280cd87692cfa40dde95e5a0eb5509c8562a8d8f511bada206') { throw 'APK matches the broken 1.0.0 release; refusing publication' }
+  $aapt = Join-Path $tools.androidHome 'build-tools\37.0.0\aapt.exe'
+  $badging = (& $aapt dump badging $apk) -join "`n"
+  if ($LASTEXITCODE -ne 0 -or $badging -notmatch "versionName='$([regex]::Escape($releaseVersion))'" -or $badging -notmatch "versionCode='$($appConfig.android.versionCode)'") { throw 'APK version differs from the requested release' }
   $signer = Join-Path $tools.androidHome 'build-tools\37.0.0\apksigner.bat'
   $signature = (& $signer verify --verbose --print-certs $apk 2>&1) -join "`n"
   if ($LASTEXITCODE -ne 0) { throw 'APK signature verification failed' }
@@ -70,10 +79,10 @@ try {
   Write-Output $signature
   $destination = Join-Path $repositoryRoot 'outputs\android'
   New-Item -ItemType Directory -Path $destination -Force | Out-Null
-  Copy-Item -LiteralPath $apk -Destination (Join-Path $destination 'finflow-1.0.0-arm64.apk')
-  @{version='1.0.0';bytes=(Get-Item -LiteralPath $apk).Length;sha256=(Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant();certificateSha256=$certificateHash;architecture='arm64-v8a';sourceRevision=(& git -C $repositoryRoot rev-parse HEAD)} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $destination 'release.json')
+  Copy-Item -LiteralPath $apk -Destination (Join-Path $destination "finflow-$releaseVersion-arm64.apk")
+  @{version=$releaseVersion;versionCode=$appConfig.android.versionCode;bytes=(Get-Item -LiteralPath $apk).Length;sha256=$apkHash;certificateSha256=$certificateHash;architecture='arm64-v8a';sourceRevision=(& git -C $repositoryRoot rev-parse HEAD)} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $destination 'release.json')
   Get-FileHash -LiteralPath $apk -Algorithm SHA256 | Select-Object Algorithm,Hash
-  Write-Output "Verified Android APK: $destination\finflow-1.0.0-arm64.apk"
+  Write-Output "Verified Android APK: $destination\finflow-$releaseVersion-arm64.apk"
 } finally {
   Pop-Location
   Remove-Item Env:FINFLOW_STORE_PASSWORD,Env:FINFLOW_KEY_PASSWORD -ErrorAction SilentlyContinue

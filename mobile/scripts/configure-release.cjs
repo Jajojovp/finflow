@@ -2,6 +2,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const target = path.join(__dirname, '../android/app/build.gradle');
 let text = fs.readFileSync(target, 'utf8');
+const app = require('../app.json').expo;
+text = text.replace(/versionCode \d+/, `versionCode ${app.android.versionCode}`)
+  .replace(/versionName "[^"]+"/, `versionName "${app.version}"`);
 if (!text.includes('signingConfigs {') || !text.includes('buildTypes {')) throw new Error('Unexpected Android build template');
 if (!text.includes('FINFLOW_STORE_FILE')) {
   text = text.replace('signingConfigs {', `signingConfigs {
