@@ -9,7 +9,7 @@ Utiliza Expo SDK 58 y las guías oficiales de `expo/skills`, revisión `8a0dc4fa
 ## Comprobaciones automatizadas
 
 - 87 pruebas Vitest: los servicios originales y 11 casos de datos móviles. Cubren separación de perfiles/clientes, fórmulas compartidas, validación, CSV, identificadores, archivo, recuperación y límites de respaldo.
-- 16 pruebas Node: caja, resultados, equilibrio, escenarios, CSV, catálogo de descargas y contratos de identidad.
+- 17 pruebas Node: caja, resultados, equilibrio, escenarios, CSV, catálogo de descargas y contratos de identidad.
 - 6 pruebas del servidor PHP: CSRF, estado, PKCE, caducidad, consumo único, sesión nativa y límites de intentos.
 - Acceso real con Google y cierre de sesión comprobados en finflow.sysora.io; el espacio muestra el nombre verificado de la cuenta.
 - TypeScript estricto sin errores; `expo install --check` sin incompatibilidades.

@@ -15,3 +15,5 @@ El cliente secreto se provisiona por HTTPS una sola vez y se almacena en `.finfl
 Los registros temporales de acceso tienen caducidad, limitación de frecuencia y limpieza acotada. No contienen movimientos financieros. El hosting necesita PHP 8.1+, cURL y mbstring. Sites conserva el frontend y envía el acceso al dominio canónico, ya que este backend PHP se ejecuta en Hostinger.
 
 Fuentes: [Google OAuth para aplicaciones web](https://developers.google.com/identity/protocols/oauth2/web-server), [OpenID Connect](https://developers.google.com/identity/openid-connect/openid-connect).
+
+El retorno nativo valida el contrato exacto `finflow://account?attempt=...&code=...` y el intento esperado sin depender del parser global de URL del teléfono. La prueba de regresión deshabilita ese parser y comprueba también host, esquema, intento y parámetros adicionales inválidos.

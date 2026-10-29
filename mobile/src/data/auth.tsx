@@ -1,7 +1,7 @@
 import React, { createContext, use, useEffect, useRef, useState } from 'react';
 import { Linking } from 'react-native';
 import * as Crypto from 'expo-crypto';
-import { AUTH_ORIGIN, accountUser, nativeLoginUrl } from '../../../src/workspace/auth-contract.mjs';
+import { AUTH_ORIGIN, accountUser, nativeLoginUrl, nativeReturnCode } from '../../../src/workspace/auth-contract.mjs';
 
 export type Account = { id: string; name: string; email: string };
 type Session = { user: Account; token: string; expires: number };
@@ -31,11 +31,8 @@ function browserReturn(attempt: string, signal: AbortSignal) {
     };
     const abort = () => done(new Error('Acceso cancelado.'));
     const listener = Linking.addEventListener('url', ({ url: value }) => {
-      try {
-        const url = new URL(value);
-        if (url.protocol !== 'finflow:' || url.hostname !== 'account' || url.searchParams.get('attempt') !== attempt || !/^[A-Za-z0-9_-]{43}$/.test(url.searchParams.get('code') || '')) return;
-        done(undefined, url.searchParams.get('code')!);
-      } catch { /* Ignore unrelated links. */ }
+      const code = nativeReturnCode(value, attempt);
+      if (code) done(undefined, code);
     });
     const timer = setTimeout(() => done(new Error('El acceso caducó. Vuelve a intentarlo.')), 300000);
     signal.addEventListener('abort', abort);
@@ -61,12 +58,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const challenge = (await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, verifier, { encoding: Crypto.CryptoEncoding.BASE64 })).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
       const attempt = await request('begin-native', { challenge }, current.signal);
       const url = nativeLoginUrl(attempt.url);
-      if (!url || typeof attempt.id !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(attempt.id) || new URL(url).searchParams.get('attempt') !== attempt.id) throw new Error('El servidor devolvió un acceso inválido.');
+      if (!url || typeof attempt.id !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(attempt.id) || !url.endsWith(`attempt=${attempt.id}`)) throw new Error('El servidor devolvió un acceso inválido.');
       const returned = browserReturn(attempt.id, current.signal);
       // Attach a handler immediately so cancellation while opening cannot leave
       // an unhandled rejection or an orphaned browser listener.
       const completion = returned.then(code => ({ code }), error => ({ error }));
-      try { await Linking.openURL(url); } catch (error) { current.abort(); throw error; }
+      try { await Linking.openURL(url); } catch (error) { current.abort(); setError('No pudimos abrir el navegador. Revisa tu navegador predeterminado y reintenta.'); throw error; }
       const handoff = await completion;
       if ('error' in handoff) throw handoff.error;
       const result = await request('complete-native', { id: attempt.id, verifier, code: handoff.code }, current.signal);
