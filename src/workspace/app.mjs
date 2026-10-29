@@ -1,6 +1,7 @@
 import { PROFILE_NAMES, money as formatMoney, parseCSV, validateTransaction, scenario, csvExport } from './core.mjs?v=0.2';
 import { incomeStatement, breakEven, detectLeaks, cashPosition, simulateCosts } from './finance.mjs?v=0.2';
 import { renderResults, renderLeaks, renderBusinessScenario } from './reports.mjs?v=0.2';
+import { getAccount, workspaceStorageKey } from './auth.mjs';
 let intelligenceModule,renderSequence=0;
 const money=value=>formatMoney(value,dataset().currency||'EUR');
 const totals=rows=>cashPosition(rows);
@@ -40,7 +41,7 @@ function seed(profile, entity = 0) {
   }
   return {rows,goal:{name:c.goal,target:c.target,saved:c.saved},lessons:[],updated:'2026-10-27'};
 }
-const STORAGE='finflow-open-v1';
+const STORAGE=workspaceStorageKey();
 let saved={};
 try{saved=JSON.parse(localStorage.getItem(STORAGE)||'{}');if(!saved||typeof saved!=='object')saved={};}catch{saved={};}
 const state={profile:'personal',view:'overview',month:saved.month||'2026-10',entity:saved.entity||0,filter:'Todas',chart:'six',scenario:{monthly:200,years:5,rate:3,fee:.5,inflation:2},theme:saved.theme||'light',datasets:saved.datasets||{}};
@@ -97,7 +98,7 @@ function goalPanel(){const g=dataset().goal,pct=Math.min(100,Math.round(g.saved/
 function recent(){const rows=[...currentRows()].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4);return `<section class="panel"><div class="panel-title"><h2>Los últimos movimientos</h2><button class="text-button" data-view="transactions">Ver todos ↗</button></div><ul class="transaction-list">${rows.map(r=>`<li class="transaction-row"><span class="transaction-icon ${r.type==='ingreso'?'income':''}">${icon(r.type==='ingreso'?'up':'wallet')}</span><div><b>${escape(r.description)}</b><small>${escape(r.category)} · ${r.date.slice(8)}/${r.date.slice(5,7)}</small></div><strong class="${r.type==='ingreso'?'income':''}">${r.type==='ingreso'?'+':'−'}${money(r.amount)}</strong></li>`).join('')||'<li class="empty">Todavía no hay movimientos. Añade el primero.</li>'}</ul></section>`;}
 function overview(){
   const c=config[state.profile],select=monthsSelect(),demo=dataset().rows.some(r=>r.source==='Datos de ejemplo');
-  return header(c.title,c.subtitle,select,c.hello)+entitySelector()+
+  return header(c.title,c.subtitle,select,state.profile==='personal'?(getAccount()?`Hola, ${escape(getAccount().name)} ☀`:'TU ESPACIO PERSONAL'):c.hello)+entitySelector()+
   `<div class="quick-actions"><button class="button primary small" data-action="add-income">+ Añadir ingreso</button><button class="button secondary small" data-action="add-expense">+ Añadir gasto</button><button class="button secondary small" data-action="settings">Configurar mes</button><button class="text-button" data-action="import">Importar CSV ↗</button>${dataset().demoArchive?'<button class="text-button" data-action="restore-demo">Restaurar ejemplos</button>':''}</div>`+
   (demo?`<section class="welcome-banner"><div><span class="banner-spark">✧</span><div><h2>Este espacio incluye datos de ejemplo.</h2><p>Empieza con tus datos o edita los registros para ver cómo cambia tu resumen.</p></div></div><button class="button" data-action="own-data">Usar mis datos →</button></section>`:'')+
   stats()+`<div class="dashboard-grid">${chart()}${goalPanel()}</div>`+

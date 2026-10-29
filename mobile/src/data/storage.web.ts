@@ -1,10 +1,10 @@
 export const storage = {
-  async read() {
+  async read(key = "finflow-mobile-v1") {
     return typeof window === "undefined"
       ? null
-      : window.localStorage.getItem("finflow-mobile-v1");
+      : window.localStorage.getItem(key);
   },
-  async write(value: string) {
-    window.localStorage.setItem("finflow-mobile-v1", value);
+  async write(value: string, key = "finflow-mobile-v1") {
+    window.localStorage.setItem(key, value);
   },
 };

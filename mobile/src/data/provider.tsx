@@ -38,7 +38,7 @@ type Store = {
 };
 const Context = createContext<Store | null>(null);
 
-export function FinflowProvider({ children }: { children: React.ReactNode }) {
+export function FinflowProvider({ children, storageKey = 'finflow-mobile-v1' }: { children: React.ReactNode; storageKey?: string }) {
   const [state, setState] = useState(initialState),
     [ready, setReady] = useState(false),
     [saving, setSaving] = useState(false),
@@ -49,7 +49,7 @@ export function FinflowProvider({ children }: { children: React.ReactNode }) {
     setError("");
     setReady(false);
     try {
-      const saved = await storage.read();
+      const saved = await storage.read(storageKey);
       const next = saved ? decodeBackup(saved) : initialState();
       current.current = next;
       setState(next);
@@ -59,7 +59,7 @@ export function FinflowProvider({ children }: { children: React.ReactNode }) {
         "No pudimos abrir tus datos. Puedes reintentar; el archivo guardado se conserva.",
       );
     }
-  }, []);
+  }, [storageKey]);
   useEffect(() => {
     void load();
   }, [load]);
@@ -70,7 +70,7 @@ export function FinflowProvider({ children }: { children: React.ReactNode }) {
     setSaving(true);
     try {
       const next = change(current.current);
-      await storage.write(encodeBackup(next));
+      await storage.write(encodeBackup(next), storageKey);
       current.current = next;
       setState(next);
     } catch (e) {
@@ -83,7 +83,7 @@ export function FinflowProvider({ children }: { children: React.ReactNode }) {
       locked.current = false;
       setSaving(false);
     }
-  }, []);
+  }, [storageKey]);
   const update = useCallback(
     (change: (d: Workspace) => Workspace) =>
       commit((s) => updateWorkspace(s, change)),

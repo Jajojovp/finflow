@@ -1,5 +1,5 @@
 import Storage from "expo-sqlite/kv-store";
 export const storage = {
-  read: () => Storage.getItemAsync("finflow-mobile-v1"),
-  write: (value: string) => Storage.setItemAsync("finflow-mobile-v1", value),
+  read: (key = "finflow-mobile-v1") => Storage.getItemAsync(key),
+  write: (value: string, key = "finflow-mobile-v1") => Storage.setItemAsync(key, value),
 };

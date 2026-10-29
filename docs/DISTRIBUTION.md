@@ -20,6 +20,8 @@ El configurador local también utiliza `cxx/` en la raíz como directorio tempor
 
 El script genera una clave RSA propia de FinFlow si todavía no existe; reutiliza la existente en futuras compilaciones. La guarda en `%USERPROFILE%/.finflow/signing/`, con acceso restringido al usuario actual y contraseña protegida con DPAPI de Windows. No se envía a Expo, GitHub ni al hosting y no se incluye en el repositorio. Antes de reinstalar Windows o migrar de ordenador, el titular debe respaldar la clave y sus credenciales de forma segura para conservar la posibilidad de actualizar la app.
 
+Para reanudar una compilación interrumpida sin regenerar el proyecto nativo puede utilizarse `-SkipPrebuild`. En equipos con poca memoria se puede añadir `-NoMinify`: omite R8 y la reducción de recursos, genera un archivo más grande y conserva una compilación release firmada. Esta entrega utiliza esa opción local.
+
 La compilación `release` utiliza esa clave y verifica la firma del APK contra el certificado esperado. No utiliza la clave de depuración del ejemplo Expo. El resultado ARM64 y su recibo se guardan en `outputs/android/`; la verificación en teléfono físico sigue siendo un paso separado.
 
 Para publicar un APK verificado, se copia a `public/downloads/finflow-VERSION.apk` y se actualiza `public/descargar/releases.json` con los datos del recibo, la URL y `status: available`. El archivo binario está excluido de Git, pero debe incluirse en el artefacto estático que se publica. No se activa una descarga para un archivo ausente, sin firma verificada o con metadatos incompletos.

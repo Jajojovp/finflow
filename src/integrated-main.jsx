@@ -3,4 +3,6 @@
 import './workspace/styles.css';
 import './workspace/intelligence.css';
 import './workspace/downloads.css';
-import './workspace/app.mjs';
+import './workspace/auth.css';
+import { initAuth } from './workspace/auth.mjs';
+initAuth().then(() => import('./workspace/app.mjs'));

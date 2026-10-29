@@ -1,3 +1,5 @@
+import { AuthProvider, useAuth } from '@/data/auth';
+import { accountStorageKey } from '../../../src/workspace/auth-contract.mjs';
 import React from "react";
 import { Stack } from "expo-router/stack";
 import { usePathname } from "expo-router";
@@ -61,10 +63,13 @@ function Navigator() {
     </>
   );
 }
-export default function RootLayout() {
+function AccountWorkspace() {
+  const { user } = useAuth();
+  const storageKey = accountStorageKey('finflow-mobile-v1', user);
   return (
-    <FinflowProvider>
+    <FinflowProvider key={storageKey} storageKey={storageKey}>
       <Navigator />
     </FinflowProvider>
   );
 }
+export default function RootLayout() { return <AuthProvider><AccountWorkspace /></AuthProvider>; }

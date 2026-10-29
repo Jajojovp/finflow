@@ -26,6 +26,7 @@ import {
   Title,
 } from "@/components/ui";
 import { colors, radius, spacing, type } from "@/theme";
+import AccountCard from '@/components/account-card';
 
 const percent = (n: number | null) =>
   n == null
@@ -756,6 +757,7 @@ export function More() {
   };
   return (
     <Frame>
+      <AccountCard />
       <Card>
         <Copy muted small>
           {profileNames[state.profile].toUpperCase()}

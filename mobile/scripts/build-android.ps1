@@ -1,4 +1,4 @@
-param([string]$ToolsConfig = "$env:USERPROFILE\.cache\finflow-android\tools-config.json")
+param([string]$ToolsConfig = "$env:USERPROFILE\.cache\finflow-android\tools-config.json", [switch]$SkipPrebuild, [switch]$NoMinify)
 $ErrorActionPreference = 'Stop'
 $mobileRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $repositoryRoot = (Resolve-Path (Join-Path $mobileRoot '..')).Path
@@ -45,13 +45,17 @@ $env:FINFLOW_KEY_PASSWORD = $env:FINFLOW_STORE_PASSWORD
 $env:FINFLOW_KEY_ALIAS = 'finflow'
 Push-Location $mobileRoot
 try {
-  & $taskNode 'node_modules/expo/bin/cli' prebuild --platform android --no-install
-  if ($LASTEXITCODE -ne 0) { throw 'Android prebuild failed' }
+  if (!$SkipPrebuild) {
+    & $taskNode 'node_modules/expo/bin/cli' prebuild --platform android --no-install
+    if ($LASTEXITCODE -ne 0) { throw 'Android prebuild failed' }
+  } elseif (!(Test-Path 'android/app/build.gradle')) { throw 'Cannot resume without an existing Android project' }
   & $taskNode 'scripts/configure-release.cjs'
   if ($LASTEXITCODE -ne 0) { throw 'Release signing configuration failed' }
   Push-Location 'android'
   try {
-    & '.\gradlew.bat' ':app:assembleRelease' '-PreactNativeArchitectures=arm64-v8a' '--no-daemon' '--max-workers=1' '-Dorg.gradle.parallel=false' '-Pkotlin.compiler.execution.strategy=in-process' '-Dorg.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8'
+    $optimization = @()
+    if ($NoMinify) { $optimization = @('-Pandroid.enableMinifyInReleaseBuilds=false', '-Pandroid.enableShrinkResourcesInReleaseBuilds=false') }
+    & '.\gradlew.bat' ':app:assembleRelease' '-PreactNativeArchitectures=arm64-v8a' '--no-daemon' '--max-workers=1' '-Dorg.gradle.parallel=false' '-Pkotlin.compiler.execution.strategy=in-process' '-Dorg.gradle.jvmargs=-Xmx1536m -Dfile.encoding=UTF-8' @optimization
     if ($LASTEXITCODE -ne 0) { throw 'Android release build failed' }
   } finally { Pop-Location }
   $apk = Join-Path $mobileRoot 'android\app\build\outputs\apk\release\app-release.apk'
