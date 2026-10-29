@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { releaseAction } from '../public/descargar/release.mjs';
+import { releaseAction } from '../public/descargar/release.js';
 const origin = 'https://finflow.sysora.io';
 const apk = {status:'available',url:'/downloads/finflow-1.0.0.apk',version:'1.0.0',sha256:'a'.repeat(64),certificateSha256:'b'.repeat(64),bytes:1234};
 test('only a complete signed APK release can enable downloading', () => {

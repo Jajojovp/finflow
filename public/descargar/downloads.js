@@ -1,4 +1,4 @@
-import { releaseAction } from './release.mjs';
+import { releaseAction } from './release.js';
 
 function showRelease(platform, entry) {
   const href = releaseAction(platform, entry, location.origin);
