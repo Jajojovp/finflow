@@ -54,5 +54,7 @@ export async function initAuth() {
   document.querySelectorAll('.user-avatar').forEach(avatar => {
     avatar.textContent = session.user ? session.user.name.slice(0, 1).toUpperCase() : '·';
     avatar.setAttribute('title', session.user ? session.user.name : 'Modo local');
+    avatar.setAttribute('aria-label', session.user ? 'Mi cuenta' : 'Iniciar sesión');
+    avatar.addEventListener('click', () => dialog.showModal());
   });
 }
