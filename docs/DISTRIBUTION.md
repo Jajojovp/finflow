@@ -26,6 +26,16 @@ La compilación `release` utiliza esa clave y verifica la firma del APK contra e
 
 Para publicar un APK verificado, se copia a `public/downloads/finflow-VERSION.apk` y se actualiza `public/descargar/releases.json` con los datos del recibo, la URL y `status: available`. El archivo binario está excluido de Git, pero debe incluirse en el artefacto estático que se publica. No se activa una descarga para un archivo ausente, sin firma verificada o con metadatos incompletos.
 
+## APK publicado · 29 de octubre de 2026
+
+Android 1.0.0, `io.sysora.finflow`, versión interna 1, ARM64, 45.242.309 bytes. El APK release se compiló del commit `bcaa4aa08e70af78cbda537cfd59fda76f2211a7`, con firma propia RSA de 3072 bits y esquema v2. Se verificaron la firma, el certificado esperado, el alineamiento de 16 KB, los metadatos y la presencia del código nativo y el bundle embebido con el acceso Google. No es depurable.
+
+- Archivo: https://finflow.sysora.io/downloads/finflow-1.0.0.apk
+- SHA-256: `b32aea2e3db757280cd87692cfa40dde95e5a0eb5509c8562a8d8f511bada206`
+- Certificado SHA-256: `4420a145b7a3ecb0b505980eb85b400e452b4cb7e37885ad3590d91a96ff1d66`
+
+La instalación y el retorno de Google en teléfono físico siguen pendientes de validación.
+
 ## iPhone y iPad
 
 Un APK no se instala en iOS. La app Expo ya tiene identificador `io.sysora.finflow`, versión y perfiles de compilación; una distribución nativa mediante TestFlight/App Store requiere configurar la cuenta Apple Developer, el proyecto y la firma. No existe una cuenta Expo o Apple Developer del titular en esta entrega y no se contratan servicios.

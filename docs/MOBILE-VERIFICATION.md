@@ -38,3 +38,7 @@ No hay emulador ni teléfono disponible en este entorno. Falta validar la instal
 SQLite en teléfono y almacenamiento del navegador en web; sin sincronización automática, conexión bancaria ni cifrado propio. El acceso opcional con Google abre un espacio separado por cuenta y conserva el modo local anterior. Los respaldos de la app tienen formato propio `finflow-mobile-v1`; CSV permite añadir movimientos. Las proyecciones son hipotéticas y las propuestas son informativas.
 
 La auditoría móvil registra ocho avisos transitivos en herramientas del SDK; alcance y referencias en `mobile/SECURITY.md`. No se presenta la entrega como certificación de seguridad ni como distribución aprobada para tiendas.
+
+## Instalador Android
+
+Se generó un APK release ARM64 de 45.242.309 bytes, firmado con el certificado propio de FinFlow y verificado mediante apksigner y zipalign con páginas de 16 KB. No es depurable y contiene el bundle de la aplicación y el flujo de acceso Google. Procedencia, hash y distribución en [DISTRIBUTION.md](DISTRIBUTION.md). Esto no sustituye una prueba en teléfono físico.

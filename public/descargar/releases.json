@@ -1,4 +1,16 @@
 {
-  "android": { "status": "pending", "url": null },
-  "ios": { "status": "pending", "url": null }
+  "android": {
+    "status": "available",
+    "url": "https://finflow.sysora.io/downloads/finflow-1.0.0.apk",
+    "architecture": "arm64-v8a",
+    "bytes": 45242309,
+    "sha256": "b32aea2e3db757280cd87692cfa40dde95e5a0eb5509c8562a8d8f511bada206",
+    "version": "1.0.0",
+    "sourceRevision": "bcaa4aa08e70af78cbda537cfd59fda76f2211a7",
+    "certificateSha256": "4420a145b7a3ecb0b505980eb85b400e452b4cb7e37885ad3590d91a96ff1d66"
+  },
+  "ios": {
+    "status": "pending",
+    "url": null
+  }
 }

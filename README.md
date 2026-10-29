@@ -10,6 +10,8 @@ Consulta [la integración y criterios de aceptación](docs/INTEGRATION-2026-10.m
 
 La app para iOS y Android está en [`mobile/`](mobile/README.md), dentro de este mismo historial. Comparte los servicios financieros originales y la paleta clara, con navegación nativa, SQLite local, tres perfiles y movimientos editables. Utiliza las guías oficiales de Expo; consulta [la validación y sus límites](docs/MOBILE-VERIFICATION.md) y [los hallazgos de herramientas](mobile/SECURITY.md). La web publicada y la app guardan datos separados.
 
+El [APK Android 1.0.0 firmado para ARM64](https://finflow.sysora.io/downloads/finflow-1.0.0.apk) está disponible con su huella verificable. La instalación en un teléfono físico sigue pendiente de comprobación.
+
 La página de [descargas e instalación](https://finflow.sysora.io/descargar/) reúne los canales disponibles para Android, iPhone y web. Las descargas nativas solo se habilitan después de verificar sus instaladores; iPhone también dispone de la opción web gratuita desde Safari. La compilación local de Android y la protección de su firma están descritas en [DISTRIBUTION.md](docs/DISTRIBUTION.md).
 
 Para desarrollar esta versión utiliza Node 22.12 o posterior compatible con `package.json`. Los apartados siguientes se conservan como documentación de la versión original; las capacidades publicadas y sus límites se describen arriba.
