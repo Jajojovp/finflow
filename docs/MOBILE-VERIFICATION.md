@@ -1,4 +1,4 @@
-# FinFlow móvil 1.0.0 · verificación del 28 de octubre de 2026
+# FinFlow móvil 1.0.0 · verificación actualizada el 29 de octubre de 2026
 
 ## Procedencia y alcance
 
@@ -9,10 +9,12 @@ Utiliza Expo SDK 58 y las guías oficiales de `expo/skills`, revisión `8a0dc4fa
 ## Comprobaciones automatizadas
 
 - 87 pruebas Vitest: los servicios originales y 11 casos de datos móviles. Cubren separación de perfiles/clientes, fórmulas compartidas, validación, CSV, identificadores, archivo, recuperación y límites de respaldo.
-- 10 pruebas Node de las fórmulas de caja, resultados, equilibrio, escenarios y CSV.
+- 16 pruebas Node: caja, resultados, equilibrio, escenarios, CSV, catálogo de descargas y contratos de identidad.
+- 6 pruebas del servidor PHP: CSRF, estado, PKCE, caducidad, consumo único, sesión nativa y límites de intentos.
+- Acceso real con Google y cierre de sesión comprobados en finflow.sysora.io; el espacio muestra el nombre verificado de la cuenta.
 - TypeScript estricto sin errores; `expo install --check` sin incompatibilidades.
 - ESLint web: cero errores y seis advertencias existentes (roles de accesibilidad e importaciones sin uso). Reconoce los módulos `.mjs` y el global GSAP del navegador; conserva las reglas suaves del proyecto.
-- Expo Doctor: 20 de 20 comprobaciones aprobadas.
+- Expo Doctor del 28 de octubre: 20 de 20 comprobaciones aprobadas; no se presenta como una nueva ejecución del 29.
 - Exportaciones Metro/Hermes de iOS y Android, más la vista web de producción. Exportar estos recursos no genera una instalación firmada ni demuestra ejecución en un dispositivo.
 
 ## Interfaz verificada en navegador
@@ -31,8 +33,8 @@ Datos sintéticos, guardados en el origen local de la vista Expo; no se utilizar
 
 ## Límites de entrega
 
-No hay emulador ni teléfono disponible en este entorno. Falta validar la instalación y los controles de iOS/Android en un dispositivo físico con Expo Go compatible. No se han solicitado builds de pago, firmado binarios, publicado en tiendas ni configurado servicios EAS.
+No hay emulador ni teléfono disponible en este entorno. Falta validar la instalación, los controles nativos y el retorno de Google en un teléfono físico. No se han solicitado builds de pago, publicado en tiendas ni configurado servicios EAS. La distribución nativa de iOS sigue pendiente de cuenta y firma Apple; la web instalable es la alternativa gratuita.
 
-SQLite en teléfono y almacenamiento del navegador en web; sin sincronización automática, conexión bancaria, autenticación ni cifrado propio. Los respaldos de la app tienen formato propio `finflow-mobile-v1`; CSV permite añadir movimientos. Las proyecciones son hipotéticas y las propuestas son informativas.
+SQLite en teléfono y almacenamiento del navegador en web; sin sincronización automática, conexión bancaria ni cifrado propio. El acceso opcional con Google abre un espacio separado por cuenta y conserva el modo local anterior. Los respaldos de la app tienen formato propio `finflow-mobile-v1`; CSV permite añadir movimientos. Las proyecciones son hipotéticas y las propuestas son informativas.
 
 La auditoría móvil registra ocho avisos transitivos en herramientas del SDK; alcance y referencias en `mobile/SECURITY.md`. No se presenta la entrega como certificación de seguridad ni como distribución aprobada para tiendas.
