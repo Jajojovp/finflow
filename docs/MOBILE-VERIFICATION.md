@@ -1,4 +1,4 @@
-# FinFlow móvil 1.0.0 · verificación actualizada el 29 de octubre de 2026
+# FinFlow móvil 1.0.1 · verificación actualizada el 29 de octubre de 2026
 
 ## Procedencia y alcance
 
@@ -41,4 +41,8 @@ La auditoría móvil registra ocho avisos transitivos en herramientas del SDK; a
 
 ## Instalador Android
 
-Se generó un APK release ARM64 de 45.242.309 bytes, firmado con el certificado propio de FinFlow y verificado mediante apksigner y zipalign con páginas de 16 KB. No es depurable y contiene el bundle de la aplicación y el flujo de acceso Google. Procedencia, hash y distribución en [DISTRIBUTION.md](DISTRIBUTION.md). Esto no sustituye una prueba en teléfono físico.
+Se generó un APK release ARM64 de 45.787.469 bytes, firmado con el certificado propio de FinFlow y verificado mediante apksigner y zipalign con páginas de 16 KB. No es depurable y contiene el bundle de la aplicación y el flujo de acceso Google. Procedencia, hash y distribución en [DISTRIBUTION.md](DISTRIBUTION.md). Esto no sustituye una prueba en teléfono físico.
+
+## Corrección Android 1.0.1
+
+El log del teléfono identificó la dependencia ausente `expo-symbols` en los iconos `md` de NativeTabs. La versión 1.0.1 (código 2) incluye ~58.0.4, se recompiló con caché de Metro vacía y se verificó el renderizador y la fuente Material Symbols en el APK. Firma v2 y certificado de FinFlow correctos, zipalign 16 KB correcto, hash distinto del APK defectuoso. El verificador rechaza la versión anterior. Los recuentos anteriores documentan la base validada; esta corrección se comprueba en el artefacto y su distribución.

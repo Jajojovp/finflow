@@ -28,13 +28,17 @@ Para publicar un APK verificado, se copia a `public/downloads/finflow-VERSION.ap
 
 ## APK publicado · 29 de octubre de 2026
 
-Android 1.0.0, `io.sysora.finflow`, versión interna 1, ARM64, 45.242.309 bytes. El APK release se compiló del commit `bcaa4aa08e70af78cbda537cfd59fda76f2211a7`, con firma propia RSA de 3072 bits y esquema v2. Se verificaron la firma, el certificado esperado, el alineamiento de 16 KB, los metadatos y la presencia del código nativo y el bundle embebido con el acceso Google. No es depurable.
+Android 1.0.1, `io.sysora.finflow`, versión interna 2, ARM64, 45.787.469 bytes. El APK release se compiló del commit `929525876e4562e9a53a32bd690adaef3ef73011`, con firma propia RSA de 3072 bits y esquema v2. Se verificaron la firma, el certificado esperado, el alineamiento de 16 KB, los metadatos y la presencia del código nativo y el bundle embebido con el acceso Google. No es depurable.
 
-- Archivo: https://finflow.sysora.io/downloads/finflow-1.0.0.apk
-- SHA-256: `b32aea2e3db757280cd87692cfa40dde95e5a0eb5509c8562a8d8f511bada206`
+- Archivo: https://finflow.sysora.io/downloads/finflow-1.0.1.apk
+- SHA-256: `a53e9d2540312167cbb26642ffed743a853f1e32ec9d395769e7238524e32a70`
 - Certificado SHA-256: `4420a145b7a3ecb0b505980eb85b400e452b4cb7e37885ad3590d91a96ff1d66`
 
-La instalación y el retorno de Google en teléfono físico siguen pendientes de validación.
+Esta versión corrige el cierre de NativeTabs por la ausencia de `expo-symbols` (~58.0.4). Se comprobaron el renderizador en el bundle y la fuente Material Symbols incrustada en el APK. El build rechaza el APK defectuoso, archivos de un build anterior y una versión distinta de `app.json`.
+
+Verificación adicional con Python 3: `python mobile/scripts/verify-android-artifact.py RUTA_APK RUTA_RECIBO`. Este control también se ejecutó contra la versión defectuosa y la rechazó.
+
+La instalación y el retorno de Google en teléfono físico siguen pendientes de validación. El enlace anterior de 1.0.0 redirige a 1.0.1.
 
 ## iPhone y iPad
 
