@@ -8,6 +8,15 @@ header("Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; 
 ini_set('display_errors', '0');
 ini_set('session.use_strict_mode', '1');
 ini_set('session.use_only_cookies', '1');
+ini_set('session.gc_maxlifetime', '28800');
+try {
+    $sessionDir = ff_private() . '/web-sessions';
+    if (!is_dir($sessionDir) && !mkdir($sessionDir, 0700, true)) throw new RuntimeException('Session storage unavailable');
+    session_save_path($sessionDir);
+} catch (Throwable $e) {
+    http_response_code(503); header('Content-Type: application/json');
+    echo '{"error":"El acceso no está disponible temporalmente."}'; exit;
+}
 session_name('__Host-finflow');
 session_set_cookie_params(['lifetime' => 0, 'path' => '/', 'secure' => true, 'httponly' => true, 'samesite' => 'Lax']);
 session_start();

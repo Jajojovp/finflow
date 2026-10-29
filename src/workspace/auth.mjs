@@ -45,7 +45,8 @@ export async function initAuth() {
       status.textContent = unavailable ? 'No pudimos conectar con el acceso. Recarga para reintentar; puedes seguir en modo local.' : 'El acceso con Google está en preparación. Puedes seguir en modo local.';
     }
   }
-  dialog.append(heading, email, note, status, action, close); document.body.append(dialog);
+  const privacy = document.createElement('a'); privacy.href = '/privacidad/'; privacy.textContent = 'Privacidad y datos'; privacy.className = 'account-privacy';
+  dialog.append(heading, email, note, privacy, status, action, close); document.body.append(dialog);
   document.querySelectorAll('[data-account]').forEach(button => {
     button.textContent = session.user ? 'Mi cuenta' : 'Iniciar sesión';
     button.addEventListener('click', () => dialog.showModal());
