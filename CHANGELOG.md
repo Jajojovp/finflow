@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project uses [Semantic Versioning](https://semver.org/).
 
+## [2.3.0] - 2026-10-29
+
+### Added
+
+- Acceso opcional con Google mediante el proyecto FinFlow autorizado, código de autorización, PKCE y estado de un solo uso.
+- Sesiones web seguras y retorno a Android ligado al verificador de la app y a un código entregado por el navegador.
+- Espacios locales independientes para cada cuenta, conservación del modo local y página de privacidad.
+- Pruebas de caducidad, reutilización, CSRF, límites de intentos y validación de identidades.
+
 ## [2.2.0] - 2026-10-28
 
 ### Added
