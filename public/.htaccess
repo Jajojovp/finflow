@@ -1,6 +1,9 @@
 <IfModule mod_mime.c>
   AddType application/vnd.android.package-archive .apk
 </IfModule>
+<IfModule mod_alias.c>
+  RedirectMatch 302 ^/downloads/finflow-1\.0\.0\.apk$ https://finflow.sysora.io/downloads/finflow-1.0.1.apk
+</IfModule>
 <IfModule mod_headers.c>
   <FilesMatch "\.apk$">
     Header set Content-Disposition "attachment"

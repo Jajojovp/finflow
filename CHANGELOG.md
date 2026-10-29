@@ -6,6 +6,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [2.3.0] - 2026-10-29
 
+### Fixed
+
+- Android móvil 1.0.1 (versión interna 2): incluye `expo-symbols` para evitar el cierre al dibujar los iconos Material de las pestañas.
+- La compilación comprueba versión, fecha de generación y hash, y rechaza el APK defectuoso anterior antes de generar el recibo de publicación.
+
 ### Added
 
 - Acceso opcional con Google mediante el proyecto FinFlow autorizado, código de autorización, PKCE y estado de un solo uso.
