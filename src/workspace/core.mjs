@@ -30,19 +30,26 @@ function cells(text, delimiter) {
   row.push(cell.replace(/\r$/, '')); if (row.some(c => c.trim())) rows.push(row);
   return rows;
 }
-export function parseCSV(text) {
+export function inspectCSV(text) {
   const clean = text.replace(/^\uFEFF/, ''); const delimiter = clean.split(/\r?\n/)[0].includes(';') ? ';' : ',';
   const [header, ...rows] = cells(clean, delimiter);
   const expected = ['fecha', 'descripcion', 'categoria', 'tipo', 'importe'];
   if (!header || header.map(c => c.trim().toLowerCase()).join() !== expected.join()) throw new Error('Cabecera requerida: fecha,descripcion,categoria,tipo,importe');
   if (!rows.length) throw new Error('El CSV no contiene movimientos.');
   if (rows.length > 5000) throw new Error('Importa un máximo de 5.000 movimientos por archivo.');
-  return rows.map((row, index) => {
+  const valid = [], errors = [];
+  rows.forEach((row, index) => {
     try {
       if (row.length !== 5) throw new Error('Se esperaban 5 columnas.');
-      return validateTransaction({ date: row[0].trim(), description: row[1], category: row[2], type: row[3].trim().toLowerCase(), amount: Number(row[4].trim().replace(',', '.')), source: 'CSV importado' });
-    } catch (error) { throw new Error(`Fila ${index + 2}: ${error.message}`); }
+      valid.push(validateTransaction({ date: row[0].trim(), description: row[1], category: row[2], type: row[3].trim().toLowerCase(), amount: Number(row[4].trim().replace(',', '.')), source: 'CSV importado' }));
+    } catch (error) { errors.push({ row: index + 2, message: error.message }); }
   });
+  return { rows: valid, errors, total: rows.length };
+}
+export function parseCSV(text) {
+  const result = inspectCSV(text);
+  if (result.errors.length) throw new Error(`Fila ${result.errors[0].row}: ${result.errors[0].message}`);
+  return result.rows;
 }
 export function scenario(monthly, months, annualRate) {
   const rate = annualRate / 100 / 12; let balance = 0;

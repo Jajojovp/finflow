@@ -22,7 +22,7 @@ Estado al 30 de octubre de 2026. La lista se ejecuta por dependencias e hitos de
   - Verificación: navegador real con datos sintéticos, recarga, aborto de escritura y cambio de cuenta; pruebas del contrato del adaptador.
   - Archivos: nuevos `src/workspace/storage.mjs`, `tests/storage.test.mjs`; `src/workspace/app.mjs`, `src/workspace/auth.mjs`.
 
-- [ ] **CR-04 · Preparar importación sin escribir datos.** Depende de CR-01.
+- [x] **CR-04 · Preparar importación sin escribir datos.** Depende de CR-01.
   - Aceptación: propuesta de lote con filas/errores/duplicados; límites actuales y parser conservados; lote inválido rechazado sin omisiones silenciosas.
   - Verificación: comillas, saltos de línea, Unicode, decimales, fechas inválidas, duplicados y cancelación.
   - Archivos: nuevo `src/workspace/import-review.mjs`, `tests/import-review.test.mjs`; `src/workspace/core.mjs`, `tests/core.test.mjs`.
