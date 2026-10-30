@@ -4,6 +4,8 @@ Esta evolución parte del historial original de **Jajojovp/finflow** y conserva 
 
 Web y app admiten 176 monedas ISO 4217, con búsqueda por nombre o código: CLP, ARS, USD y CAD aparecen primero. La elección se guarda por espacio o cliente y se aplica a importes, análisis y metas. Cambiar la moneda no convierte las cifras mediante un tipo de cambio. Consulta [las monedas y su precisión](docs/CURRENCIES.md).
 
+La próxima versión, **[Crecimiento](docs/CRECIMIENTO.md)**, mantiene el diseño claro, la gratuidad y los tres perfiles. Su [plan](tasks/plan.md) y [tareas](tasks/todo.md) documentan la ampliación prevista; las capacidades nuevas todavía no se presentan como publicadas.
+
 En **Empresa o Asesor → Resultados** se pueden consultar los servicios originales de indicadores, flujo de caja, pronósticos, anomalías, comparaciones, covenants, variaciones y propuestas, alimentados por los movimientos de cada entidad. El balance, presupuesto de ventas y límites se editan en ese mismo panel. La evidencia y los supuestos se pueden exportar.
 
 El almacenamiento sigue siendo local; la actualización conserva los registros existentes del mismo dominio. El acceso opcional con Google utiliza el proyecto `finflow-513111` y abre un espacio independiente por cuenta, conservando el modo local anterior. No hay sincronización entre dispositivos ni conexiones bancarias. Consulta [el acceso y sus límites](docs/GOOGLE-AUTH.md) y [privacidad](https://finflow.sysora.io/privacidad/). Las referencias de comparación son metas declaradas, no estadísticas sectoriales verificadas. Las propuestas solo registran decisiones locales.
