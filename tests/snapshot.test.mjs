@@ -66,6 +66,9 @@ test('rejects malformed versions, arrays, duplicate IDs and invalid financial va
     { ...state(), datasets: { personal: { ...workspace(), budgets: { Test: -1 } } } },
     { ...state(), datasets: { personal: { ...workspace(), finance: { '2026-02': { opening: 0, savingsTarget: 101, expenseBudget: 0, unitPrice: 0 } } } } },
     { ...state(), datasets: { personal: { ...workspace(), rows: [{ ...workspace().rows[0], date: '2026-02-31' }] } } },
+    { ...state(), datasets: { personal: { ...workspace(), lastMonth: '__proto__' } } },
+    { ...state(), scenario: { monthly: '<script>', years: 5, rate: 3, fee: 0.5, inflation: 2 } },
+    { ...state(), datasets: { personal: { ...workspace(), rows: [{ ...workspace().rows[0], financialType: 0 }] } } },
   ];
   for (const value of invalid) assert.throws(() => encodeSnapshot(value));
   const changedVersion = JSON.parse(encodeSnapshot(state())); changedVersion.schemaVersion = 999;

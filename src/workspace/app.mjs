@@ -1,3 +1,6 @@
+import { decodeSnapshot, scopeFromStorageKey, toWebState } from './snapshot.mjs';
+import { restoreSnapshot } from './restore.mjs';
+import { showDataTools } from './data-tools.mjs';
 import { currencyOptions, searchCurrencies, isCurrencyCode, changeCurrency, currencyStep, currencyMath } from './currencies.mjs';
 import { PROFILE_NAMES, money as formatMoney, parseCSV, validateTransaction, scenario, csvExport } from './core.mjs?v=0.2';
 import { incomeStatement as baseStatement, breakEven as baseBreakEven, cashPosition as baseCash } from './finance.mjs?v=0.2';
@@ -45,10 +48,10 @@ function seed(profile, entity = 0) {
   }
   return {rows,goal:{name:c.goal,target:c.target,saved:c.saved},lessons:[],updated:'2026-10-27'};
 }
-const STORAGE=workspaceStorageKey();
+const STORAGE=workspaceStorageKey(), dataScope=scopeFromStorageKey(STORAGE);
 let saved={};
-try{saved=JSON.parse(localStorage.getItem(STORAGE)||'{}');if(!saved||typeof saved!=='object')saved={};}catch{saved={};}
-const state={profile:'personal',view:'overview',month:saved.month||'2026-10',entity:saved.entity||0,filter:'Todas',chart:'six',scenario:{monthly:200,years:5,rate:3,fee:.5,inflation:2},theme:saved.theme||'light',previewCurrency:isCurrencyCode(saved.previewCurrency)?saved.previewCurrency:'EUR',datasets:saved.datasets||{}};
+try{saved=JSON.parse(localStorage.getItem(STORAGE)||'{}');if(saved?.format)saved=toWebState(decodeSnapshot(JSON.stringify(saved),{scope:dataScope}).state);if(!saved||typeof saved!=='object')saved={};}catch{saved={};}
+const state={...saved,profile:'personal',view:'overview',month:saved.month||'2026-10',entity:saved.entity||0,filter:'Todas',chart:'six',scenario:{monthly:200,years:5,rate:3,fee:.5,inflation:2},theme:saved.theme||'light',previewCurrency:isCurrencyCode(saved.previewCurrency)?saved.previewCurrency:'EUR',datasets:saved.datasets||{}};
 let toastTimer,transition;
 function dataset(){
   const key=state.profile==='advisor'?`advisor-${state.entity}`:state.profile;let value=state.datasets[key];
@@ -63,7 +66,16 @@ function dataset(){
 function monthSettings(){const d=dataset();return d.finance[state.month] ||= {opening:0,savingsTarget:20,expenseBudget:0,unitPrice:0};}
 function previousRows(){const date=new Date(state.month+'-01T00:00:00Z');date.setUTCMonth(date.getUTCMonth()-1);const key=date.toISOString().slice(0,7);return dataset().rows.filter(r=>r.date.startsWith(key));}
 function activeNavs(){return navs.filter(n=>n[0]!=='results'||state.profile!=='personal');}
-function persist(){try{localStorage.setItem(STORAGE,JSON.stringify({theme:state.theme,month:state.month,entity:state.entity,previewCurrency:state.previewCurrency,datasets:state.datasets}));}catch{toast('El navegador no pudo guardar los cambios. Exporta una copia.');}}
+function savedState(){const data={...state};for(const key of ['view','filter','chart','reviewCategory'])delete data[key];return {...data,period:state.month};}
+function dataTools(){showDataTools({getState:savedState,scope:dataScope,modal,download,toast,
+ readRecovery:async()=>localStorage.getItem(STORAGE+':before-restore'),
+ restore:async incoming=>{
+  await restoreSnapshot({write:async(value,key)=>localStorage.setItem(key,value)},STORAGE,savedState(),incoming);
+  const restored=toWebState(incoming);for(const key of Object.keys(state))delete state[key];
+  Object.assign(state,{filter:'Todas',chart:'six',scenario:{monthly:200,years:5,rate:3,fee:.5,inflation:2},...restored,view:'overview'});
+  document.documentElement.classList.toggle('dark',state.theme==='dark');refreshPreviewCurrency();route(state.profile,'overview');
+ }});}
+function persist(){try{localStorage.setItem(STORAGE,JSON.stringify(savedState()));}catch{toast('El navegador no pudo guardar los cambios. Exporta una copia.');}}
 function currentRows(){return dataset().rows.filter(r=>r.date.startsWith(state.month));}
 function balance(){return cashPosition(currentRows(),monthSettings().opening||0);}
 const monthName = value=>new Intl.DateTimeFormat('es-ES',{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(value+'-01T00:00:00Z'));
@@ -210,6 +222,7 @@ document.addEventListener('click',event=>{
   if(b.dataset.delete){const row=dataset().rows.find(r=>r.id===b.dataset.delete);if(row){dataset().rows=dataset().rows.filter(r=>r.id!==row.id);persist();updateTable();toast('Movimiento eliminado.');}return;}
   if(b.dataset.action==='add')return addTransaction();
   if(b.dataset.action==='goal')return editGoal();
+  if(b.dataset.action==='data-tools'){dataTools();return;}
   if(b.dataset.action==='import'){modal(`<span class="overline">IMPORTACIÓN LOCAL</span><h2>Tus números, en tu espacio.</h2><p>Selecciona un CSV con esta cabecera:</p><p><code>fecha,descripcion,categoria,tipo,importe</code></p><p>Fecha AAAA-MM-DD, tipo ingreso o gasto e importe positivo en ${dataset().currency}. Hasta 5.000 filas y 2 MB. Se añadirán al espacio actual; los duplicados exactos se omiten.</p><p>Para incluir los gastos importados en el punto de equilibrio, edita su clasificación y comportamiento desde Movimientos.</p><button class="button primary" id="choose-csv">Elegir archivo CSV →</button>`);return;}
   if(b.id==='choose-csv'){$('#csv-file').click();return;}
   if(b.dataset.action==='export'){download(`finflow-${state.profile}-${state.month}.csv`,csvExport(currentRows()),'text/csv;charset=utf-8');toast('CSV del periodo exportado.');return;}

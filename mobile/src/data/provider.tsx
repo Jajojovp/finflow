@@ -16,6 +16,8 @@ import {
 } from "../../../src/workspace/finance.mjs";
 import { money } from "../../../src/workspace/core.mjs";
 import { storage } from "./storage";
+import { scopeFromStorageKey } from "../../../src/workspace/snapshot.mjs";
+import { restoreSnapshot } from "../../../src/workspace/restore.mjs";
 import {
   decodeBackup,
   encodeBackup,
@@ -32,13 +34,16 @@ type Store = {
   ready: boolean;
   saving: boolean;
   error: string;
+  dataScope: string;
+  readRecovery: () => Promise<string | null>;
   retry: () => void;
-  commit: (change: (s: Snapshot) => Snapshot) => Promise<void>;
+  commit: (change: (s: Snapshot) => Snapshot, options?: { recovery?: boolean }) => Promise<void>;
   update: (change: (d: Workspace) => Workspace) => Promise<void>;
 };
 const Context = createContext<Store | null>(null);
 
 export function FinflowProvider({ children, storageKey = 'finflow-mobile-v1' }: { children: React.ReactNode; storageKey?: string }) {
+  const dataScope = scopeFromStorageKey(storageKey);
   const [state, setState] = useState(initialState),
     [ready, setReady] = useState(false),
     [saving, setSaving] = useState(false),
@@ -50,7 +55,7 @@ export function FinflowProvider({ children, storageKey = 'finflow-mobile-v1' }: 
     setReady(false);
     try {
       const saved = await storage.read(storageKey);
-      const next = saved ? decodeBackup(saved) : initialState();
+      const next = saved ? decodeBackup(saved, dataScope) : initialState();
       current.current = next;
       setState(next);
       setReady(true);
@@ -59,18 +64,19 @@ export function FinflowProvider({ children, storageKey = 'finflow-mobile-v1' }: 
         "No pudimos abrir tus datos. Puedes reintentar; el archivo guardado se conserva.",
       );
     }
-  }, [storageKey]);
+  }, [storageKey, dataScope]);
   useEffect(() => {
     void load();
   }, [load]);
-  const commit = useCallback(async (change: (s: Snapshot) => Snapshot) => {
+  const commit = useCallback(async (change: (s: Snapshot) => Snapshot, options?: { recovery?: boolean }) => {
     if (locked.current)
       throw new Error("Espera a que termine el guardado actual.");
     locked.current = true;
     setSaving(true);
     try {
       const next = change(current.current);
-      await storage.write(encodeBackup(next), storageKey);
+      if (options?.recovery) await restoreSnapshot(storage, storageKey, current.current, next, { source: 'mobile' });
+      else await storage.write(encodeBackup(next, dataScope), storageKey);
       current.current = next;
       setState(next);
     } catch (e) {
@@ -83,7 +89,7 @@ export function FinflowProvider({ children, storageKey = 'finflow-mobile-v1' }: 
       locked.current = false;
       setSaving(false);
     }
-  }, [storageKey]);
+  }, [storageKey, dataScope]);
   const update = useCallback(
     (change: (d: Workspace) => Workspace) =>
       commit((s) => updateWorkspace(s, change)),
@@ -96,6 +102,8 @@ export function FinflowProvider({ children, storageKey = 'finflow-mobile-v1' }: 
         ready,
         saving,
         error,
+        dataScope,
+        readRecovery: () => storage.read(storageKey + ':before-restore'),
         retry: () => {
           void load();
         },

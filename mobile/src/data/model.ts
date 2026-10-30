@@ -356,8 +356,9 @@ export function importRows(d: Workspace, csv: string): Workspace {
 export function encodeBackup(s: Snapshot, scope = "local") {
   return encodeSnapshot(s, { source: "mobile", scope });
 }
-export function decodeBackup(raw: string, scope?: string): Snapshot {
-  const { state } = decodeSnapshot(raw, { scope });
+export function inspectBackup(raw: string, scope?: string) {
+  const decoded = decodeSnapshot(raw, { scope });
+  const { state } = decoded;
   const restored = state as Snapshot;
   const datasets: Record<string, Workspace> = {};
   for (const [key, d] of Object.entries(restored.datasets)) {
@@ -367,5 +368,8 @@ export function decodeBackup(raw: string, scope?: string): Snapshot {
       trash: d.trash.map(r => makeTransaction(r, r.id)),
     };
   }
-  return { ...restored, datasets };
+  return { ...decoded, state: { ...restored, datasets } };
+}
+export function decodeBackup(raw: string, scope?: string): Snapshot {
+  return inspectBackup(raw, scope).state;
 }

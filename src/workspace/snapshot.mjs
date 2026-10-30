@@ -53,8 +53,8 @@ function rows(value, ids, legacy) {
       if (result.type === 'gasto') result.behavior = ['Proveedores', 'Marketing', 'Operaciones', 'Compra', 'Ocio', 'Transporte'].includes(result.category) ? 'variable' : 'fixed';
     }
     const allowed = result.type === 'ingreso' ? ['revenue', 'other_income', 'capital'] : ['opex', 'cogs', 'depreciation', 'interest', 'tax', 'capital', 'unclassified'];
-    if (result.financialType && !allowed.includes(result.financialType)) fail('La clasificación no corresponde al tipo de movimiento.');
-    if (result.behavior && !['fixed', 'variable'].includes(result.behavior)) fail('Hay un comportamiento de gasto inválido.');
+    if (result.financialType !== undefined && !allowed.includes(result.financialType)) fail('La clasificación no corresponde al tipo de movimiento.');
+    if (result.behavior !== undefined && !['', 'fixed', 'variable'].includes(result.behavior)) fail('Hay un comportamiento de gasto inválido.');
     if (result.source !== undefined && typeof result.source !== 'string') fail('Hay una fuente de movimiento inválida.');
     return result;
   });
@@ -66,6 +66,7 @@ function workspace(value, key, legacy) {
   if (typeof name !== 'string' || name.length > 200) fail('El nombre del espacio es inválido.');
   const currency = d.currency ?? (legacy ? 'EUR' : null);
   if (!isCurrencyCode(currency)) fail('Revisa la moneda del respaldo.');
+  if (d.lastMonth !== undefined && !month(d.lastMonth)) fail('El último período del espacio es inválido.');
   const goal = record(d.goal, 'el objetivo');
   if (typeof goal.name !== 'string' || goal.name.length > 200 || !amount(goal.target) || goal.target <= 0 || !amount(goal.saved)) fail('Revisa el objetivo y sus importes.');
   if (!Array.isArray(d.lessons) || d.lessons.some(n => !Number.isInteger(n) || n < 0 || n >= 5)) fail('Hay progreso de aprendizaje inválido.');
@@ -108,6 +109,13 @@ export function normalizeSnapshotState(value, { legacy = false } = {}) {
   }
   if (state.theme !== undefined && !['light', 'dark'].includes(state.theme)) fail('Hay una apariencia inválida en el respaldo.');
   if (state.previewCurrency !== undefined && !isCurrencyCode(state.previewCurrency)) fail('La moneda de la portada es inválida.');
+  if (state.scenario !== undefined) {
+    record(state.scenario, 'el simulador');
+    for (const [key, min, max] of [['monthly', 0, 1e9], ['years', 1, 40], ['rate', -50, 50], ['fee', 0, 20], ['inflation', -10, 50]]) {
+      const n = state.scenario[key];
+      if (!Number.isFinite(n) || n < min || n > max) fail('Hay parámetros de simulación inválidos.');
+    }
+  }
   return { ...state, version: 1, profile, period, entity, onboarded: !!state.onboarded, datasets };
 }
 export function encodeSnapshot(state, { source = 'web', scope = 'local' } = {}) {

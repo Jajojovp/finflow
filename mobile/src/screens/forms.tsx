@@ -6,11 +6,12 @@ import * as Clipboard from "expo-clipboard";
 import * as Haptics from "expo-haptics";
 import Animated, { FadeIn, ReduceMotion } from "react-native-reanimated";
 import { cashPosition } from "../../../src/workspace/finance.mjs";
+import { snapshotSummary } from "../../../src/workspace/snapshot.mjs";
 import { useWorkspace } from "@/data/provider";
 import {
   archiveTransaction,
   appendDemo,
-  decodeBackup,
+  inspectBackup,
   demoWorkspace,
   emptySettings,
   emptyWorkspace,
@@ -691,114 +692,85 @@ function merge(current: Snapshot, incoming: Snapshot): Snapshot {
   return { ...current, datasets };
 }
 export function ImportScreen() {
-  const { state, commit, update, saving } = useWorkspace(),
-    [format, setFormat] = useState("csv"),
-    [text, setText] = useState(""),
-    [pasteVersion, setPasteVersion] = useState(0),
-    [error, setError] = useState(""),
-    [notice, setNotice] = useState("");
-  async function apply() {
-    setError("");
-    setNotice("");
-    try {
-      if (format === "csv") await update((d) => importRows(d, text));
-      else {
-        const incoming = decodeBackup(text);
-        await commit((s) => merge(s, incoming));
-      }
-      setNotice(
-        "Importación guardada. Los registros duplicados se omiten y tus ajustes actuales se conservan.",
-      );
-    } catch (e) {
-      setError(errorMessage(e));
-    }
+  const { state, commit, update, saving, dataScope, readRecovery } = useWorkspace();
+  const [format, setFormat] = useState("csv");
+  const [text, setText] = useState("");
+  const [pasteVersion, setPasteVersion] = useState(0);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [restoreMode, setRestoreMode] = useState("replace");
+  const [preview, setPreview] = useState<ReturnType<typeof inspectBackup> | null>(null);
+  const summary = preview ? snapshotSummary(preview.state) : null;
+  function review(raw: string) {
+    setPreview(null); setError("");
+    setPreview(inspectBackup(raw, dataScope));
   }
-  return (
-    <Frame>
-      <Card>
-        <Title>Tus datos pueden acompañarte.</Title>
-        <Copy muted>
-          CSV añade movimientos al espacio actual. Un respaldo de FinFlow móvil
-          añade los registros de cada espacio y crea los que faltan; conserva
-          tus ajustes existentes.
-        </Copy>
-        <Select
-          label="Formato"
-          value={format}
-          onChange={setFormat}
-          options={[
-            { label: "CSV de movimientos", value: "csv" },
-            { label: "Respaldo de FinFlow móvil", value: "backup" },
-          ]}
-        />
-        <Copy small muted>
-          {format === "csv"
-            ? "Cabecera: fecha,descripcion,categoria,tipo,importe. Fecha AAAA-MM-DD, tipo ingreso o gasto, importe positivo."
-            : "Formato finflow-mobile-v1. No se importa un informe de análisis como si fuera un respaldo completo."}
-        </Copy>
-        <Field
-          key={format + pasteVersion}
-          label="Contenido para importar"
-          value={text}
-          onChange={setText}
-          multiline
-          maxLength={4 * 1024 * 1024}
-        />
-        <Button
-          title="Pegar desde el portapapeles"
-          secondary
-          onPress={() => {
-            void Clipboard.getStringAsync()
-              .then((value) => {
-                if (value.length > 4 * 1024 * 1024)
-                  throw new Error("El contenido supera el límite de 4 MB.");
-                setText(value);
-                setPasteVersion((v) => v + 1);
-                setNotice(
-                  "Texto pegado. Revisa su contenido antes de importar.",
-                );
-              })
-              .catch((e) => setError(errorMessage(e)));
-          }}
-        />
-        <ErrorText message={error} />
-        <Button
-          title={saving ? "Guardando…" : "Importar registros"}
-          disabled={saving}
-          onPress={() => {
-            void apply();
-          }}
-        />
-        {!!notice && (
-          <Copy muted small>
-            {notice}
-          </Copy>
-        )}
-      </Card>
-      <Card>
-        <Title>Guarda un respaldo completo.</Title>
-        <Copy small muted>
-          Incluye los espacios, movimientos y ajustes. Se copia al portapapeles;
-          elige dónde guardarlo y con quién compartirlo.
-        </Copy>
-        <Button
-          title="Copiar mi respaldo"
-          secondary
-          onPress={() => {
-            setError("");
-            void copy(encodeBackup(state))
-              .then(() =>
-                setNotice(
-                  "Respaldo copiado. Guárdalo en un lugar que controles.",
-                ),
-              )
-              .catch((e) => setError(errorMessage(e)));
-          }}
-        />
-      </Card>
-    </Frame>
-  );
+  async function apply() {
+    setError(""); setNotice("");
+    try {
+      if (format === "backup") { review(text); return; }
+      await update(d => importRows(d, text));
+      setNotice("Movimientos guardados. Los duplicados exactos se omiten.");
+    } catch (e) { setError(errorMessage(e)); }
+  }
+  async function confirmBackup() {
+    if (!preview || saving) return;
+    setError("");
+    try {
+      if (restoreMode === "replace") await commit(() => preview.state, { recovery: true });
+      else await commit(s => merge(s, preview.state));
+      setPreview(null);
+      setNotice(restoreMode === "replace" ? "Respaldo completo restaurado. Puedes revisar la copia anterior desde esta pantalla." : "Registros añadidos. Tus ajustes actuales se conservan.");
+    } catch (e) { setError(errorMessage(e)); }
+  }
+  return <Frame>
+    <Card>
+      <Title>Tus datos pueden acompañarte.</Title>
+      <Copy muted>CSV añade movimientos al espacio actual. Un respaldo completo recupera también los espacios, monedas, metas y configuración. Revisa su contenido antes de confirmar.</Copy>
+      <Select label="Formato" value={format} onChange={value => { setFormat(value); setPreview(null); setError(""); }} options={[
+        { label: "CSV de movimientos", value: "csv" }, { label: "Respaldo completo de FinFlow", value: "backup" },
+      ]} />
+      <Copy small muted>{format === "csv" ? "Cabecera: fecha,descripcion,categoria,tipo,importe. Fecha AAAA-MM-DD, tipo ingreso o gasto, importe positivo." : "Admite el formato portátil v2, el respaldo móvil v1 y los datos web anteriores. Hasta 4 MB; se revisan en este dispositivo."}</Copy>
+      <Field key={format + pasteVersion} label="Contenido para importar" value={text} onChange={value => { setText(value); setPreview(null); }} multiline maxLength={4 * 1024 * 1024} />
+      <Button title="Pegar desde el portapapeles" secondary onPress={() => {
+        void Clipboard.getStringAsync().then(value => {
+          if (value.length > 4 * 1024 * 1024) throw new Error("El contenido supera el límite de 4 MB.");
+          setText(value); setPasteVersion(v => v + 1); setPreview(null); setNotice("Texto pegado. Revisa su contenido antes de importar.");
+        }).catch(e => setError(errorMessage(e)));
+      }} />
+      <ErrorText message={error} />
+      <Button title={saving ? "Guardando…" : format === "backup" ? "Revisar respaldo" : "Importar registros"} disabled={saving} onPress={() => { void apply(); }} />
+      {!!notice && <Copy muted small>{notice}</Copy>}
+    </Card>
+    {preview && summary && <Card>
+      <Title>Antes de restaurar.</Title>
+      <Copy>{summary.workspaces} espacios · {summary.movements} movimientos · {summary.archived} archivados</Copy>
+      <Copy muted>{summary.currencies.join(", ") || "Sin monedas guardadas"}</Copy>
+      {Object.entries(preview.state.datasets).map(([key, d]) => <Copy small key={key}>{d.name} · {d.currency} · {d.rows.length} movimientos</Copy>)}
+      <Copy small muted>{preview.legacy ? "Respaldo anterior sin ámbito de cuenta declarado. Comprueba que estos datos sean tuyos." : "El ámbito declarado coincide con el destino. El archivo es editable y no constituye una autorización de acceso."}</Copy>
+      <Select label="Cómo importar este respaldo" value={restoreMode} onChange={setRestoreMode} options={[
+        { label: "Restaurar todos los datos y ajustes", value: "replace" }, { label: "Añadir solo movimientos sin cambiar ajustes", value: "merge" },
+      ]} />
+      <Copy muted>{restoreMode === "replace" ? "Se sustituirán todos los espacios de este modo local o cuenta. Se conservará una copia anterior para recuperarla." : "Se añadirán movimientos a sus espacios y se crearán los que falten. Los ajustes existentes se conservan."}</Copy>
+      <Button title={saving ? "Guardando…" : restoreMode === "replace" ? "Confirmar restauración completa" : "Confirmar y añadir movimientos"} disabled={saving} onPress={() => { void confirmBackup(); }} />
+      <Button title="Cancelar sin cambios" secondary disabled={saving} onPress={() => setPreview(null)} />
+    </Card>}
+    <Card>
+      <Title>Guarda un respaldo completo.</Title>
+      <Copy small muted>Incluye espacios, movimientos, archivados, metas y ajustes. Se copia al portapapeles; elige dónde guardarlo y con quién compartirlo.</Copy>
+      <Button title="Copiar mi respaldo" secondary onPress={() => {
+        void (async () => { try { setError(""); await copy(encodeBackup(state, dataScope)); setNotice("Respaldo copiado. Guárdalo en un lugar que controles."); } catch (e) { setError(errorMessage(e)); } })();
+      }} />
+      <Button title="Revisar copia anterior a la restauración" secondary disabled={saving} onPress={() => {
+        void readRecovery().then(raw => {
+          if (!raw) throw new Error("Todavía no hay una copia anterior a una restauración.");
+          setFormat("backup"); setRestoreMode("replace"); review(raw);
+        }).catch(e => setError(errorMessage(e)));
+      }} />
+    </Card>
+  </Frame>;
 }
+
 const lessons = [
   {
     title: "La caja y el beneficio",

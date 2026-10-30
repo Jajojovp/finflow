@@ -12,7 +12,7 @@ Estado al 30 de octubre de 2026. La lista se ejecuta por dependencias e hitos de
   - Verificación: fixtures antiguos, campos ausentes/desconocidos y aislamiento en pruebas de contrato.
   - Archivos: nuevos `src/workspace/snapshot.mjs`, `tests/snapshot.test.mjs`; `mobile/src/data/model.ts`, `mobile/src/data/model.test.ts`.
 
-- [ ] **CR-02 · Exportar y restaurar respaldos completos.** Depende de CR-01.
+- [x] **CR-02 · Exportar y restaurar respaldos completos.** Depende de CR-01.
   - Aceptación: incluye todo el espacio; preview y confirmación; cancelación/error conserva el anterior y restaurar recupera monedas/metas/configuración.
   - Verificación: exportar/restaurar en web y móvil, archivo corrupto y vuelta a fixtures v1; pruebas de contrato y TypeScript.
   - Archivos: `src/workspace/app.mjs`, `src/workspace/snapshot.mjs`, `mobile/src/data/model.ts`, `mobile/src/screens/forms.tsx`, `tests/snapshot.test.mjs`.

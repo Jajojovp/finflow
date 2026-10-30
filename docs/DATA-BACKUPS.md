@@ -10,4 +10,10 @@ Los campos JSON adicionales se conservan. Se validan perfil, cliente, moneda, id
 
 La importación/restauración trabaja sobre una copia. Los identificadores existentes no se regeneran y los importes conservan hasta cuatro decimales. Normalizar un legado web aplica a sus ejemplos las mismas clasificaciones que utilizaba la interfaz anterior. Las 176 monedas usan el catálogo existente.
 
-Comprobaciones iniciales: `node --test tests/snapshot.test.mjs`, suite Vitest y TypeScript móvil. La integración de vista previa, confirmación y recuperación anterior corresponde a CR-02; este documento no afirma que el contrato por sí solo complete la interfaz de restauración.
+## CR-02 · Restauración completa
+
+La web incorpora «Mis datos y respaldos», con descarga JSON, selección local del archivo, resumen de espacios/monedas/movimientos y confirmación de restauración completa. Antes de sustituir el estado se guarda una copia `:before-restore`, accesible desde el mismo diálogo para revisar y recuperar. Las filas, incluidos sus identificadores, se codifican al mostrarse en HTML.
+
+La pantalla «Llevar mis datos» de Expo permite revisar un respaldo y elegir restauración completa o la opción anterior de añadir únicamente movimientos conservando ajustes. El provider identifica el ámbito desde su clave de almacenamiento, escribe antes de actualizar React y permite revisar la copia anterior. Los errores de validación, recuperación o escritura no confirman cambios ni sustituyen el estado visible.
+
+Comprobaciones: 8 pruebas del contrato y 4 de fallos/recuperación; 13 pruebas del modelo móvil; TypeScript y build web. En navegador local se probaron rechazo por otra cuenta, preview/cancelación, restauración en CLP, recarga y recuperación del estado anterior ARS/CAD. Un identificador con comillas se conservó sin crear atributos HTML adicionales. La comprobación física de Android se registra por separado de estas pruebas.
