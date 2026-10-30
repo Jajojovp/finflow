@@ -1,4 +1,4 @@
-# FinFlow móvil 1.0.1 · verificación actualizada el 29 de octubre de 2026
+# FinFlow móvil 1.1.0 · verificación actualizada el 30 de octubre de 2026
 
 ## Procedencia y alcance
 
@@ -31,6 +31,14 @@ Datos sintéticos, guardados en el origen local de la vista Expo; no se utilizar
 - Objetivo actualizado a 10.000 con 2.500 reservados. Aportación mensual del simulador cambiada de 200 a 300: aportaciones a cinco años pasan de 12.000 a 18.000.
 - Perfil personal con ejemplos y revisión de la interfaz a 390 × 844; comprobación de navegación entre perfiles.
 
+## Monedas · 30 de octubre de 2026
+
+La web 2.4.0 y el código móvil 1.1.0 comparten un catálogo de 176 monedas ISO 4217. CLP, ARS, USD y CAD aparecen primero; se puede buscar por código o nombre. La selección pertenece a cada espacio o cliente y se conserva en el respaldo móvil. Los importes muestran el código y los decimales de la unidad; cambiarla conserva las cifras, sin conversión de divisas.
+
+Se ejecutaron 88 pruebas Vitest, 17 pruebas Node de movimientos, fórmulas, monedas y descargas, y la comprobación estricta de TypeScript móvil. Los casos nuevos comprueban las 176 monedas en respaldos, la separación entre clientes, el formato, la búsqueda y la precisión de tres y cuatro decimales.
+
+En navegador se comprobó la selección y persistencia de ARS, la independencia de CAD en Empresa y la portada en CLP. El selector contiene las 176 opciones y no desborda a 375 × 844. La web pública también se inspeccionó después de publicar. Estas comprobaciones no sustituyen una prueba del APK en teléfono.
+
 ## Límites de entrega
 
 No hay emulador ni teléfono disponible en este entorno. Falta validar la instalación, los controles nativos y el retorno de Google en un teléfono físico. No se han solicitado builds de pago, publicado en tiendas ni configurado servicios EAS. La distribución nativa de iOS sigue pendiente de cuenta y firma Apple; la web instalable es la alternativa gratuita.
@@ -41,8 +49,12 @@ La auditoría móvil registra ocho avisos transitivos en herramientas del SDK; a
 
 ## Instalador Android
 
-Se generó un APK release ARM64 de 45.787.469 bytes, firmado con el certificado propio de FinFlow y verificado mediante apksigner y zipalign con páginas de 16 KB. No es depurable y contiene el bundle de la aplicación y el flujo de acceso Google. Procedencia, hash y distribución en [DISTRIBUTION.md](DISTRIBUTION.md). Esto no sustituye una prueba en teléfono físico.
+Se generó un APK release ARM64 de 45.799.045 bytes, firmado con el certificado propio de FinFlow y verificado mediante apksigner y zipalign con páginas de 16 KB. No es depurable y contiene el bundle de la aplicación y el flujo de acceso Google. Procedencia, hash y distribución en [DISTRIBUTION.md](DISTRIBUTION.md). Esto no sustituye una prueba en teléfono físico.
 
 ## Corrección Android 1.0.1
 
 El log del teléfono identificó la dependencia ausente `expo-symbols` en los iconos `md` de NativeTabs. La versión 1.0.1 (código 2) incluye ~58.0.4, se recompiló con caché de Metro vacía y se verificó el renderizador y la fuente Material Symbols en el APK. Firma v2 y certificado de FinFlow correctos, zipalign 16 KB correcto, hash distinto del APK defectuoso. El verificador rechaza la versión anterior. Los recuentos anteriores documentan la base validada; esta corrección se comprueba en el artefacto y su distribución.
+
+## APK Android 1.1.0
+
+Versión interna 3, firma v2 con el mismo certificado de FinFlow, alineamiento de 16 KB correcto y aplicación no depurable. El verificador del artefacto confirma el selector nuevo, CLP, ARS, USD, CAD, KWD y CLF en el bundle, y la fuente Material Symbols. Se rechazaron las huellas de 1.0.0 y 1.0.1; el archivo nuevo tiene una huella distinta. El código móvil coincide con el commit de procedencia del recibo. La prueba en teléfono físico sigue pendiente.

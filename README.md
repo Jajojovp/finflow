@@ -1,6 +1,8 @@
-# Versión integrada · 2.3.0
+# Versión integrada · 2.4.0
 
 Esta evolución parte del historial original de **Jajojovp/finflow** y conserva su motor financiero. Mantiene el diseño claro, la navegación y los tres perfiles de la aplicación publicada en [finflow.sysora.io](https://finflow.sysora.io).
+
+Web y app admiten 176 monedas ISO 4217, con búsqueda por nombre o código: CLP, ARS, USD y CAD aparecen primero. La elección se guarda por espacio o cliente y se aplica a importes, análisis y metas. Cambiar la moneda no convierte las cifras mediante un tipo de cambio. Consulta [las monedas y su precisión](docs/CURRENCIES.md).
 
 En **Empresa o Asesor → Resultados** se pueden consultar los servicios originales de indicadores, flujo de caja, pronósticos, anomalías, comparaciones, covenants, variaciones y propuestas, alimentados por los movimientos de cada entidad. El balance, presupuesto de ventas y límites se editan en ese mismo panel. La evidencia y los supuestos se pueden exportar.
 
@@ -10,7 +12,7 @@ Consulta [la integración y criterios de aceptación](docs/INTEGRATION-2026-10.m
 
 La app para iOS y Android está en [`mobile/`](mobile/README.md), dentro de este mismo historial. Comparte los servicios financieros originales y la paleta clara, con navegación nativa, SQLite local, tres perfiles y movimientos editables. Utiliza las guías oficiales de Expo; consulta [la validación y sus límites](docs/MOBILE-VERIFICATION.md) y [los hallazgos de herramientas](mobile/SECURITY.md). La web publicada y la app guardan datos separados.
 
-El [APK Android 1.0.1 firmado para ARM64](https://finflow.sysora.io/downloads/finflow-1.0.1.apk) está disponible con su huella verificable. La instalación en un teléfono físico sigue pendiente de comprobación.
+El [APK Android 1.1.0 firmado para ARM64](https://finflow.sysora.io/downloads/finflow-1.1.0.apk) está disponible con su huella verificable. La instalación en un teléfono físico sigue pendiente de comprobación.
 
 La página de [descargas e instalación](https://finflow.sysora.io/descargar/) reúne los canales disponibles para Android, iPhone y web. Las descargas nativas solo se habilitan después de verificar sus instaladores; iPhone también dispone de la opción web gratuita desde Safari. La compilación local de Android y la protección de su firma están descritas en [DISTRIBUTION.md](docs/DISTRIBUTION.md).
 

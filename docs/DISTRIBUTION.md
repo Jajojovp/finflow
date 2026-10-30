@@ -26,19 +26,19 @@ La compilación `release` utiliza esa clave y verifica la firma del APK contra e
 
 Para publicar un APK verificado, se copia a `public/downloads/finflow-VERSION.apk` y se actualiza `public/descargar/releases.json` con los datos del recibo, la URL y `status: available`. El archivo binario está excluido de Git, pero debe incluirse en el artefacto estático que se publica. No se activa una descarga para un archivo ausente, sin firma verificada o con metadatos incompletos.
 
-## APK publicado · 29 de octubre de 2026
+## APK publicado · 30 de octubre de 2026
 
-Android 1.0.1, `io.sysora.finflow`, versión interna 2, ARM64, 45.787.469 bytes. El APK release se compiló del commit `929525876e4562e9a53a32bd690adaef3ef73011`, con firma propia RSA de 3072 bits y esquema v2. Se verificaron la firma, el certificado esperado, el alineamiento de 16 KB, los metadatos y la presencia del código nativo y el bundle embebido con el acceso Google. No es depurable.
+Android 1.1.0, `io.sysora.finflow`, versión interna 3, ARM64, 45.799.045 bytes. El APK release se compiló del commit `a532493a4e8abf5f149b1025639682bb59a83760`, con firma propia RSA de 3072 bits y esquema v2. Se verificaron la firma, el certificado esperado, el alineamiento de 16 KB, los metadatos y el bundle embebido. No es depurable.
 
-- Archivo: https://finflow.sysora.io/downloads/finflow-1.0.1.apk
-- SHA-256: `a53e9d2540312167cbb26642ffed743a853f1e32ec9d395769e7238524e32a70`
+- Archivo: https://finflow.sysora.io/downloads/finflow-1.1.0.apk
+- SHA-256: `1cc26d84376d047c41f447bb97ae58a99d561802708165fd69e97abcdd5a7ede`
 - Certificado SHA-256: `4420a145b7a3ecb0b505980eb85b400e452b4cb7e37885ad3590d91a96ff1d66`
 
-Esta versión corrige el cierre de NativeTabs por la ausencia de `expo-symbols` (~58.0.4). Se comprobaron el renderizador en el bundle y la fuente Material Symbols incrustada en el APK. El build rechaza el APK defectuoso, archivos de un build anterior y una versión distinta de `app.json`.
+Esta versión incorpora el selector buscable de 176 monedas, con CLP, ARS, USD y CAD entre las primeras opciones. Conserva la corrección de NativeTabs con `expo-symbols` (~58.0.4). Se comprobaron el selector, los códigos solicitados, el renderizador y la fuente Material Symbols incrustada en el APK.
 
-Verificación adicional con Python 3: `python mobile/scripts/verify-android-artifact.py RUTA_APK RUTA_RECIBO`. Este control también se ejecutó contra la versión defectuosa y la rechazó.
+Verificación adicional con Python 3: `python mobile/scripts/verify-android-artifact.py RUTA_APK RUTA_RECIBO`. El build y el verificador rechazan los APK anteriores, un archivo de un build anterior o una versión distinta de `app.json`.
 
-La instalación y el retorno de Google en teléfono físico siguen pendientes de validación. El enlace anterior de 1.0.0 redirige a 1.0.1.
+La instalación, los controles nativos y el retorno de Google en teléfono físico siguen pendientes de validación. Los enlaces de 1.0.0 y 1.0.1 redirigen a 1.1.0. El catálogo de descargas se sirve sin caché.
 
 ## iPhone y iPad
 
