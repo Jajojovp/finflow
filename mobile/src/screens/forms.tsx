@@ -17,7 +17,9 @@ import {
   emptyWorkspace,
   encodeBackup,
   financialNames,
-  importRows,
+  reviewRows,
+  confirmImportRows,
+  getWorkspace,
   makeTransaction,
   profileNames,
   updateWorkspace,
@@ -692,7 +694,7 @@ function merge(current: Snapshot, incoming: Snapshot): Snapshot {
   return { ...current, datasets };
 }
 export function ImportScreen() {
-  const { state, commit, update, saving, dataScope, readRecovery } = useWorkspace();
+  const { state, commit, saving, dataScope, readRecovery } = useWorkspace();
   const [format, setFormat] = useState("csv");
   const [text, setText] = useState("");
   const [pasteVersion, setPasteVersion] = useState(0);
@@ -700,6 +702,8 @@ export function ImportScreen() {
   const [notice, setNotice] = useState("");
   const [restoreMode, setRestoreMode] = useState("replace");
   const [preview, setPreview] = useState<ReturnType<typeof inspectBackup> | null>(null);
+  const [csvPreview, setCSVPreview] = useState<{ key: string; name: string; review: ReturnType<typeof reviewRows> } | null>(null);
+  const clearPreview = () => { setPreview(null); setCSVPreview(null); };
   const summary = preview ? snapshotSummary(preview.state) : null;
   function review(raw: string) {
     setPreview(null); setError("");
@@ -709,8 +713,20 @@ export function ImportScreen() {
     setError(""); setNotice("");
     try {
       if (format === "backup") { review(text); return; }
-      await update(d => importRows(d, text));
-      setNotice("Movimientos guardados. Los duplicados exactos se omiten.");
+      const d = getWorkspace(state);
+      setCSVPreview({ key: workspaceKey(state), name: d.name, review: reviewRows(d, text) });
+    } catch (e) { setError(errorMessage(e)); }
+  }
+  async function confirmCSV() {
+    if (!csvPreview || saving || !csvPreview.review.ok) return;
+    setError("");
+    try {
+      await commit(s => {
+        if (workspaceKey(s) !== csvPreview.key) throw new Error("Cambió el espacio. Revisa el CSV otra vez.");
+        const next = updateWorkspace(s, d => confirmImportRows(d, csvPreview.review));
+        return { ...next, period: csvPreview.review.latestMonth || next.period };
+      });
+      setCSVPreview(null); setNotice("Movimientos guardados. Los duplicados exactos se han omitido.");
     } catch (e) { setError(errorMessage(e)); }
   }
   async function confirmBackup() {
@@ -727,21 +743,32 @@ export function ImportScreen() {
     <Card>
       <Title>Tus datos pueden acompañarte.</Title>
       <Copy muted>CSV añade movimientos al espacio actual. Un respaldo completo recupera también los espacios, monedas, metas y configuración. Revisa su contenido antes de confirmar.</Copy>
-      <Select label="Formato" value={format} onChange={value => { setFormat(value); setPreview(null); setError(""); }} options={[
+      <Select label="Formato" value={format} onChange={value => { setFormat(value); clearPreview(); setError(""); }} options={[
         { label: "CSV de movimientos", value: "csv" }, { label: "Respaldo completo de FinFlow", value: "backup" },
       ]} />
       <Copy small muted>{format === "csv" ? "Cabecera: fecha,descripcion,categoria,tipo,importe. Fecha AAAA-MM-DD, tipo ingreso o gasto, importe positivo." : "Admite el formato portátil v2, el respaldo móvil v1 y los datos web anteriores. Hasta 4 MB; se revisan en este dispositivo."}</Copy>
-      <Field key={format + pasteVersion} label="Contenido para importar" value={text} onChange={value => { setText(value); setPreview(null); }} multiline maxLength={4 * 1024 * 1024} />
+      <Field key={format + pasteVersion} label="Contenido para importar" value={text} onChange={value => { setText(value); clearPreview(); }} multiline maxLength={4 * 1024 * 1024} />
       <Button title="Pegar desde el portapapeles" secondary onPress={() => {
         void Clipboard.getStringAsync().then(value => {
           if (value.length > 4 * 1024 * 1024) throw new Error("El contenido supera el límite de 4 MB.");
-          setText(value); setPasteVersion(v => v + 1); setPreview(null); setNotice("Texto pegado. Revisa su contenido antes de importar.");
+          setText(value); setPasteVersion(v => v + 1); clearPreview(); setNotice("Texto pegado. Revisa su contenido antes de importar.");
         }).catch(e => setError(errorMessage(e)));
       }} />
       <ErrorText message={error} />
-      <Button title={saving ? "Guardando…" : format === "backup" ? "Revisar respaldo" : "Importar registros"} disabled={saving} onPress={() => { void apply(); }} />
+      <Button title={saving ? "Guardando…" : format === "backup" ? "Revisar respaldo" : "Revisar CSV"} disabled={saving} onPress={() => { void apply(); }} />
       {!!notice && <Copy muted small>{notice}</Copy>}
     </Card>
+    {csvPreview && <Card>
+      <Title>Antes de añadir.</Title>
+      <Copy>Destino: {csvPreview.name} · {csvPreview.review.currency}</Copy>
+      <Copy>{csvPreview.review.total} filas · {csvPreview.review.rows.length} nuevas · {csvPreview.review.duplicates} duplicadas · {csvPreview.review.errors.length} errores</Copy>
+      <Copy small muted>No se convertirán los importes. Los gastos se añaden sin clasificación financiera para que puedas revisarla.</Copy>
+      {csvPreview.review.rows.slice(0, 5).map((r: { date: string; description: string; amount: number }, i: number) => <Copy small key={i}>{r.date} · {r.description} · {r.amount} {csvPreview.review.currency}</Copy>)}
+      {csvPreview.review.errors.slice(0, 20).map((e: { row: number | null; message: string }, i: number) => <ErrorText key={i} message={(e.row ? `Fila ${e.row}: ` : "") + e.message} />)}
+      {csvPreview.review.errors.length > 20 && <Copy small muted>Hay más errores. Corrige el archivo y vuelve a revisarlo.</Copy>}
+      <Button title={saving ? "Guardando…" : "Confirmar importación"} disabled={saving || !csvPreview.review.ok || !csvPreview.review.rows.length} onPress={() => { void confirmCSV(); }} />
+      <Button title="Cancelar sin cambios" secondary disabled={saving} onPress={() => setCSVPreview(null)} />
+    </Card>}
     {preview && summary && <Card>
       <Title>Antes de restaurar.</Title>
       <Copy>{summary.workspaces} espacios · {summary.movements} movimientos · {summary.archived} archivados</Copy>

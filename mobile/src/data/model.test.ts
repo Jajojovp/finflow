@@ -9,6 +9,8 @@ import {
   archiveTransaction,
   restoreTransaction,
   importRows,
+  reviewRows,
+  confirmImportRows,
   decodeBackup,
   encodeBackup,
   createAdvisorClient,
@@ -24,6 +26,18 @@ import { encodeSnapshot } from "../../../src/workspace/snapshot.mjs";
 import { analyzeWorkspace } from "../../../src/services/financial/WorkspaceAnalysis";
 
 describe("FinFlow mobile shared financial data", () => {
+  it("reviews CSV without mutation and confirms the same proposal only once", () => {
+    const d = { ...getWorkspace(initialState("2026-10")), currency: "CLP" };
+    const csv = "fecha,descripcion,categoria,tipo,importe\n2026-10-01,Café,Ocio,gasto,10.5";
+    const review = reviewRows(d, csv);
+    expect(d.rows).toHaveLength(0);
+    expect(review.currency).toBe("CLP");
+    const once = confirmImportRows(d, review);
+    expect(once.rows).toHaveLength(1);
+    expect(once.rows[0].financialType).toBe("unclassified");
+    expect(confirmImportRows(once, review).rows).toHaveLength(1);
+    expect(() => confirmImportRows({ ...d, currency: "USD" }, review)).toThrow(/moneda/);
+  });
   it("opens portable web backups completely and checks the destination scope", () => {
     const web = { month: "2026-10", profile: "personal", entity: 0, theme: "dark", datasets: { personal: { ...getWorkspace(initialState("2026-10")), currency: "CLP", futureModule: { preserved: true } } } };
     const raw = encodeSnapshot(web, { source: "web", scope: "google:owner" });

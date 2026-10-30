@@ -1,4 +1,5 @@
-import { parseCSV, validateTransaction } from "../../../src/workspace/core.mjs";
+import { reviewImport, applyImport } from "../../../src/workspace/import-review.mjs";
+import { validateTransaction } from "../../../src/workspace/core.mjs";
 import { CURRENCIES } from "../../../src/workspace/currencies.mjs";
 import { encodeSnapshot, decodeSnapshot } from "../../../src/workspace/snapshot.mjs";
 
@@ -323,35 +324,13 @@ export function appendDemo(
   });
   return { ...d, rows };
 }
+export function reviewRows(d: Workspace, csv: string) { return reviewImport(csv, d); }
+export function confirmImportRows(d: Workspace, review: ReturnType<typeof reviewRows>): Workspace {
+  const next = applyImport(review, d);
+  return { ...next, rows: next.rows.map((r: Transaction) => makeTransaction(r, r.id)) };
+}
 export function importRows(d: Workspace, csv: string): Workspace {
-  if (csv.length > 2 * 1024 * 1024)
-    throw new Error("El CSV debe ocupar menos de 2 MB.");
-  const parsed = parseCSV(csv),
-    fingerprint = (
-      r: Pick<
-        Transaction,
-        "date" | "description" | "category" | "type" | "amount"
-      >,
-    ) => JSON.stringify([r.date, r.description, r.category, r.type, r.amount]);
-  const seen = new Set(d.rows.map(fingerprint)),
-    fresh: Transaction[] = [];
-  const identifiers = new Set([...d.rows, ...d.trash].map((r) => r.id));
-  parsed.forEach((r: Record<string, unknown>, i: number) => {
-    const base = `csv-${Date.now()}-${i}`;
-    let id = base,
-      suffix = 1;
-    while (identifiers.has(id)) id = `${base}-${suffix++}`;
-    const row = makeTransaction({ ...r, source: "CSV" }, id);
-    const key = fingerprint(row);
-    if (!seen.has(key)) {
-      seen.add(key);
-      identifiers.add(id);
-      fresh.push(row);
-    }
-  });
-  if (d.rows.length + fresh.length > 5000)
-    throw new Error("El espacio admite hasta 5.000 movimientos.");
-  return { ...d, rows: [...d.rows, ...fresh] };
+  return confirmImportRows(d, reviewRows(d, csv));
 }
 export function encodeBackup(s: Snapshot, scope = "local") {
   return encodeSnapshot(s, { source: "mobile", scope });
