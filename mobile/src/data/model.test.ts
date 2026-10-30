@@ -20,9 +20,20 @@ import {
   breakEven,
 } from "../../../src/workspace/finance.mjs";
 import { CURRENCIES } from "../../../src/workspace/currencies.mjs";
+import { encodeSnapshot } from "../../../src/workspace/snapshot.mjs";
 import { analyzeWorkspace } from "../../../src/services/financial/WorkspaceAnalysis";
 
 describe("FinFlow mobile shared financial data", () => {
+  it("opens portable web backups completely and checks the destination scope", () => {
+    const web = { month: "2026-10", profile: "personal", entity: 0, theme: "dark", datasets: { personal: { ...getWorkspace(initialState("2026-10")), currency: "CLP", futureModule: { preserved: true } } } };
+    const raw = encodeSnapshot(web, { source: "web", scope: "google:owner" });
+    const restored = decodeBackup(raw, "google:owner");
+    expect(restored.datasets.personal.currency).toBe("CLP");
+    expect((restored.datasets.personal as unknown as { futureModule: object }).futureModule).toEqual({ preserved: true });
+    expect(() => decodeBackup(raw, "google:someone-else")).toThrow();
+    const legacy = JSON.stringify({ format: "finflow-mobile-v1", state: { ...initialState("2026-10"), futurePreference: "keep" } });
+    expect((decodeBackup(legacy) as unknown as { futurePreference: string }).futurePreference).toBe("keep");
+  });
   it("persists all catalog currencies and keeps advisor clients independent", () => {
     for (const entry of CURRENCIES) {
       const state = updateWorkspace(initialState("2026-10"), d => ({ ...d, currency: entry.code }));

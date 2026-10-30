@@ -1,5 +1,6 @@
 import { parseCSV, validateTransaction } from "../../../src/workspace/core.mjs";
-import { CURRENCIES, isCurrencyCode } from "../../../src/workspace/currencies.mjs";
+import { CURRENCIES } from "../../../src/workspace/currencies.mjs";
+import { encodeSnapshot, decodeSnapshot } from "../../../src/workspace/snapshot.mjs";
 
 export type Profile = "personal" | "business" | "advisor";
 export type Currency = (typeof CURRENCIES)[number]["code"];
@@ -68,10 +69,6 @@ export const emptySettings = (): MonthSettings => ({
   expenseBudget: 0,
   unitPrice: 0,
 });
-const validMonth = (s: unknown): s is string =>
-  typeof s === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(s);
-const amount = (n: unknown) =>
-  typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= 1e12;
 
 export function currentMonth() {
   const date = new Date();
@@ -356,120 +353,19 @@ export function importRows(d: Workspace, csv: string): Workspace {
     throw new Error("El espacio admite hasta 5.000 movimientos.");
   return { ...d, rows: [...d.rows, ...fresh] };
 }
-export function encodeBackup(s: Snapshot) {
-  for (const d of Object.values(s.datasets)) {
-    if (d.rows.length > 5000 || d.trash.length > 5000)
-      throw new Error(
-        "El espacio admite hasta 5.000 movimientos activos y 5.000 archivados. No se ha modificado el guardado anterior.",
-      );
-  }
-  const encoded = JSON.stringify(
-    {
-      format: "finflow-mobile-v1",
-      exportedAt: new Date().toISOString(),
-      state: s,
-    },
-    null,
-    2,
-  );
-  if (encoded.length > 4 * 1024 * 1024)
-    throw new Error(
-      "El espacio local supera el límite de respaldo de 4 MB. Exporta y divide tu historial antes de añadir más datos.",
-    );
-  return encoded;
+export function encodeBackup(s: Snapshot, scope = "local") {
+  return encodeSnapshot(s, { source: "mobile", scope });
 }
-export function decodeBackup(raw: string): Snapshot {
-  if (raw.length > 4 * 1024 * 1024)
-    throw new Error("El respaldo debe ocupar menos de 4 MB.");
-  const parsed = JSON.parse(raw),
-    s = parsed?.state;
-  if (
-    parsed.format !== "finflow-mobile-v1" ||
-    s?.version !== 1 ||
-    !["personal", "business", "advisor"].includes(s?.profile) ||
-    !validMonth(s?.period) ||
-    !Number.isInteger(s?.entity) ||
-    s.entity < 0 ||
-    s.entity > 99 ||
-    !s.datasets ||
-    typeof s.datasets !== "object"
-  )
-    throw new Error("El respaldo no tiene el formato de FinFlow móvil.");
+export function decodeBackup(raw: string, scope?: string): Snapshot {
+  const { state } = decodeSnapshot(raw, { scope });
+  const restored = state as Snapshot;
   const datasets: Record<string, Workspace> = {};
-  for (const [key, value] of Object.entries(s.datasets)) {
-    if (!/^(personal|business|advisor-(\d|[1-9]\d))$/.test(key))
-      throw new Error("El respaldo contiene un espacio desconocido.");
-    const d = value as Workspace;
-    if (
-      !d ||
-      typeof d.name !== "string" ||
-      d.name.length > 80 ||
-      !isCurrencyCode(d.currency) ||
-      !Array.isArray(d.rows) ||
-      d.rows.length > 5000 ||
-      !Array.isArray(d.trash) ||
-      d.trash.length > 5000 ||
-      !d.goal ||
-      !amount(d.goal.target) ||
-      d.goal.target <= 0 ||
-      !amount(d.goal.saved) ||
-      typeof d.goal.name !== "string" ||
-      d.goal.name.length > 80
-    )
-      throw new Error(
-        "Revisa los movimientos, moneda y objetivos del respaldo.",
-      );
-    const finance: Record<string, MonthSettings> = {};
-    for (const [month, v] of Object.entries(d.finance || {})) {
-      if (
-        !validMonth(month) ||
-        !v ||
-        !Number.isFinite(v.opening) ||
-        Math.abs(v.opening) > 1e12 ||
-        !amount(v.expenseBudget) ||
-        !amount(v.unitPrice) ||
-        !Number.isFinite(v.savingsTarget) ||
-        v.savingsTarget < 0 ||
-        v.savingsTarget > 100
-      )
-        throw new Error("Hay parámetros mensuales inválidos en el respaldo.");
-      finance[month] = {
-        opening: v.opening,
-        savingsTarget: v.savingsTarget,
-        expenseBudget: v.expenseBudget,
-        unitPrice: v.unitPrice,
-      };
-    }
-    const ids = new Set<string>();
-    const rows = d.rows.map((r, i) => {
-      const id =
-        typeof r.id === "string" && r.id.length <= 100 ? r.id : `import-${i}`;
-      if (ids.has(id))
-        throw new Error("El respaldo contiene identificadores repetidos.");
-      ids.add(id);
-      return makeTransaction(r, id);
-    });
+  for (const [key, d] of Object.entries(restored.datasets)) {
     datasets[key] = {
       ...d,
-      name: d.name.trim(),
-      rows,
-      trash: d.trash.map((r, i) =>
-        makeTransaction(r, typeof r.id === "string" ? r.id : `trash-${i}`),
-      ),
-      finance,
-      lessons: Array.isArray(d.lessons)
-        ? d.lessons.filter((i) => Number.isInteger(i) && i >= 0 && i < 5)
-        : [],
-      budgets: d.budgets || {},
-      analysis: d.analysis && typeof d.analysis === "object" ? d.analysis : {},
+      rows: d.rows.map(r => makeTransaction(r, r.id)),
+      trash: d.trash.map(r => makeTransaction(r, r.id)),
     };
   }
-  return {
-    version: 1,
-    onboarded: !!s.onboarded,
-    profile: s.profile,
-    entity: s.entity,
-    period: s.period,
-    datasets,
-  };
+  return { ...restored, datasets };
 }

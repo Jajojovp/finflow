@@ -7,7 +7,7 @@ Estado al 30 de octubre de 2026. La lista se ejecuta por dependencias e hitos de
   - Verificación: inspección de entrada web, almacenamiento, importación, clientes y servicios; enlaces, matriz y diff revisados. No implica nueva prueba en teléfono.
   - Archivos: `docs/CRECIMIENTO.md`, `docs/adr/0011-crecimiento-evolutivo.md`, `docs/crecimiento-traceability.csv` y documentación de planificación.
 
-- [ ] **CR-01 · Definir contrato y migración compatible de datos.** Depende de CR-00.
+- [x] **CR-01 · Definir contrato y migración compatible de datos.** Depende de CR-00.
   - Aceptación: esquema versionado independiente de plataforma; conserva identidades/monedas/IDs; acepta respaldo móvil v1 y datos web existentes sin mezclarlos.
   - Verificación: fixtures antiguos, campos ausentes/desconocidos y aislamiento en pruebas de contrato.
   - Archivos: nuevos `src/workspace/snapshot.mjs`, `tests/snapshot.test.mjs`; `mobile/src/data/model.ts`, `mobile/src/data/model.test.ts`.
