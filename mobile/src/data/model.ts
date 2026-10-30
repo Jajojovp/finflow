@@ -1,7 +1,8 @@
 import { parseCSV, validateTransaction } from "../../../src/workspace/core.mjs";
+import { CURRENCIES, isCurrencyCode } from "../../../src/workspace/currencies.mjs";
 
 export type Profile = "personal" | "business" | "advisor";
-export type Currency = "EUR" | "USD" | "CLP" | "CAD";
+export type Currency = (typeof CURRENCIES)[number]["code"];
 export type Transaction = {
   id: string;
   date: string;
@@ -49,7 +50,7 @@ export const profileNames = {
   business: "Empresa",
   advisor: "Asesor / profesional",
 };
-export const currencies: Currency[] = ["EUR", "USD", "CLP", "CAD"];
+export const currencies: Currency[] = CURRENCIES.map(entry => entry.code);
 export const financialNames: Record<string, string> = {
   revenue: "Ventas / ingresos",
   other_income: "Otros ingresos",
@@ -403,7 +404,7 @@ export function decodeBackup(raw: string): Snapshot {
       !d ||
       typeof d.name !== "string" ||
       d.name.length > 80 ||
-      !currencies.includes(d.currency) ||
+      !isCurrencyCode(d.currency) ||
       !Array.isArray(d.rows) ||
       d.rows.length > 5000 ||
       !Array.isArray(d.trash) ||

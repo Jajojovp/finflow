@@ -138,13 +138,13 @@ export function useWorkspace() {
     rows,
     settings,
     analysis,
-    cash: cashPosition(rows, settings.opening),
-    statement: incomeStatement(rows),
-    equilibrium: breakEven(rows, settings.unitPrice),
+    cash: cashPosition(rows, settings.opening, dataset.currency),
+    statement: incomeStatement(rows, dataset.currency),
+    equilibrium: breakEven(rows, settings.unitPrice, dataset.currency),
     leaks: detectLeaks(rows, previous, {
       ...dataset.budgets,
       __total: settings.expenseBudget,
-    }),
+    }, dataset.currency),
     money: (n: number) => money(n, dataset.currency),
   };
 }

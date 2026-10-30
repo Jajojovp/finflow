@@ -1,9 +1,11 @@
+import { formatMoney, currencyMath } from './currencies.mjs';
 export const PROFILE_NAMES = { personal: 'Personal', business: 'Empresa', advisor: 'Profesional' };
-export const money = (value,currency='EUR') => new Intl.NumberFormat('es-ES', { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: currency==='CLP'?0:2, useGrouping: 'always' }).format(Object.is(value,-0)?0:value);
-export function totals(rows) {
-  const income = rows.filter(r => r.type === 'ingreso').reduce((s, r) => s + Math.round(r.amount * 100), 0) / 100;
-  const expense = rows.filter(r => r.type === 'gasto').reduce((s, r) => s + Math.round(r.amount * 100), 0) / 100;
-  const net = Math.round((income - expense) * 100) / 100;
+export const money = formatMoney;
+export function totals(rows, currency='EUR') {
+  const {sum,round}=currencyMath(currency);
+  const income = sum(rows.filter(r => r.type === 'ingreso'));
+  const expense = sum(rows.filter(r => r.type === 'gasto'));
+  const net = round(income - expense);
   return { income, expense, net, rate: income > 0 ? net / income * 100 : null };
 }
 export function validateTransaction(row) {
@@ -11,7 +13,9 @@ export function validateTransaction(row) {
   if (!row.description?.trim() || row.description.length > 200) throw new Error('Añade una descripción de hasta 200 caracteres.');
   if (!['ingreso', 'gasto'].includes(row.type)) throw new Error('El tipo debe ser ingreso o gasto.');
   if (!Number.isFinite(row.amount) || row.amount <= 0 || row.amount > 1e12) throw new Error('El importe debe ser un número positivo.');
-  return { ...row, description: row.description.trim(), category: (row.category || 'Otros').trim().slice(0, 80), amount: Math.round(row.amount * 100) / 100 };
+  const amount=Number(row.amount.toFixed(4));
+  if (amount<=0) throw new Error('El importe debe ser al menos 0,0001.');
+  return { ...row, description: row.description.trim(), category: (row.category || 'Otros').trim().slice(0, 80), amount };
 }
 function cells(text, delimiter) {
   const rows = []; let row = [], cell = '', quoted = false;

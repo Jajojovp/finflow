@@ -10,7 +10,6 @@ import { useWorkspace } from "@/data/provider";
 import {
   archiveTransaction,
   appendDemo,
-  currencies,
   decodeBackup,
   demoWorkspace,
   emptySettings,
@@ -33,9 +32,11 @@ import {
   Field,
   Frame,
   Select,
+  CurrencySelect,
   Title,
 } from "@/components/ui";
 import { colors, spacing, type } from "@/theme";
+import { isCurrencyCode, currencyMath } from "../../../src/workspace/currencies.mjs";
 
 const errorMessage = (error: unknown) =>
   error instanceof Error
@@ -407,6 +408,7 @@ function SettingsForm() {
         Number(v.replace(",", ".")),
       );
       if (
+        !isCurrencyCode(currency) ||
         !name.trim() ||
         name.length > 80 ||
         !/^\d{4}-(0[1-9]|1[0-2])$/.test(period) ||
@@ -452,6 +454,7 @@ function SettingsForm() {
           const net = cashPosition(
             d.rows.filter((r) => r.date.startsWith(period)),
             0,
+            currency,
           ).net;
           return {
             ...d,
@@ -460,7 +463,7 @@ function SettingsForm() {
             finance: {
               ...d.finance,
               [period]: {
-                opening: Math.round((values[0] - net) * 100) / 100,
+                opening: currencyMath(currency).round(values[0] - net),
                 savingsTarget: values[1],
                 expenseBudget: values[2],
                 unitPrice: values[3],
@@ -492,11 +495,9 @@ function SettingsForm() {
         onChange={setName}
         maxLength={80}
       />
-      <Select
-        label="Moneda"
+      <CurrencySelect
         value={currency}
         onChange={(v) => setCurrency(v as typeof currency)}
-        options={currencies.map((value) => ({ label: value, value }))}
       />
       <Copy muted small>
         Cambiar de moneda no convierte los importes registrados.

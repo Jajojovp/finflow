@@ -19,9 +19,20 @@ import {
   incomeStatement,
   breakEven,
 } from "../../../src/workspace/finance.mjs";
+import { CURRENCIES } from "../../../src/workspace/currencies.mjs";
 import { analyzeWorkspace } from "../../../src/services/financial/WorkspaceAnalysis";
 
 describe("FinFlow mobile shared financial data", () => {
+  it("persists all catalog currencies and keeps advisor clients independent", () => {
+    for (const entry of CURRENCIES) {
+      const state = updateWorkspace(initialState("2026-10"), d => ({ ...d, currency: entry.code }));
+      expect(getWorkspace(decodeBackup(encodeBackup(state))).currency).toBe(entry.code);
+    }
+    const state = updateWorkspace({ ...initialState("2026-10"), profile: "advisor" as const, entity: 0 }, d => ({ ...d, currency: "CLP" }));
+    const next = updateWorkspace(createAdvisorClient(state, "Cliente en dólares"), d => ({ ...d, currency: "CAD" }));
+    expect(getWorkspace({ ...next, entity: 0 }).currency).toBe("CLP");
+    expect(getWorkspace(decodeBackup(encodeBackup(next))).currency).toBe("CAD");
+  });
   it("rejects saving an archive that exceeds the reload limit", () => {
     const s = initialState("2026-10");
     const d = getWorkspace(s);

@@ -14,6 +14,8 @@ import {
   useNativeState,
 } from "@expo/ui";
 import { scheduleOnRN } from "react-native-worklets";
+import { router } from "expo-router";
+import { searchCurrencies, currencyOptions } from "../../../src/workspace/currencies.mjs";
 import { useFinflow, useWorkspace } from "@/data/provider";
 import { colors, radius, shadow, spacing, type } from "@/theme";
 
@@ -209,6 +211,18 @@ export function ErrorText({ message }: { message: string }) {
     </Text>
   ) : null;
 }
+export function CurrencySelect({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  const [query, setQuery] = useState("");
+  const matches = searchCurrencies(query);
+  const current = currencyOptions.find(entry => entry.code === value);
+  const options = current && !matches.some(entry => entry.code === value) ? [current, ...matches] : matches;
+  return <View style={{ gap: spacing.sm }}>
+    <Field label="Buscar moneda por nombre o código" value={query} onChange={setQuery} maxLength={80} />
+    <Select label="Moneda del espacio" value={value} onChange={onChange}
+      options={options.map(entry => ({ value: entry.code, label: `${entry.code} · ${entry.name}` }))} />
+    <Copy muted small>{matches.length ? `${matches.length} ${matches.length === 1 ? "moneda disponible" : "monedas disponibles"}` : "Sin coincidencias. Se conserva tu moneda actual."}</Copy>
+  </View>;
+}
 export function Metric({
   label,
   value,
@@ -354,6 +368,7 @@ export function ContextLine() {
       <Copy muted small>
         {dataset.name} · {dataset.currency}
       </Copy>
+      <Button title={`Moneda: ${dataset.currency} · Cambiar`} onPress={() => router.push("/settings")} secondary />
       <Select
         label="Periodo"
         value={state.period}

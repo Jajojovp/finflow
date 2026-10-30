@@ -6,14 +6,15 @@ import BenchmarkService from './BenchmarkService';
 import CovenantService from './CovenantService';
 import VarianceService from './VarianceService';
 import AgentOrchestrator, { CAPABILITIES } from '../agent/AgentOrchestrator';
+import { currencyMath } from '../../workspace/currencies.mjs';
 
-const total = rows => rows.reduce((s,r)=>s+Math.round(r.amount*100),0)/100;
 const kind = r => r.financialType || (r.type === 'ingreso' ? 'revenue' : 'unclassified');
 const numeric = value => Number.isFinite(value) ? value : null;
 const monthIndex = month => Number(month.slice(0,4))*12+Number(month.slice(5,7));
 
 /** Adapter only: all headline ratios are calculated by the original services. */
 export function buildMonthlySeries(dataset, through) {
+  const {sum:total,round}=currencyMath(dataset.currency);
   const valid=(dataset.rows||[]).filter(r=>/^\d{4}-(0[1-9]|1[0-2])-\d{2}$/.test(r.date)&&r.date.slice(0,7)<=through&&Number.isFinite(r.amount)&&r.amount>=0&&['ingreso','gasto'].includes(r.type));
   const months=[...new Set(valid.map(r=>r.date.slice(0,7)))].sort();
   let previous=null;
@@ -27,7 +28,7 @@ export function buildMonthlySeries(dataset, through) {
     const cashNet=total(rows.filter(r=>r.type==='ingreso'))-total(rows.filter(r=>r.type==='gasto'&&kind(r)!=='depreciation'));
     const explicit=dataset.finance?.[month]?.opening;
     const opening=Number.isFinite(explicit)?explicit:previous&&monthIndex(month)-monthIndex(previous.month)===1?previous.cash:null;
-    const closing=opening==null?null:Math.round((opening+cashNet)*100)/100;
+    const closing=opening==null?null:round(opening+cashNet);
     const balance=dataset.analysis?.balances?.[month]||{};
     const point={month,revenue,otherIncome,expenses,cogs,opex,daa,interest,tax,cash:closing,cashNet,
       cashBurn:expenses-daa-revenue-otherIncome,

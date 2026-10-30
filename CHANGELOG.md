@@ -4,6 +4,15 @@ All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project uses [Semantic Versioning](https://semver.org/).
 
+## [2.4.0] - 2026-10-30
+
+### Added
+
+- Selector de moneda visible y buscable, con catálogo compartido de 176 códigos ISO 4217 de SIX (publicación 2026-09-17).
+- CLP, ARS, USD y CAD destacados; preferencia independiente por espacio y por cliente del asesor, persistente y restaurable.
+- Código de moneda visible en los importes y precisión ISO de cero, dos, tres y cuatro decimales en formato y cálculos compartidos.
+- Android móvil 1.1.0, código 3. Cambiar la unidad conserva los registros y no aplica un tipo de cambio implícito.
+
 ## [2.3.0] - 2026-10-29
 
 ### Fixed

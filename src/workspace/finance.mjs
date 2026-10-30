@@ -1,13 +1,14 @@
-const rounded = n => Math.round((n + Number.EPSILON) * 100) / 100;
-const sum = rows => rows.reduce((n,r)=>n+Math.round(r.amount*100),0)/100;
+import { currencyMath } from './currencies.mjs';
 const kind = r => r.financialType || (r.type==='ingreso'?'revenue':'unclassified');
-export function cashPosition(rows,opening=0) {
+export function cashPosition(rows,opening=0,currency='EUR') {
+  const {round:rounded,sum}=currencyMath(currency);
   const cashRows=rows.filter(r=>kind(r)!=='depreciation');
   const income=sum(cashRows.filter(r=>r.type==='ingreso')),expense=sum(cashRows.filter(r=>r.type==='gasto'));
   const net=rounded(income-expense);
   return {income,expense,net,available:rounded(opening+net),opening,rate:income>0?net/income*100:null};
 }
-export function incomeStatement(rows) {
+export function incomeStatement(rows,currency='EUR') {
+  const {round:rounded,sum}=currencyMath(currency);
   const amount=(type,flow)=>sum(rows.filter(r=>kind(r)===type&&r.type===flow));
   const revenue=amount('revenue','ingreso'),otherIncome=amount('other_income','ingreso');
   const cogs=amount('cogs','gasto'),opex=amount('opex','gasto');
@@ -17,8 +18,9 @@ export function incomeStatement(rows) {
   const operatingProfit=rounded(ebitda-depreciation),netProfit=rounded(operatingProfit+otherIncome-interest-tax);
   return {revenue,otherIncome,cogs,opex,depreciation,interest,tax,unclassified,grossProfit,ebitda,operatingProfit,netProfit,margin:revenue>0?netProfit/revenue*100:null};
 }
-export function breakEven(rows,unitPrice=0) {
-  const revenue=incomeStatement(rows).revenue;
+export function breakEven(rows,unitPrice=0,currency='EUR') {
+  const {round:rounded,sum}=currencyMath(currency);
+  const revenue=incomeStatement(rows,currency).revenue;
   const costs=rows.filter(r=>r.type==='gasto'&&['cogs','opex','unclassified'].includes(kind(r)));
   const missing=costs.filter(r=>!['fixed','variable'].includes(r.behavior)||kind(r)==='unclassified');
   const fixed=sum(costs.filter(r=>r.behavior==='fixed')),variable=sum(costs.filter(r=>r.behavior==='variable'));
@@ -27,12 +29,14 @@ export function breakEven(rows,unitPrice=0) {
   const sales=reason?null:rounded(fixed/contribution);
   return {revenue,fixed,variable,contribution,sales,units:sales!==null&&unitPrice>0?Math.ceil(sales/unitPrice):null,safety:sales===null?null:rounded(revenue-sales),reason,missingCount:missing.length};
 }
-export function simulateCosts(rows,{salesChange=0,fixedReduction=0,variableReduction=0}={}) {
-  const b=breakEven(rows),revenue=rounded(b.revenue*(1+salesChange/100));
+export function simulateCosts(rows,{salesChange=0,fixedReduction=0,variableReduction=0}={},currency='EUR') {
+  const {round:rounded}=currencyMath(currency);
+  const b=breakEven(rows,0,currency),revenue=rounded(b.revenue*(1+salesChange/100));
   const fixed=rounded(b.fixed*(1-fixedReduction/100)),variable=rounded(b.variable*(1+salesChange/100)*(1-variableReduction/100));
   return {revenue,fixed,variable,profit:b.reason?null:rounded(revenue-fixed-variable),reason:b.reason};
 }
-export function detectLeaks(rows,previous=[],budgets={}) {
+export function detectLeaks(rows,previous=[],budgets={},currency='EUR') {
+  const {round:rounded,sum}=currencyMath(currency);
   const costs=rows.filter(r=>r.type==='gasto'&&kind(r)!=='depreciation');
   const before=previous.filter(r=>r.type==='gasto'&&kind(r)!=='depreciation');
   const findings=[],groups=new Map(),categories=Object.create(null);
