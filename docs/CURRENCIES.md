@@ -4,6 +4,8 @@ El selector utiliza 176 códigos monetarios activos del catálogo ISO 4217 publi
 
 Fuente: https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml
 
+La portada incluye su propio selector para los importes ilustrativos, sin cambiar los registros de un espacio.
+
 CLP, ARS, USD, CAD y EUR aparecen primero. Hay búsqueda por código y nombre. La elección se guarda por espacio o cliente, afecta movimientos, disponible, metas, resultados, análisis e informes, y se conserva en los respaldos móviles. El código evita confundir dólares o pesos que comparten símbolo.
 
 Cambiar moneda conserva las cifras guardadas y no convierte saldos mediante tasas de cambio. El usuario debe elegir la unidad correcta de sus registros. No se mezclan monedas por movimiento ni se agrega el dinero de clientes de distintas monedas.

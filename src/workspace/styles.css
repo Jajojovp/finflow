@@ -15,3 +15,5 @@ dialog{border:1px solid var(--line);padding:36px;border-radius:23px;max-width:mi
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 
 .currency-trigger{border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--blue);padding:9px 12px;min-height:36px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}.currency-trigger:focus-visible{outline:2px solid var(--blue);outline-offset:3px}#currency-choice{min-height:220px;width:100%;padding:8px}#currency-choice option{padding:9px 6px}#currency-count{display:block;color:var(--muted);margin:8px 0}.coin{font-size:18px}
+
+#preview-currency{max-width:64px;border:1px solid var(--line);border-radius:5px;background:var(--surface);color:var(--muted);font:inherit;padding:2px 3px}.mini-balance strong[data-preview-money]{font-size:clamp(20px,2.7vw,35px);overflow-wrap:anywhere}
