@@ -17,18 +17,18 @@ function FinancialIntelligence({dataset,month,money,onSave}) {
   const [notice,setNotice]=useState('');
   const a=useMemo(()=>analyzeWorkspace(dataset,month,stress),[dataset,month,stress]);
   const settings=dataset.analysis||{};
-  function saveSettings(event) {
+  async function saveSettings(event) {
     event.preventDefault();
     const f=new FormData(event.currentTarget),read=key=>{const raw=f.get(key);return raw===''?null:Number(raw);};
     const balance=Object.fromEntries(Object.keys(balances).map(k=>[k,read(k)]));
     const revenueBudget=read('revenueBudget'),marginTarget=read('marginTarget'),ratioLimit=read('ratioLimit');
     if(Object.values(balance).some(v=>v!=null&&(!Number.isFinite(v)||v<0))||[revenueBudget,marginTarget,ratioLimit].some(v=>v!=null&&!Number.isFinite(v))) return;
-    onSave({...settings,balances:{...settings.balances,[month]:balance},revenueBudgets:{...settings.revenueBudgets,[month]:revenueBudget},targets:{...settings.targets,netMargin:marginTarget==null?null:marginTarget/100},limits:{...settings.limits,currentRatio:ratioLimit}});
+    try{await onSave({...settings,balances:{...settings.balances,[month]:balance},revenueBudgets:{...settings.revenueBudgets,[month]:revenueBudget},targets:{...settings.targets,netMargin:marginTarget==null?null:marginTarget/100},limits:{...settings.limits,currentRatio:ratioLimit}});}catch(error){setNotice(error.message);}
   }
-  function decision(action,index,accepted) {
+  async function decision(action,index,accepted) {
     const key=`${month}:${action.capability}`;
     const decisions={...settings.decisions,[key]:{status:accepted?'reviewed':'dismissed',at:new Date().toISOString(),period:month,capability:action.capability,evidence:action.data}};
-    onSave({...settings,decisions});
+    try{await onSave({...settings,decisions});}catch(error){setNotice(error.message);}
   }
   const chart=a.series.map(p=>({month:p.month,real:p.revenue})).concat(a.forecast.points.map(p=>({month:p.month,forecast:p.value})));
   if(a.forecast.points.length&&a.series.length) chart[a.series.length-1].forecast=a.series.at(-1).revenue;

@@ -17,3 +17,11 @@ La web incorpora «Mis datos y respaldos», con descarga JSON, selección local 
 La pantalla «Llevar mis datos» de Expo permite revisar un respaldo y elegir restauración completa o la opción anterior de añadir únicamente movimientos conservando ajustes. El provider identifica el ámbito desde su clave de almacenamiento, escribe antes de actualizar React y permite revisar la copia anterior. Los errores de validación, recuperación o escritura no confirman cambios ni sustituyen el estado visible.
 
 Comprobaciones: 8 pruebas del contrato y 4 de fallos/recuperación; 13 pruebas del modelo móvil; TypeScript y build web. En navegador local se probaron rechazo por otra cuenta, preview/cancelación, restauración en CLP, recarga y recuperación del estado anterior ARS/CAD. Un identificador con comillas se conservó sin crear atributos HTML adicionales. La comprobación física de Android se registra por separado de estas pruebas.
+
+## CR-03 · Guardado web transaccional
+
+`storage.mjs` migra cada clave de cuenta/modo local a IndexedDB, base `finflow-workspaces`. Valida antes de migrar y conserva intacto el localStorage original. Restaurar escribe la copia anterior y el reemplazo en una sola transacción. La interfaz solo anuncia «Guardado» después de `transaction.oncomplete`; un aborto conserva el estado confirmado y los campos del formulario para poder reintentarlo. Véanse los eventos [complete](https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction/complete_event) y [abort](https://developer.mozilla.org/en-US/docs/Web/API/IDBTransaction/abort).
+
+Cada escritura compara una revisión dentro de la transacción. Una pestaña desactualizada recibe un aviso y no reemplaza datos nuevos; debe recargar antes de continuar. Si no puede abrirse la base o validar la migración, se ofrece reintentar y descargar los datos originales, sin iniciar un espacio vacío ni borrar el origen.
+
+Comprobaciones: 7 pruebas del adaptador con IndexedDB simulado, incluidas migración concurrente, ámbito de cuenta, escrituras en cola y aborto real de transacción con recuperación atómica. En navegador se editó el disponible de ARS 1.500 a 1.600; otra pestaña intentó guardar 1.700, fue rechazada y al recargar recuperó 1.600. Suite de 89 pruebas y build web correctos. La web pública todavía no se actualiza por registrar este incremento.

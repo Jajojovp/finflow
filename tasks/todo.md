@@ -17,7 +17,7 @@ Estado al 30 de octubre de 2026. La lista se ejecuta por dependencias e hitos de
   - Verificación: exportar/restaurar en web y móvil, archivo corrupto y vuelta a fixtures v1; pruebas de contrato y TypeScript.
   - Archivos: `src/workspace/app.mjs`, `src/workspace/snapshot.mjs`, `mobile/src/data/model.ts`, `mobile/src/screens/forms.tsx`, `tests/snapshot.test.mjs`.
 
-- [ ] **CR-03 · Migrar persistencia web con recuperación.** Depende de CR-02.
+- [x] **CR-03 · Migrar persistencia web con recuperación.** Depende de CR-02.
   - Aceptación: IndexedDB activo tras copia validada; migración repetible y fuente anterior conservada; fallo de cuota/transacción/otra pestaña muestra recuperación sin datos falsamente guardados.
   - Verificación: navegador real con datos sintéticos, recarga, aborto de escritura y cambio de cuenta; pruebas del contrato del adaptador.
   - Archivos: nuevos `src/workspace/storage.mjs`, `tests/storage.test.mjs`; `src/workspace/app.mjs`, `src/workspace/auth.mjs`.
