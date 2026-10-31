@@ -149,6 +149,7 @@ export function Field({
         style={{ width: "100%" }}
       >
         <TextInput
+          accessibilityLabel={label}
           value={text}
           onChangeText={change}
           keyboardType={keyboard}
