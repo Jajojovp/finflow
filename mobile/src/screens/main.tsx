@@ -86,9 +86,9 @@ export function Home() {
         <Metric label="Ingresos" value={money(cash.income)} />
         <Metric label="Gastos" value={money(cash.expense)} />
         <Metric
-          label="Tasa de ahorro"
-          value={percent(cash.rate)}
-          caption={`Meta ${settings.savingsTarget}%`}
+          label={state.profile === "personal" ? "Tasa de ahorro" : "Margen de caja"}
+          value={percent(state.profile === "personal" ? cash.savingsRate : cash.rate)}
+          caption={state.profile === "personal" ? `Meta ${settings.savingsTarget}% · excluye capital` : "Flujo neto / ingresos de caja"}
         />
       </View>
       <Button

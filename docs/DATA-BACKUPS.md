@@ -39,3 +39,8 @@ Comprobaciones: 5 pruebas nuevas del contrato y las 5 anteriores del parser; pru
 `clients.mjs` mantiene las claves originales `advisor-0/1/2` y admite hasta 100 clientes locales. Crear un cliente añade un espacio vacío con nombre y moneda elegidos; no copia ejemplos ni datos de otro. Archivar conserva todos los campos, oculta el cliente del selector activo y permite restaurarlo. Los identificadores archivados no se reutilizan. Se conserva al menos un cliente activo; para archivar el último debe crearse otro antes. Renombrar sigue disponible en Configurar espacio.
 
 Web y Expo usan las mismas reglas. Se verificaron creación del cuarto cliente CLP, recarga, archivo y restauración en web; creación, archivo y restauración en Expo web. Las pruebas conservan nombres, monedas, apertura de caja y campos de análisis al exportar/restaurar. La suite global suma 91 pruebas Vitest y 50 pruebas Node correctas; TypeScript y build web pasan. Lint mantiene cuatro advertencias anteriores, sin errores nuevos.
+
+
+## Crecimiento · planificación compartida
+
+El formato v2 conserva ahora `planning` opcional: recurrentes, deudas, valoraciones, presupuestos, agenda y preferencias locales de alertas. Las versiones anteriores sin ese campo siguen siendo válidas. Antes de escribir se verifican los vínculos de pagos con movimientos activos, clases financieras e importes; los identificadores archivados no se reutilizan. Una restauración inválida conserva el estado anterior. El [contrato y los casos integrados](GROWTH-IMPLEMENTATION.md) documentan los límites y los resultados comprobados.

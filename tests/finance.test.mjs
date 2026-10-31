@@ -17,6 +17,17 @@ test('cash uses opening balance but excludes noncash depreciation',()=>{
   const r=cashPosition([row('ingreso',100,'revenue'),row('gasto',20,'opex'),row('gasto',30,'depreciation')],50);
   assert.equal(r.available,130);assert.equal(r.net,80);
 });
+
+test('personal savings excludes borrowing and capital repayments while cash includes both',()=>{
+  const rows=[row('ingreso',1000,'revenue'),row('ingreso',2000,'capital'),row('gasto',400,'opex'),row('gasto',300,'capital'),row('gasto',50,'depreciation')];
+  const cash=cashPosition(rows,100,'CLP');
+  assert.equal(cash.available,2400);assert.equal(cash.net,2300);
+  assert.equal(cash.rate,2300/3000*100);
+  assert.equal(cash.savingsIncome,1000);assert.equal(cash.savingsExpense,400);
+  assert.equal(cash.savingsNet,600);assert.equal(cash.savingsRate,60);
+  assert.equal(cashPosition([row('ingreso',2000,'capital')]).savingsRate,null);
+  assert.equal(cashPosition([row('ingreso',100,'revenue'),row('gasto',150,'opex')]).savingsRate,-50);
+});
 test('leaks use observed evidence: duplicates, category spikes and recurrence',()=>{
   const current=[{...row('gasto',50,'opex','fixed'),id:'a',description:'Software',category:'Suscripciones'},{...row('gasto',50,'opex','fixed'),id:'b',description:'Software',category:'Suscripciones'}, {...row('gasto',300,'opex','fixed'),id:'c',category:'Servicios'}];
   const previous=[{...row('gasto',50,'opex','fixed'),category:'Suscripciones'}, {...row('gasto',100,'opex','fixed'),category:'Servicios'}];

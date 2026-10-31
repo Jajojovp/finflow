@@ -31,7 +31,7 @@ with ZipFile(apk) as archive:
     for code in [b"CLP", b"ARS", b"USD", b"CAD", b"KWD", b"CLF"]:
         assert code in bundle, f"Currency missing from bundle: {code!r}"
     assert (b"Buscar moneda por nombre" in bundle or "Buscar moneda por nombre".encode("utf-16le") in bundle), "New currency selector absent from bundle"
-    for text in ["finflow-backup-v2", "Confirmar restauración completa", "Revisar CSV", "Archivar este cliente", "Dale espacio a lo que viene.", "Tu portafolio, por moneda.", "Señales con una explicación.", "Caja de 13 semanas", "collectionDelayDays", "in-app-local", "Seleccionar movimientos existentes", "Origen del cobro o pago"]:
+    for text in ["finflow-backup-v2", "Confirmar restauración completa", "Revisar CSV", "Archivar este cliente", "Dale espacio a lo que viene.", "Tu portafolio, por moneda.", "Señales con una explicación.", "Caja de 13 semanas", "collectionDelayDays", "in-app-local", "Seleccionar movimientos existentes", "Origen del cobro o pago", "savingsRate"]:
         assert text.encode("utf-8") in bundle or text.encode("utf-16le") in bundle, f"Crecimiento feature missing: {text}"
     font = mobile / "node_modules/@expo-google-fonts/material-symbols/400Regular/MaterialSymbols_400Regular.ttf"
     font_hash = hashlib.sha256(font.read_bytes()).hexdigest()

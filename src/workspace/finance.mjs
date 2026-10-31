@@ -5,7 +5,11 @@ export function cashPosition(rows,opening=0,currency='EUR') {
   const cashRows=rows.filter(r=>kind(r)!=='depreciation');
   const income=sum(cashRows.filter(r=>r.type==='ingreso')),expense=sum(cashRows.filter(r=>r.type==='gasto'));
   const net=rounded(income-expense);
-  return {income,expense,net,available:rounded(opening+net),opening,rate:income>0?net/income*100:null};
+  const savingsRows=cashRows.filter(r=>kind(r)!=='capital');
+  const savingsIncome=sum(savingsRows.filter(r=>r.type==='ingreso')),savingsExpense=sum(savingsRows.filter(r=>r.type==='gasto'));
+  const savingsNet=rounded(savingsIncome-savingsExpense);
+  return {income,expense,net,available:rounded(opening+net),opening,rate:income>0?net/income*100:null,
+    savingsIncome,savingsExpense,savingsNet,savingsRate:savingsIncome>0?savingsNet/savingsIncome*100:null};
 }
 export function incomeStatement(rows,currency='EUR') {
   const {round:rounded,sum}=currencyMath(currency);
