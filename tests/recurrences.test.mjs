@@ -10,8 +10,8 @@ test('day 31 clamps each month without drifting and respects leap years', () => 
   assert.equal(recurrenceOccurrences(annual,'2025-01-01','2025-12-31')[0].date,'2025-02-28');
 });
 test('confirm is explicit, idempotent even in trash, and does not mutate template', () => {
-  const d = saveRecurrence(empty(), input), next = confirmOccurrence(d,'rent','2024-02-29');
-  assert.equal(d.rows.length,0); assert.equal(next.rows.length,1); assert.equal(next.rows[0].financialType,'opex');
+  const d = saveRecurrence(empty(), {...input,behavior:'fixed'}), next = confirmOccurrence(d,'rent','2024-02-29');
+  assert.equal(d.rows.length,0); assert.equal(next.rows.length,1); assert.equal(next.rows[0].financialType,'opex');assert.equal(next.rows[0].behavior,'fixed');
   assert.deepEqual(confirmOccurrence(next,'rent','2024-02-29'),next);
   const archived = {...next,rows:[],trash:next.rows}; assert.deepEqual(confirmOccurrence(archived,'rent','2024-02-29'),archived);
   assert.throws(() => confirmOccurrence(d,'rent','2024-02-28'), /ocurrencia/);

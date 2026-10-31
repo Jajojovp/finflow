@@ -10,9 +10,10 @@ export function validateRecurrence(input, currency) {
   const financialType = input.financialType ?? (input.type === 'ingreso' ? 'revenue' : 'opex');
   const allowed = input.type === 'ingreso' ? ['revenue','other_income'] : ['opex','cogs','interest','tax','unclassified'];
   if (!allowed.includes(financialType)) fail('Clasifica el recurrente; registra capital y préstamos en Deudas.');
+  if(input.behavior!==undefined&&!['','fixed','variable'].includes(input.behavior))fail('Selecciona coste fijo, variable o pendiente.');
   if (input.paused !== undefined && typeof input.paused !== 'boolean') fail('Revisa el estado del recurrente.');
   const row = validateTransaction({...input, date:startDate, amount:currencyMath(currency).round(input.amount)});
-  return {...input, id:identifier(input.id), description:row.description,category:row.category,type:row.type,amount:row.amount,financialType,startDate,endDate,paused:input.paused ?? false};
+  return {...input, id:identifier(input.id), description:row.description,category:row.category,type:row.type,amount:row.amount,financialType,behavior:input.behavior ?? '',startDate,endDate,paused:input.paused ?? false};
 }
 export function saveRecurrence(d, input) { return upsert(d, 'recurrences', validateRecurrence(input, d.currency)); }
 function occurrenceDate(r, index) {
