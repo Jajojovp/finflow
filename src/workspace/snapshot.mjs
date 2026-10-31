@@ -1,5 +1,6 @@
 import { validateTransaction } from './core.mjs';
 import { isCurrencyCode } from './currencies.mjs';
+import { validatePlanning } from './planning-validation.mjs';
 
 export const BACKUP_FORMAT = 'finflow-backup-v2';
 export const MAX_BACKUP_BYTES = 4 * 1024 * 1024;
@@ -92,6 +93,7 @@ function workspace(value, key, legacy) {
     record(d.demoArchive, 'los ejemplos archivados');
     result.demoArchive = { ...d.demoArchive, rows: rows(d.demoArchive.rows, new Set(), legacy) };
   }
+  validatePlanning(result);
   return result;
 }
 export function normalizeSnapshotState(value, { legacy = false } = {}) {
