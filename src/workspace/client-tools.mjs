@@ -33,10 +33,10 @@ export function showClientTools({ getState, create, archive, restore, select, mo
     event.preventDefault(); const data = new FormData(event.currentTarget);
     void run(() => create({ name: data.get('name'), currency: data.get('currency') }), true);
   });
-  root.addEventListener('click', event => {
+  root.onclick = event => {
     const b = event.target.closest('[data-client-action]'); if (!b) return;
     const index = Number(b.dataset.clientIndex), action = b.dataset.clientAction;
     void run(() => ({ archive, restore, select })[action](index), action === 'select');
-  });
+  };
   draw();
 }

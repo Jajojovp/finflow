@@ -32,7 +32,7 @@ Estado al 30 de octubre de 2026. La lista se ejecuta por dependencias e hitos de
   - Verificación: recorrido en navegador de ambas interfaces, pruebas móviles de importación y TypeScript.
   - Archivos: `src/workspace/app.mjs`, `mobile/src/data/model.ts`, `mobile/src/screens/forms.tsx`, `mobile/src/data/model.test.ts`.
 
-- [ ] **CR-06 · Crear clientes dinámicos en la web.** Depende de CR-01/02.
+- [x] **CR-06 · Crear clientes dinámicos en la web.** Depende de CR-01/02.
   - Aceptación: crear/nombrar/archivar/restaurar; conservar entidades anteriores; cliente vacío sin datos demo mezclados y separación por cuenta/moneda.
   - Verificación: crear un cuarto cliente, recargar y restaurar respaldo; aislamiento del resto y paridad con el modelo móvil existente.
   - Archivos: nuevo `src/workspace/clients.mjs`, `tests/clients.test.mjs`; `src/workspace/app.mjs`, `src/workspace/snapshot.mjs`.

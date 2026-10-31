@@ -1,6 +1,6 @@
 # Plan de implementación · FinFlow Crecimiento
 
-Estado: plan preparado para la próxima versión, 30 de octubre de 2026.
+Estado: hito 1 implementado y comprobado en web local y Expo web, 30 de octubre de 2026. Distribución en preparación; los hitos financieros siguientes siguen pendientes.
 Fuente: [especificación](../docs/CRECIMIENTO.md), [ADR 0011](../docs/adr/0011-crecimiento-evolutivo.md), [tareas](todo.md).
 
 ## Estrategia
@@ -86,4 +86,4 @@ Ejecutar las órdenes completas de [CRECIMIENTO.md](../docs/CRECIMIENTO.md#verif
 
 ## Resultado de esta preparación
 
-El hito 0 deja disponibles la especificación, decisiones, matriz y tareas. El resto permanece pendiente: este plan no modifica los paquetes ni declara nuevas capacidades como publicadas.
+El hito 0 deja disponibles la especificación, decisiones, matriz y tareas. El hito 1 incorpora respaldos completos compatibles, restauración recuperable, guardado web transaccional, revisión CSV y clientes dinámicos. Véanse las comprobaciones y límites en [DATA-BACKUPS.md](../docs/DATA-BACKUPS.md). Los hitos 2–6 siguen pendientes; terminar este primer incremento no equivale a publicar toda la versión Crecimiento.

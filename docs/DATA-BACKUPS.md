@@ -33,3 +33,9 @@ Comprobaciones: 7 pruebas del adaptador con IndexedDB simulado, incluidas migrac
 Web y Expo muestran destino, moneda, resumen y hasta cinco registros antes de confirmar. Los errores indican su fila; se muestran los primeros veinte y se avisa si hay más. Cancelar no escribe. Los gastos quedan sin clasificación financiera para su revisión posterior.
 
 Comprobaciones: 5 pruebas nuevas del contrato y las 5 anteriores del parser; pruebas móviles de revisión sin cambios, confirmación repetida y cambio de moneda. En navegador web se rechazó un CSV con dos errores, se canceló un lote válido y después se confirmó: 2 registros nuevos y 1 duplicado. Reimportarlo mostró 0 nuevos y 3 duplicados. En Expo web se comprobó el mismo recorrido; además, copiar respaldo, restaurar completo en CLP y revisar la copia anterior en EUR. Son pruebas de interfaz web de Expo, no una instalación física Android/iOS.
+
+## CR-06 · Clientes que conservan su identidad
+
+`clients.mjs` mantiene las claves originales `advisor-0/1/2` y admite hasta 100 clientes locales. Crear un cliente añade un espacio vacío con nombre y moneda elegidos; no copia ejemplos ni datos de otro. Archivar conserva todos los campos, oculta el cliente del selector activo y permite restaurarlo. Los identificadores archivados no se reutilizan. Se conserva al menos un cliente activo; para archivar el último debe crearse otro antes. Renombrar sigue disponible en Configurar espacio.
+
+Web y Expo usan las mismas reglas. Se verificaron creación del cuarto cliente CLP, recarga, archivo y restauración en web; creación, archivo y restauración en Expo web. Las pruebas conservan nombres, monedas, apertura de caja y campos de análisis al exportar/restaurar. La suite global suma 91 pruebas Vitest y 50 pruebas Node correctas; TypeScript y build web pasan. Lint mantiene cuatro advertencias anteriores, sin errores nuevos.
