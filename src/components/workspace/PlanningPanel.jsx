@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { recurrenceOccurrences, confirmOccurrence, saveRecurrence } from '../../workspace/recurrences.mjs';
 import { debtBalance, unlinkDebtPayment } from '../../workspace/debts.mjs';
@@ -15,7 +15,7 @@ import AlertsPanel from './AlertsPanel';
 function PlanningPanel({dataset:d,period,profile,money,onSave,workspaceState,onSelectClient}) {
   const [tab,setTab]=useState('recurrences'),[editor,setEditor]=useState(null),[values,setValues]=useState({}),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[simulation,setSimulation]=useState(null);
   const day=period+'-01',end=new Date(Date.UTC(Number(period.slice(0,4)),Number(period.slice(5,7)),0)).toISOString().slice(0,10);
-  const occurrences=recurrenceOccurrences(d,day,addDays(day,45)),worth=netWorth(d,end),budgets=budgetSummary(d,period);
+  const occurrences=useMemo(()=>recurrenceOccurrences(d,day,addDays(day,45)),[d,day]),worth=useMemo(()=>netWorth(d,end),[d,end]),budgets=useMemo(()=>budgetSummary(d,period),[d,period]);
   function open(kind,id='') {const e=createPlanningEditor(kind,d,period,id,crypto.randomUUID());setEditor(e);setValues(editorValues(e));setNotice('');setSimulation(null);}
   async function run(change,message) {if(busy)return;setBusy(true);setNotice('');try{await onSave(change);setNotice(message);return true;}catch(e){setNotice(e.message);return false;}finally{setBusy(false);}}
   async function submit(event) {event.preventDefault();if(editor.kind==='simulation'){try{setSimulation(evaluateLoanSimulation(values,d.currency));setNotice('Escenario calculado, sin guardar.');}catch(e){setNotice(e.message);}return;}if(await run(current=>applyPlanningEditor(current,editor,values),'Guardado en este espacio.'))setEditor(null);}

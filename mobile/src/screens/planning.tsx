@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import * as Crypto from 'expo-crypto';
 import { useWorkspace } from '@/data/provider';
 import type { Workspace, Transaction } from '@/data/model';
@@ -20,7 +20,7 @@ export function PlanningScreen() {
   const [tab,setTab]=useState('recurrences'),[editor,setEditor]=useState<PlanningEditor|null>(null),[values,setValues]=useState<Record<string,string>>({}),[notice,setNotice]=useState(''),[error,setError]=useState('');
   const [simulation,setSimulation]=useState<ReturnType<typeof evaluateLoanSimulation>|null>(null);
   const day=state.period+'-01',end=new Date(Date.UTC(Number(state.period.slice(0,4)),Number(state.period.slice(5,7)),0)).toISOString().slice(0,10);
-  const occurrences=recurrenceOccurrences(d,day,addDays(day,45)),worth=netWorth(d,end),budgets=budgetSummary(d,state.period);
+  const occurrences=useMemo(()=>recurrenceOccurrences(d,day,addDays(day,45)),[d,day]),worth=useMemo(()=>netWorth(d,end),[d,end]),budgets=useMemo(()=>budgetSummary(d,state.period),[d,state.period]);
   const display=(value:number|null)=>value===null?'N/D':money(value);
   function open(kind:string,id='') {const e=createPlanningEditor(kind,d,state.period,id,Crypto.randomUUID());setEditor(e);setValues(editorValues(e));setError('');setSimulation(null);}
   async function run(change:(current:Workspace)=>Workspace,message:string) {setError('');try{await update(change);setNotice(message);return true;}catch(e){setError(e instanceof Error?e.message:'No se pudo guardar. El formulario se conserva.');return false;}}
