@@ -2,6 +2,11 @@ import { validateTransaction } from './core.mjs';
 import { currencyMath } from './currencies.mjs';
 
 export const fail = message => { throw new Error(message); };
+export function numericInput(value) {
+  if(typeof value==='number')return value;
+  if(typeof value!=='string'||!/^[-+]?(?:\d+(?:[.,]\d*)?|[.,]\d+)$/.test(value.trim()))return NaN;
+  return Number(value.trim().replace(',','.'));
+}
 export function date(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value) || !Number.isFinite(Date.parse(value)) || new Date(value).toISOString().slice(0, 10) !== value) fail('La fecha debe ser válida y usar AAAA-MM-DD.');
   return value;

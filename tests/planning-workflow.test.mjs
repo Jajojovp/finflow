@@ -32,5 +32,7 @@ test('both form renderers receive the same safe type change and invalid values c
  const d=emptyClient('Personal','KWD','2026-10'),e=createPlanningEditor('recurrences',d,'2026-10','','r');
  const values=changeEditorValue(editorValues(e),'type','ingreso');assert.equal(values.financialType,'revenue');
  assert.throws(()=>applyPlanningEditor(d,e,{...values,description:'Salario',amount:'Infinity'}),/importe/);
+  const decimal=applyPlanningEditor(d,e,{...values,description:'Ingreso',amount:'12,345'});assert.equal(decimal.planning.recurrences[0].amount,12.345);
+  assert.throws(()=>applyPlanningEditor(d,e,{...values,description:'Ingreso',amount:'1.234,50'}),/importe/);
  assert.deepEqual(d.rows,[]);
 });

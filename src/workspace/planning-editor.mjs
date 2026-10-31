@@ -2,7 +2,7 @@ import { saveRecurrence } from './recurrences.mjs';
 import { saveDebt, payDebt, simulateLoan } from './debts.mjs';
 import { saveValuation } from './net-worth.mjs';
 import { saveBudget } from './budgets.mjs';
-import { date, fail } from './planning-contract.mjs';
+import { date, fail,numericInput } from './planning-contract.mjs';
 import { saveDue, settleDue, linkDuePayment } from './dues.mjs';
 
 /** @typedef {{name:string,label:string,value:string,type:string,required:boolean,options:{value:string,label:string}[]}} EditorField */
@@ -12,7 +12,7 @@ const choices=entries=>entries.map(([value,label])=>({value,label}));
 /** @returns {PlanningEditor} */
 export function createPlanningEditor(kind, d, period, id, newId) {
   date(period+'-01');const item=(d.planning?.[kind] ?? []).find(x=>x.id===id) ?? {};
-  const common={kind,id:id||newId,parentId:'',title:'',note:'Los datos se guardan solo en este espacio y en su moneda: '+d.currency+'.',fields:[]};
+  const common={kind,id:id||newId,parentId:'',title:'',note:'Los datos se guardan solo en este espacio y en su moneda: '+d.currency+'. Usa números sin separadores de miles; se admite punto o coma decimal.',fields:[]};
   if(kind==='recurrences') return {...common,title:id?'Editar recurrente':'Nuevo recurrente',fields:[
     field('description','Descripción',item.description),field('amount','Importe',item.amount ?? '', 'number'),field('category','Categoría',item.category ?? 'Otros'),
     field('type','Tipo',item.type ?? 'gasto','select',true,choices([['gasto','Gasto'],['ingreso','Ingreso']])),
@@ -32,7 +32,7 @@ export function createPlanningEditor(kind, d, period, id, newId) {
 export const editorValues=editor=>Object.fromEntries(editor.fields.map(f=>[f.name,f.value]));
 export const changeEditorValue=(values,key,value)=>({...values,[key]:value,...(key==='type'?{financialType:value==='ingreso'?'revenue':'opex'}:{})});
 export function applyPlanningEditor(d, editor, values) {
-  const n=key=>values[key]===''||values[key]===undefined?NaN:Number(values[key]);
+  const n=key=>numericInput(values[key]);
   if(editor.kind==='recurrences') {const old=d.planning?.recurrences?.find(x=>x.id===editor.id);return saveRecurrence(d,{...old,id:editor.id,description:values.description,amount:n('amount'),category:values.category,type:values.type,financialType:values.financialType,behavior:values.behavior ?? '',startDate:values.startDate,endDate:values.endDate || null,frequency:values.frequency,interval:n('interval')});}
   if(editor.kind==='debts') return saveDebt(d,{id:editor.id,name:values.name,principal:n('principal'),startDate:values.startDate,dueDate:values.dueDate || null,annualRate:values.annualRate===''?null:n('annualRate')});
   if(editor.kind==='payment') return payDebt(d,editor.parentId,{id:editor.id,date:values.date,principal:n('principal'),interest:n('interest'),fee:n('fee'),...(values.rowIds?.trim()?{rowIds:values.rowIds.split(',').map(x=>x.trim())}:{})});
@@ -42,4 +42,4 @@ export function applyPlanningEditor(d, editor, values) {
   if(editor.kind==='settlement') return values.rowId?.trim()?linkDuePayment(d,editor.parentId,values.rowId.trim()):settleDue(d,editor.parentId,{id:editor.id,date:values.date,amount:n('amount')});
   fail('Este formulario no guarda datos financieros.');
 }
-export function evaluateLoanSimulation(values,currency) { return simulateLoan(Number(values.principal),values.annualRate===''?null:Number(values.annualRate),Number(values.months),currency); }
+export function evaluateLoanSimulation(values,currency) { return simulateLoan(numericInput(values.principal),values.annualRate?.trim()===''?null:numericInput(values.annualRate),numericInput(values.months),currency); }
