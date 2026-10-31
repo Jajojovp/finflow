@@ -25,3 +25,11 @@ Comprobaciones: 8 pruebas del contrato y 4 de fallos/recuperación; 13 pruebas d
 Cada escritura compara una revisión dentro de la transacción. Una pestaña desactualizada recibe un aviso y no reemplaza datos nuevos; debe recargar antes de continuar. Si no puede abrirse la base o validar la migración, se ofrece reintentar y descargar los datos originales, sin iniciar un espacio vacío ni borrar el origen.
 
 Comprobaciones: 7 pruebas del adaptador con IndexedDB simulado, incluidas migración concurrente, ámbito de cuenta, escrituras en cola y aborto real de transacción con recuperación atómica. En navegador se editó el disponible de ARS 1.500 a 1.600; otra pestaña intentó guardar 1.700, fue rechazada y al recargar recuperó 1.600. Suite de 89 pruebas y build web correctos. La web pública todavía no se actualiza por registrar este incremento.
+
+## CR-04/05 · CSV revisado antes de escribir
+
+`inspectCSV` reutiliza el parser existente y devuelve todos los errores de fila. `reviewImport` prepara el lote sin modificar el destino: cuenta filas, duplicados y errores; conserva hasta cuatro decimales y comprueba 2 MB de UTF-8 y la capacidad de 5.000 movimientos. Un error bloquea el lote completo. `applyImport` revalida moneda/capacidad y duplicados al confirmar; evita también colisiones con identificadores archivados.
+
+Web y Expo muestran destino, moneda, resumen y hasta cinco registros antes de confirmar. Los errores indican su fila; se muestran los primeros veinte y se avisa si hay más. Cancelar no escribe. Los gastos quedan sin clasificación financiera para su revisión posterior.
+
+Comprobaciones: 5 pruebas nuevas del contrato y las 5 anteriores del parser; pruebas móviles de revisión sin cambios, confirmación repetida y cambio de moneda. En navegador web se rechazó un CSV con dos errores, se canceló un lote válido y después se confirmó: 2 registros nuevos y 1 duplicado. Reimportarlo mostró 0 nuevos y 3 duplicados. En Expo web se comprobó el mismo recorrido; además, copiar respaldo, restaurar completo en CLP y revisar la copia anterior en EUR. Son pruebas de interfaz web de Expo, no una instalación física Android/iOS.

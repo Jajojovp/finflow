@@ -66,6 +66,7 @@ function workspace(value, key, legacy) {
   if (typeof name !== 'string' || name.length > 200) fail('El nombre del espacio es inválido.');
   const currency = d.currency ?? (legacy ? 'EUR' : null);
   if (!isCurrencyCode(currency)) fail('Revisa la moneda del respaldo.');
+  if (d.archived !== undefined && typeof d.archived !== 'boolean') fail('El estado de archivo del cliente es inválido.');
   if (d.lastMonth !== undefined && !month(d.lastMonth)) fail('El último período del espacio es inválido.');
   const goal = record(d.goal, 'el objetivo');
   if (typeof goal.name !== 'string' || goal.name.length > 200 || !amount(goal.target) || goal.target <= 0 || !amount(goal.saved)) fail('Revisa el objetivo y sus importes.');

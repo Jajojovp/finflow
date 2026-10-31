@@ -17,7 +17,7 @@ export function showCSVTools({ getDestination, apply, modal, toast }) {
       const raw = await file.text();
       if (request !== generation || !fileInput.isConnected) return;
       pending = reviewImport(raw, destination);
-      $('#csv-summary').textContent = `${pending.total} filas · ${pending.rows.length} nuevas · ${pending.duplicates} duplicadas · ${pending.errors.length} errores`;
+      $('#csv-summary').textContent = `Filas: ${pending.total} · Nuevas: ${pending.rows.length} · Duplicadas: ${pending.duplicates} · Errores: ${pending.errors.length}`;
       $('#csv-period').textContent = pending.latestMonth ? `Último periodo del lote: ${pending.latestMonth}` : 'Sin movimientos nuevos.';
       $('#csv-samples').replaceChildren(...pending.rows.slice(0, 5).map(row => {
         const li = document.createElement('li'); li.textContent = `${row.date} · ${row.description} · ${row.type} · ${row.amount} ${destination.currency}`; return li;

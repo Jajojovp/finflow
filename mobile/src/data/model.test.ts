@@ -14,6 +14,7 @@ import {
   decodeBackup,
   encodeBackup,
   createAdvisorClient,
+  archiveAdvisorClient,
   appendDemo,
 } from "./model";
 import {
@@ -37,6 +38,16 @@ describe("FinFlow mobile shared financial data", () => {
     expect(once.rows[0].financialType).toBe("unclassified");
     expect(confirmImportRows(once, review).rows).toHaveLength(1);
     expect(() => confirmImportRows({ ...d, currency: "USD" }, review)).toThrow(/moneda/);
+  });
+  it("archives and restores advisor clients while preserving their balances and names", () => {
+    const s = createAdvisorClient({ ...initialState("2026-10"), profile: "advisor" }, "Cliente de Canadá");
+    const funded = updateWorkspace(s, d => ({ ...d, currency: "CAD", finance: { "2026-10": { opening: 1200, savingsTarget: 10, expenseBudget: 0, unitPrice: 0 } } }));
+    const archived = archiveAdvisorClient(funded, funded.entity, true);
+    expect(archived.entity).not.toBe(funded.entity);
+    const restored = archiveAdvisorClient(decodeBackup(encodeBackup(archived)), funded.entity, false);
+    expect(restored.datasets[`advisor-${funded.entity}`].name).toBe("Cliente de Canadá");
+    expect(restored.datasets[`advisor-${funded.entity}`].finance["2026-10"].opening).toBe(1200);
+    expect(restored.datasets[`advisor-${funded.entity}`].currency).toBe("CAD");
   });
   it("opens portable web backups completely and checks the destination scope", () => {
     const web = { month: "2026-10", profile: "personal", entity: 0, theme: "dark", datasets: { personal: { ...getWorkspace(initialState("2026-10")), currency: "CLP", futureModule: { preserved: true } } } };

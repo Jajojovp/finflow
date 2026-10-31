@@ -761,7 +761,7 @@ export function ImportScreen() {
     {csvPreview && <Card>
       <Title>Antes de añadir.</Title>
       <Copy>Destino: {csvPreview.name} · {csvPreview.review.currency}</Copy>
-      <Copy>{csvPreview.review.total} filas · {csvPreview.review.rows.length} nuevas · {csvPreview.review.duplicates} duplicadas · {csvPreview.review.errors.length} errores</Copy>
+      <Copy>Filas: {csvPreview.review.total} · Nuevas: {csvPreview.review.rows.length} · Duplicadas: {csvPreview.review.duplicates} · Errores: {csvPreview.review.errors.length}</Copy>
       <Copy small muted>No se convertirán los importes. Los gastos se añaden sin clasificación financiera para que puedas revisarla.</Copy>
       {csvPreview.review.rows.slice(0, 5).map((r: { date: string; description: string; amount: number }, i: number) => <Copy small key={i}>{r.date} · {r.description} · {r.amount} {csvPreview.review.currency}</Copy>)}
       {csvPreview.review.errors.slice(0, 20).map((e: { row: number | null; message: string }, i: number) => <ErrorText key={i} message={(e.row ? `Fila ${e.row}: ` : "") + e.message} />)}

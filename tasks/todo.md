@@ -27,7 +27,7 @@ Estado al 30 de octubre de 2026. La lista se ejecuta por dependencias e hitos de
   - Verificación: comillas, saltos de línea, Unicode, decimales, fechas inválidas, duplicados y cancelación.
   - Archivos: nuevo `src/workspace/import-review.mjs`, `tests/import-review.test.mjs`; `src/workspace/core.mjs`, `tests/core.test.mjs`.
 
-- [ ] **CR-05 · Confirmar el CSV desde web y móvil.** Depende de CR-02/04.
+- [x] **CR-05 · Confirmar el CSV desde web y móvil.** Depende de CR-02/04.
   - Aceptación: preview visible antes de guardar; cancelar no escribe; confirmar dos veces no duplica y el espacio/moneda destino se identifica.
   - Verificación: recorrido en navegador de ambas interfaces, pruebas móviles de importación y TypeScript.
   - Archivos: `src/workspace/app.mjs`, `mobile/src/data/model.ts`, `mobile/src/screens/forms.tsx`, `mobile/src/data/model.test.ts`.

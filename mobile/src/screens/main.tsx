@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { FlatList, Linking, Pressable, Text, View } from "react-native";
 import { Redirect, router } from "expo-router";
 import * as Clipboard from "expo-clipboard";
+import { listClients } from "../../../src/workspace/clients.mjs";
 import { scenario } from "../../../src/workspace/core.mjs";
 import { useWorkspace } from "@/data/provider";
 import {
@@ -11,6 +12,7 @@ import {
   restoreTransaction,
   clientIndexes,
   createAdvisorClient,
+  archiveAdvisorClient,
 } from "@/data/model";
 import {
   Button,
@@ -791,9 +793,11 @@ export function More() {
               secondary
               disabled={saving}
               onPress={() =>
-                run(() => commit(createAdvisorClient), "Cliente creado.")
+                run(() => commit(s => createAdvisorClient(s)), "Cliente creado.")
               }
             />
+            <Button title="Archivar este cliente" secondary disabled={saving} onPress={() => run(() => commit(s => archiveAdvisorClient(s, s.entity, true)), "Cliente archivado. Sus datos se conservan.")} />
+            {listClients(state).filter((c: { archived: boolean }) => c.archived).map((c: { index: number; name: string }) => <Button key={c.index} title={`Restaurar ${c.name}`} secondary disabled={saving} onPress={() => run(() => commit(s => archiveAdvisorClient(s, c.index, false)), "Cliente restaurado.")} />)}
           </>
         )}
         <Button

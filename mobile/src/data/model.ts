@@ -1,3 +1,4 @@
+import { listClients, createClient, setClientArchived } from "../../../src/workspace/clients.mjs";
 import { reviewImport, applyImport } from "../../../src/workspace/import-review.mjs";
 import { validateTransaction } from "../../../src/workspace/core.mjs";
 import { CURRENCIES } from "../../../src/workspace/currencies.mjs";
@@ -23,6 +24,8 @@ export type MonthSettings = {
   unitPrice: number;
 };
 export type Workspace = {
+  archived?: boolean;
+  lastMonth?: string;
   name: string;
   currency: Currency;
   rows: Transaction[];
@@ -88,33 +91,14 @@ export function initialState(period = currentMonth()): Snapshot {
 export function workspaceKey(s: Pick<Snapshot, "profile" | "entity">) {
   return s.profile === "advisor" ? `advisor-${s.entity}` : s.profile;
 }
-export function clientIndexes(s: Snapshot) {
-  return [
-    ...new Set([
-      0,
-      1,
-      2,
-      s.entity,
-      ...Object.keys(s.datasets)
-        .filter((k) => /^advisor-\d+$/.test(k))
-        .map((k) => Number(k.slice(8))),
-    ]),
-  ].sort((a, b) => a - b);
+export function clientIndexes(s: Snapshot): number[] {
+  return listClients(s).filter((c: { archived: boolean }) => !c.archived).map((c: { index: number }) => c.index);
 }
-export function createAdvisorClient(s: Snapshot): Snapshot {
-  if (s.profile !== "advisor")
-    throw new Error("Selecciona el perfil asesor para crear un cliente.");
-  const entity = Math.max(...clientIndexes(s)) + 1;
-  if (entity > 99)
-    throw new Error("Este espacio local admite hasta 100 clientes.");
-  return {
-    ...s,
-    entity,
-    datasets: {
-      ...s.datasets,
-      [`advisor-${entity}`]: emptyWorkspace("advisor", s.period, entity),
-    },
-  };
+export function createAdvisorClient(s: Snapshot, name?: string): Snapshot {
+  return createClient(s, { name });
+}
+export function archiveAdvisorClient(s: Snapshot, index: number, archived: boolean): Snapshot {
+  return setClientArchived(s, index, archived);
 }
 export function emptyWorkspace(
   profile: Profile,

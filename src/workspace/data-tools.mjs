@@ -4,7 +4,8 @@ export function showDataTools({ getState, scope, restore, readRecovery, modal, d
   modal(`<span class="overline">TUS DATOS, CONTIGO</span><h2>Respalda tu espacio.</h2><p>Un respaldo completo guarda todos tus espacios, movimientos, metas, monedas y configuración. El CSV sigue disponible para llevar solo movimientos.</p><button class="button secondary" id="backup-export">Descargar respaldo completo ↓</button><label class="field" style="margin-top:24px">Revisar un respaldo<input id="backup-file" type="file" accept=".json,application/json,text/plain"></label><p class="scenario-note">Hasta 4 MB. El archivo se revisa en este dispositivo; no se envía a un servidor.</p><button class="text-button" id="backup-recovery">Revisar copia anterior a la última restauración</button><p id="backup-error" role="alert"></p><section id="backup-preview" hidden><h3>Antes de restaurar</h3><p id="backup-summary"></p><ul id="backup-spaces"></ul><p id="backup-origin" class="scenario-note"></p><p>La restauración completa sustituye los espacios guardados de ${scope === 'local' ? 'este modo local' : 'esta cuenta'}. Se conservará una copia anterior para recuperarla desde aquí.</p><label class="field"><span><input type="checkbox" id="backup-confirm"> Confirmo que quiero restaurar estos datos completos.</span></label><div class="heading-actions"><button class="button primary" id="backup-apply" disabled>Restaurar respaldo completo</button><button class="button secondary" id="backup-cancel">Cancelar</button></div></section>`);
   const root = document.querySelector('#dialog-content');
   const find = id => root.querySelector('#' + id);
-  let pending = null, busy = false;
+  let pending = null, busy = false, generation = 0;
+  const input = find('backup-file');
   const quantity = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
   const clear = () => { pending = null; find('backup-preview').hidden = true; find('backup-confirm').checked = false; find('backup-apply').disabled = true; };
   function preview(raw) {
@@ -26,19 +27,20 @@ export function showDataTools({ getState, scope, restore, readRecovery, modal, d
     catch (e) { find('backup-error').textContent = e.message; }
   };
   find('backup-file').onchange = async event => {
-    clear();
+    const request = ++generation; clear();
     try {
       const file = event.target.files[0];
-      if (file) { if (file.size > MAX_BACKUP_BYTES) throw new Error('El respaldo supera el límite de 4 MB.'); preview(await file.text()); }
-    } catch (e) { find('backup-error').textContent = e.message; }
+      if (file) { if (file.size > MAX_BACKUP_BYTES) throw new Error('El respaldo supera el límite de 4 MB.'); const raw = await file.text(); if(request===generation && input.isConnected && root.closest('dialog').open) preview(raw); }
+    } catch (e) { if(request===generation && input.isConnected) find('backup-error').textContent = e.message; }
     finally { event.target.value = ''; }
   };
   find('backup-recovery').onclick = async () => {
-    try { const raw = await readRecovery(); if (!raw) throw new Error('Todavía no hay una copia anterior a una restauración.'); preview(raw); }
-    catch (e) { find('backup-error').textContent = e.message; }
+    const request = ++generation;
+    try { const raw = await readRecovery(); if (!raw) throw new Error('Todavía no hay una copia anterior a una restauración.'); if(request===generation && input.isConnected && root.closest('dialog').open) preview(raw); }
+    catch (e) { if(request===generation && input.isConnected) find('backup-error').textContent = e.message; }
   };
   find('backup-confirm').onchange = event => { find('backup-apply').disabled = !event.target.checked || !pending; };
-  find('backup-cancel').onclick = clear;
+  find('backup-cancel').onclick = () => { generation++; clear(); };
   find('backup-apply').onclick = async () => {
     if (busy || !pending || !find('backup-confirm').checked) return;
     busy = true; for (const id of ['backup-apply', 'backup-file', 'backup-recovery', 'backup-cancel']) find(id).disabled = true;

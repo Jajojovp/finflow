@@ -1,3 +1,5 @@
+import { listClients, createClient, setClientArchived, emptyClient } from './clients.mjs';
+import { showClientTools } from './client-tools.mjs';
 import { scopeFromStorageKey, toWebState } from './snapshot.mjs';
 import { openWorkspaceStorage } from './storage.mjs';
 import { showCSVTools } from './csv-tools.mjs';
@@ -55,12 +57,13 @@ const STORAGE=workspaceStorageKey(), dataScope=scopeFromStorageKey(STORAGE);
 const workspaceStore=await openWorkspaceStorage({key:STORAGE,legacyStorage:localStorage,initialState:{month:'2026-10',profile:'personal',entity:0,datasets:{}}});
 const saved=workspaceStore.read();
 window.addEventListener('pagehide',()=>workspaceStore.close(),{once:true});
+window.addEventListener('pageshow',event=>{if(event.persisted)location.reload();});
 const state={...saved,profile:saved.profile||'personal',view:'overview',month:saved.month||'2026-10',entity:saved.entity||0,filter:'Todas',chart:'six',scenario:saved.scenario||{monthly:200,years:5,rate:3,fee:.5,inflation:2},theme:saved.theme||'light',previewCurrency:isCurrencyCode(saved.previewCurrency)?saved.previewCurrency:'EUR',datasets:saved.datasets||{}};
 let toastTimer,transition,saving=false;
 let lastCommitted=JSON.parse(JSON.stringify(savedState()));
 function dataset(){
   const key=state.profile==='advisor'?`advisor-${state.entity}`:state.profile;let value=state.datasets[key];
-  if(!value||!Array.isArray(value.rows)||!value.goal||!Array.isArray(value.lessons))value=state.datasets[key]=seed(state.profile,state.entity);
+  if(!value||!Array.isArray(value.rows)||!value.goal||!Array.isArray(value.lessons))value=state.datasets[key]=state.profile==='advisor'&&state.entity>=3?emptyClient(`Cliente ${state.entity+1}`,'EUR',state.month):seed(state.profile,state.entity);
   value.finance ||= {};value.budgets ||= {};if(!isCurrencyCode(value.currency))value.currency='EUR';
   for(const r of value.rows) if(!r.financialType&&r.source==='Datos de ejemplo'){
     r.financialType=r.type==='ingreso'?'revenue':r.category==='Proveedores'?'cogs':'opex';
@@ -76,7 +79,9 @@ function dataTools(){showDataTools({getState:savedState,scope:dataScope,modal,do
  readRecovery:()=>workspaceStore.readRecovery(),
  restore:async incoming=>{
   if(saving)throw new Error('Espera a que termine el guardado actual.');
-  await workspaceStore.save(savedState());await workspaceStore.save(incoming,{recovery:true});
+  saving=true;saveStatus('Guardando…');
+  try{await workspaceStore.save(savedState());await workspaceStore.save(incoming,{recovery:true});}
+  finally{saving=false;}
   const restored=toWebState(incoming);for(const key of Object.keys(state))delete state[key];
   Object.assign(state,{filter:'Todas',chart:'six',scenario:{monthly:200,years:5,rate:3,fee:.5,inflation:2},...restored,view:'overview'});
   lastCommitted=JSON.parse(JSON.stringify(savedState()));document.documentElement.classList.toggle('dark',state.theme==='dark');refreshPreviewCurrency();route(state.profile,'overview');
@@ -121,7 +126,11 @@ function renderRoute(){
 }
 function header(title,desc,actions='',greeting='TU ESPACIO FINANCIERO') {return `<div class="page-heading"><div><div class="eyebrow">${greeting}</div><h1>${title}</h1><p>${desc}</p></div><div class="heading-actions">${actions}</div></div>`;}
 function monthsSelect(){const months=[...new Set([...dataset().rows.map(r=>r.date.slice(0,7)),state.month])].sort().reverse();return `<select id="month-select" aria-label="Periodo">${months.map(m=>`<option value="${m}" ${state.month===m?'selected':''}>${monthName(m)}</option>`).join('')}</select>`;}
-function entitySelector(){return state.profile==='advisor'?`<div class="entity-list" aria-label="Entidades">${['Estudio Norte','Taller Oliva','Café Alameda'].map((e,i)=>`<button class="entity-button ${state.entity===i?'active':''}" data-entity="${i}">${icon('building')}${escape(state.datasets[`advisor-${i}`]?.name||e)}</button>`).join('')}</div>`:'';}
+function entitySelector(){return state.profile==='advisor'?`<div class="entity-list" aria-label="Entidades">${listClients(state).filter(c=>!c.archived).map(c=>`<button class="entity-button ${state.entity===c.index?'active':''}" data-entity="${c.index}">${icon('building')}${escape(c.name)}</button>`).join('')}<button class="entity-button" data-action="clients">${icon('briefcase')}Gestionar clientes</button></div>`:'';}
+function clientTools(){
+ const change=async transform=>{Object.assign(state,transform({...state,period:state.month}));state.month=dataset().lastMonth||state.month;await persist();render();};
+ showClientTools({getState:()=>state,modal,create:options=>change(s=>createClient(s,options)),archive:index=>change(s=>setClientArchived(s,index,true)),restore:index=>change(s=>setClientArchived(s,index,false)),select:index=>change(s=>({...s,entity:index}))});
+}
 function results(){return header('Entiende qué deja tu negocio.','Resultados, punto de equilibrio y decisiones con los supuestos a la vista.',`${monthsSelect()}<button class="button small secondary" data-action="report">Exportar informe ↗</button>`)+entitySelector()+renderResults({rows:currentRows(),settings:monthSettings(),money,currency:dataset().currency,model:businessModel})+`<details class="advanced-analysis panel" id="advanced-analysis"><summary><span><span class="overline">UN POCO MÁS DE PERSPECTIVA</span><strong>Explorar el análisis avanzado</strong><small>Indicadores, proyecciones y decisiones que puedes explicar.</small></span><span class="advanced-arrow" aria-hidden="true">↗</span></summary><div id="financial-intelligence"><p class="scenario-note">Preparando tus indicadores…</p></div></details>`;}
 function leaks(){return header('Encuentra por dónde se escapa.','Revisa gastos repetidos, variaciones, presupuestos y comisiones.',monthsSelect())+entitySelector()+renderLeaks({rows:currentRows(),previous:previousRows(),settings:monthSettings(),budgets:dataset().budgets,money,currency:dataset().currency});}
 function stats(){const b=balance(),s=monthSettings();return `<div class="stats">${[
@@ -209,6 +218,8 @@ function budgetForm(category=''){
 function editGoal(){const g=dataset().goal,c=dataset().currency;modal(`<span class="overline">UN PASO HACIA TU META</span><h2>Dale forma a tu objetivo.</h2><form id="goal-form"><label class="field">Nombre de tu objetivo<input name="name" required maxlength="80" value="${escape(g.name)}"></label><label class="field">Importe objetivo (${c})<input type="number" name="target" min="1" max="1000000000000" required step="${currencyStep(dataset().currency)}" value="${g.target}"></label><label class="field">Dinero reservado (${c})<input type="number" name="saved" min="0" max="1000000000000" required step="${currencyStep(dataset().currency)}" value="${g.saved}"></label><p>Este registro no mueve dinero. Actualiza cuánto tienes reservado realmente.</p><p class="field-error" id="form-error" role="alert"></p><button class="button primary" type="submit">Guardar mi progreso →</button></form>`);}
 function openLesson(index){const l=lessons[index];modal(`<span class="overline">LECCIÓN ${index+1} DE ${lessons.length} · 3 MIN</span><h2>${l.title}</h2><p>${l.body}</p><h3 style="font-size:14px;margin-top:25px">${l.question}</h3>${l.answers.map((a,i)=>`<button class="quiz-option" data-answer="${i}" data-quiz="${index}">${a}</button>`).join('')}<p id="quiz-feedback" role="status"></p><button class="button primary" id="lesson-done" hidden>Continuar mi camino →</button>`);}
 function download(name,content,type){const url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+document.addEventListener('click',event=>{if(saving){event.preventDefault();event.stopImmediatePropagation();toast('Espera a que termine el guardado actual.');}},true);
+$('#detail-dialog').addEventListener('cancel',event=>{if(saving)event.preventDefault();});
 document.addEventListener('click',async event=>{if(saving){event.preventDefault();toast('Espera a que termine el guardado actual.');return;}try{
   const b=event.target.closest('button,a');if(!b)return;
   if(b.dataset.profile){route(b.dataset.profile);return;}
@@ -232,7 +243,8 @@ document.addEventListener('click',async event=>{if(saving){event.preventDefault(
   if(b.dataset.view){route(state.profile,b.dataset.view);return;}
   if(b.dataset.chart){state.chart=b.dataset.chart;render();return;}
   if(b.dataset.filter){state.filter=b.dataset.filter;render();return;}
-  if(b.hasAttribute('data-entity')){state.entity=Number(b.dataset.entity);state.month='2026-10';render();return;}
+  if(b.hasAttribute('data-entity')){state.entity=Number(b.dataset.entity);state.month=dataset().lastMonth||state.month;await persist();render();return;}
+  if(b.dataset.action==='clients'){clientTools();return;}
   if(b.dataset.evidence)return evidence(b.dataset.evidence);
   if(b.dataset.opportunity){const o=opportunityData().find(o=>o.id===b.dataset.opportunity);modal(`<span class="overline">${o.tag}</span><h2>${o.title}</h2><div class="evidence-value">${o.impact}</div><p>${o.desc}</p><dl class="evidence-details"><dt>Fórmula</dt><dd>${o.formula}</dd><dt>Fuente y periodo</dt><dd>${monthName(state.month)} · movimientos y objetivo del espacio actual. Incluye datos de ejemplo si no los has sustituido.</dd><dt>Supuestos y límites</dt><dd>${o.limits}</dd></dl><button class="button primary" data-go-goals>Explorar el escenario →</button>`);return;}
   if(b.hasAttribute('data-go-goals')){$('#detail-dialog').close();route(state.profile,'goals');return;}
@@ -275,7 +287,7 @@ async function toggleTheme(){if(saving)return;state.theme=state.theme==='dark'?'
 $('#theme-toggle').onclick=toggleTheme;$('#mobile-theme').onclick=toggleTheme;document.documentElement.classList.toggle('dark',state.theme==='dark');
 $('#profile-switch').onclick=showProfiles;$('#breadcrumb').onclick=showProfiles;
 $('#demo-button').onclick=()=>route('personal');$('#landing-button').onclick=()=>location.hash='';$('#home-link').onclick=()=>location.hash='';
-$('#help-button').onclick=()=>modal('<span class="overline">TU ESPACIO, A LA VISTA</span><h2>Tus números, con más control.</h2><p>Desde Resumen puedes añadir ingresos y gastos o ajustar el disponible. La tasa se calcula desde los movimientos, y puedes fijar tu meta de ahorro en Configurar mes. En Movimientos puedes editar los registros.</p><p>Resultados añade el estado de gestión y el punto de equilibrio para empresas y profesionales. Fugas revisa patrones y presupuestos con datos verificables.</p><p>Tus cambios se guardan en este navegador y dominio. No se sincronizan con otros dispositivos ni se trasladan automáticamente entre el dominio Sites y sysora.io. Exporta los movimientos a CSV e impórtalos en el otro dominio si necesitas llevarlos.</p><p>No hay conexión bancaria ni cotizaciones en vivo. Usa el nombre del espacio en la barra superior para cambiar de perfil.</p><button class="button secondary" id="modal-home">Volver a la web →</button>');
+$('#help-button').onclick=()=>modal('<span class="overline">TU ESPACIO, A LA VISTA</span><h2>Tus números, con más control.</h2><p>Desde Resumen puedes añadir ingresos y gastos o ajustar el disponible. La tasa se calcula desde los movimientos, y puedes fijar tu meta de ahorro en Configurar mes. En Movimientos puedes editar los registros.</p><p>Resultados añade el estado de gestión y el punto de equilibrio para empresas y profesionales. Fugas revisa patrones y presupuestos con datos verificables.</p><p>Tus cambios se guardan en este navegador y dominio. No se sincronizan con otros dispositivos ni se trasladan automáticamente entre el dominio Sites y sysora.io. Usa Mis datos y respaldos para llevar el espacio completo, o CSV para trasladar solo movimientos.</p><p>No hay conexión bancaria ni cotizaciones en vivo. Usa el nombre del espacio en la barra superior para cambiar de perfil.</p><button class="button secondary" id="modal-home">Volver a la web →</button>');
 document.addEventListener('click',e=>{if(e.target.closest('#modal-home')){$('#detail-dialog').close();location.hash='';}});
 if(new URLSearchParams(location.search).get('app')==='1'&&!location.hash)history.replaceState(null,'',`${location.pathname}?app=1#app/${state.profile}/overview`);
 window.addEventListener('hashchange',renderRoute);hydrateIcons();refreshPreviewCurrency();renderRoute();
