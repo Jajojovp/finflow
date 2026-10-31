@@ -24,6 +24,10 @@ export function saveDebt(d, input) {
   const existing=d.planning?.debts?.find(x=>x.id===input.id);
   return upsert(d,'debts',validateDebt({...input,payments:existing?.payments ?? []},d.currency));
 }
+export function unlinkDebtPayment(d,debtId,paymentId) {
+  const debt=d.planning?.debts?.find(x=>x.id===debtId);if(!debt)fail('No se encontró la deuda.');
+  return upsert(d,'debts',{...debt,payments:debt.payments.filter(p=>p.id!==paymentId)});
+}
 export function payDebt(d, debtId, input) {
   const debt=d.planning?.debts?.find(x=>x.id===debtId); if(!debt) fail('No se encontró la deuda.');
   const {round,sum}=currencyMath(d.currency), p={id:identifier(input.id),date:date(input.date),principal:round(amount(input.principal)),interest:round(amount(input.interest)),fee:round(amount(input.fee))};
@@ -44,7 +48,7 @@ export function payDebt(d, debtId, input) {
     for(const [key,kind] of parts) if(sum(rows.filter(r=>r.financialType===kind))!==p[key]) fail('Los importes de capital, interés y comisión no coinciden.');
     p.rowIds=[...input.rowIds];
   } else {
-    const rows=parts.map(([key,kind])=>({id:`debt:${p.id}:${key}`,date:p.date,description:`${debt.name} · ${key==='principal'?'capital':key==='interest'?'interés':'comisión'}`,category:'Deudas',type:'gasto',amount:p[key],financialType:kind,behavior:kind==='opex'?'fixed':'',source:'Pago de deuda',debtId}));
+    const rows=parts.map(([key,kind])=>({id:`debt:${p.id}:${key}`,date:p.date,description:`${debt.name} · ${key==='principal'?'capital':key==='interest'?'interés':'comisión'}`.slice(0,200),category:'Deudas',type:'gasto',amount:p[key],financialType:kind,behavior:'',source:'Pago de deuda',debtId}));
     next=addRows(d,rows); p.rowIds=rows.map(r=>r.id);
   }
   return upsert(next,'debts',validateDebt({...debt,payments:[...debt.payments,p]},d.currency));

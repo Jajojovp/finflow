@@ -36,7 +36,7 @@ export function recurrenceOccurrences(d, from, through) {
       if(day<from) continue;
       const id=`rec:${r.id}:${day}`;
       result.push({id,recurrenceId:r.id,date:day,description:r.description,type:r.type,category:r.category,amount:r.amount,financialType:r.financialType,behavior:r.behavior ?? '',source:'Recurrente confirmado',confirmed:recorded.has(id)});
-      if(result.length>5000) fail('Reduce el intervalo: hay más de 5.000 ocurrencias.');
+      if(result.length>20000) fail('Reduce el intervalo: hay más de 20.000 ocurrencias previstas.');
     }
   }
   return result.sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
@@ -45,6 +45,6 @@ export function confirmOccurrence(d, id, day) {
   const occurrence = recurrenceOccurrences(d,day,day).find(x=>x.recurrenceId===id);
   if(!occurrence) fail('La fecha no corresponde a una ocurrencia activa.');
   if(occurrence.confirmed) return d;
-  const {confirmed:_, ...row}=occurrence;
+  const row={...occurrence};delete row.confirmed;
   return addRows(d,[row]);
 }

@@ -37,8 +37,8 @@ export function simulateCosts(rows,{salesChange=0,fixedReduction=0,variableReduc
 }
 export function detectLeaks(rows,previous=[],budgets={},currency='EUR') {
   const {round:rounded,sum}=currencyMath(currency);
-  const costs=rows.filter(r=>r.type==='gasto'&&kind(r)!=='depreciation');
-  const before=previous.filter(r=>r.type==='gasto'&&kind(r)!=='depreciation');
+  const costs=rows.filter(r=>r.type==='gasto'&&!['depreciation','capital'].includes(kind(r)));
+  const before=previous.filter(r=>r.type==='gasto'&&!['depreciation','capital'].includes(kind(r)));
   const findings=[],groups=new Map(),categories=Object.create(null);
   for(const r of costs){const key=JSON.stringify([r.date,r.description.trim().toLowerCase(),r.amount]);const group=groups.get(key)||[];group.push(r);groups.set(key,group);categories[r.category]=(categories[r.category]||0)+r.amount;}
   for(const group of groups.values()) if(group.length>1)findings.push({kind:'duplicate',title:'Posible cargo duplicado',category:group[0].category,description:group[0].description,amount:rounded((group.length-1)*group[0].amount),evidence:`${group.length} cargos con la misma fecha, descripción e importe.`,action:'Comprueba recibos y referencias antes de decidir si existe un duplicado.'});

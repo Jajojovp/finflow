@@ -1,5 +1,12 @@
 import { currencyMath } from './currencies.mjs';
 import { amount, date, text, fail, changePlan, priorMonth } from './planning-contract.mjs';
+import {detectLeaks} from './finance.mjs';
+export const effectiveBudgets=(d,period)=>({...d.budgets,...d.planning?.budgets?.[period]});
+export function workspaceLeaks(d,period) {
+  const specific=d.planning?.budgets?.[period] ?? {},previous=priorMonth(period);
+  const findings=detectLeaks(d.rows.filter(r=>r.date.startsWith(period)),d.rows.filter(r=>r.date.startsWith(previous)),{...effectiveBudgets(d,period),__total:d.finance?.[period]?.expenseBudget ?? 0},d.currency).filter(f=>f.kind!=='budget'||!Object.hasOwn(specific,f.category));
+  return [...findings,...budgetSummary(d,period).filter(b=>b.over>0&&Object.hasOwn(specific,b.category)).map(b=>({kind:'budget',title:'Presupuesto del mes superado',category:b.category,amount:b.over,evidence:`${period}: gasto ${b.actual} ${d.currency}; límite explícito ${b.limit}. Capital y depreciación excluidos.`,action:'Revisa las partidas del período antes de modificar el límite.'}))];
+}
 
 export function saveBudget(d, period, category, limit) {
   date(period+'-01'); const key=text(category,'la categoría',80);

@@ -20,7 +20,7 @@ export function upsert(d, field, item) {
   identifier(item.id);
   const list = d.planning?.[field] ?? [];
   if (!Array.isArray(list) || list.length > 500 || (!list.some(x => x.id === item.id) && list.length === 500)) fail('Cada módulo admite hasta 500 registros.');
-  return changePlan(d, field, [...list.filter(x => x.id !== item.id), item]);
+  return changePlan(d, field, [...list.filter(x => x.id !== item.id), { ...list.find(x => x.id === item.id), ...item }]);
 }
 export function addRows(d, rows) {
   const occupied = new Set([...(d.rows ?? []), ...(d.trash ?? [])].map(r => r.id));
@@ -34,3 +34,6 @@ export function linkedRowIds(d) {
 }
 export function addDays(value, days) { return new Date(Date.parse(date(value)) + days * 86400000).toISOString().slice(0, 10); }
 export function priorMonth(period) { const d = new Date(date(period + '-01')); d.setUTCMonth(d.getUTCMonth() - 1); return d.toISOString().slice(0, 7); }
+export function availablePeriods(d,current) {
+  return [...new Set([current,...d.rows.map(r=>r.date.slice(0,7)),...Object.keys(d.finance ?? {}),...Object.keys(d.planning?.budgets ?? {}),...(d.planning?.recurrences ?? []).map(r=>r.startDate.slice(0,7)),...(d.planning?.dues ?? []).flatMap(r=>[r.dueDate.slice(0,7),...(r.expectedDate?[r.expectedDate.slice(0,7)]:[])])])].sort().reverse();
+}
