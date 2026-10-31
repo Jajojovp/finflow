@@ -6,7 +6,7 @@ Web y app admiten 176 monedas ISO 4217, con búsqueda por nombre o código: CLP,
 
 La fase 1 de **[Crecimiento](docs/CRECIMIENTO.md)** está implementada y publicada en [Sites](https://finflow-open.earlypine4.chatgpt.site), conservando su acceso privado. Incorpora respaldo completo compatible web/móvil, restauración recuperable, guardado web transaccional, revisión CSV antes de confirmar y clientes dinámicos. El [plan](tasks/plan.md) y las [tareas](tasks/todo.md) mantienen pendientes los hitos financieros siguientes. [Pruebas y contrato de datos](docs/DATA-BACKUPS.md).
 
-El dominio público `finflow.sysora.io` conserva la versión 2.4.0 hasta completar el acceso a su cuenta de Hostinger. El APK 1.2.0 (código 4) ya está compilado y verificado localmente; su publicación canónica está pendiente. Sites mantiene esa descarga pendiente para evitar enlazar un archivo aún no publicado.
+El dominio público [finflow.sysora.io](https://finflow.sysora.io) publica la web 2.5.0 y el APK 1.2.0 (código 4), desplegados mediante Hostinger Connector el 31 de octubre de 2026. La descarga completa coincide en tamaño y SHA-256 con el APK firmado; los enlaces de versiones anteriores redirigen a 1.2.0. El Site privado conserva su publicación anterior de esta fase y la descarga pendiente: la conexión actual de Sites devuelve `project_not_found` al consultar su ID, por lo que no se ha actualizado ese canal.
 
 En **Empresa o Asesor → Resultados** se pueden consultar los servicios originales de indicadores, flujo de caja, pronósticos, anomalías, comparaciones, covenants, variaciones y propuestas, alimentados por los movimientos de cada entidad. El balance, presupuesto de ventas y límites se editan en ese mismo panel. La evidencia y los supuestos se pueden exportar.
 
@@ -16,7 +16,7 @@ Consulta [la integración y criterios de aceptación](docs/INTEGRATION-2026-10.m
 
 La app para iOS y Android está en [`mobile/`](mobile/README.md), dentro de este mismo historial. Comparte los servicios financieros originales y la paleta clara, con navegación nativa, SQLite local, tres perfiles y movimientos editables. Utiliza las guías oficiales de Expo; consulta [la validación y sus límites](docs/MOBILE-VERIFICATION.md) y [los hallazgos de herramientas](mobile/SECURITY.md). La web publicada y la app guardan datos separados.
 
-El [APK Android 1.1.0 firmado para ARM64](https://finflow.sysora.io/downloads/finflow-1.1.0.apk) está disponible con su huella verificable. La instalación en un teléfono físico sigue pendiente de comprobación.
+El [APK Android 1.2.0 firmado para ARM64](https://finflow.sysora.io/downloads/finflow-1.2.0.apk) está disponible con su huella verificable. La instalación en un teléfono físico sigue pendiente de comprobación.
 
 La página de [descargas e instalación](https://finflow.sysora.io/descargar/) reúne los canales disponibles para Android, iPhone y web. Las descargas nativas solo se habilitan después de verificar sus instaladores; iPhone también dispone de la opción web gratuita desde Safari. La compilación local de Android y la protección de su firma están descritas en [DISTRIBUTION.md](docs/DISTRIBUTION.md).
 

@@ -1,6 +1,6 @@
 # Tareas · FinFlow Crecimiento
 
-Estado al 30 de octubre de 2026. La lista se ejecuta por dependencias e hitos del [plan](plan.md); los identificadores no imponen orden numérico. Cada tarea incluye aceptación, verificación y archivos probables; los nombres de archivos nuevos son propuestas, no componentes existentes.
+Estado al 31 de octubre de 2026. El hito 1 está publicado en finflow.sysora.io con web 2.5.0 y APK 1.2.0; descarga completa y redirecciones verificadas. La lista se ejecuta por dependencias e hitos del [plan](plan.md); los identificadores no imponen orden numérico. Cada tarea incluye aceptación, verificación y archivos probables; los nombres de archivos nuevos son propuestas, no componentes existentes.
 
 - [x] **CR-00 · Alinear la siguiente versión con la base publicada.**
   - Aceptación: diseño claro confirmado; brechas y procedencia registradas; V3 incompatible subordinada al nuevo alcance.

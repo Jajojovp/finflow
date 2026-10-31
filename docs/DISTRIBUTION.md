@@ -26,7 +26,7 @@ La compilación `release` utiliza esa clave y verifica la firma del APK contra e
 
 Para publicar un APK verificado, se copia a `public/downloads/finflow-VERSION.apk` y se actualiza `public/descargar/releases.json` con los datos del recibo, la URL y `status: available`. El archivo binario está excluido de Git, pero debe incluirse en el artefacto estático que se publica. No se activa una descarga para un archivo ausente, sin firma verificada o con metadatos incompletos.
 
-## APK publicado · 30 de octubre de 2026
+## Histórico · APK 1.1.0 publicado el 30 de octubre de 2026
 
 Android 1.1.0, `io.sysora.finflow`, versión interna 3, ARM64, 45.799.045 bytes. El APK release se compiló del commit `a532493a4e8abf5f149b1025639682bb59a83760`, con firma propia RSA de 3072 bits y esquema v2. Se verificaron la firma, el certificado esperado, el alineamiento de 16 KB, los metadatos y el bundle embebido. No es depurable.
 
@@ -40,13 +40,15 @@ Verificación adicional con Python 3: `python mobile/scripts/verify-android-arti
 
 La instalación, los controles nativos y el retorno de Google en teléfono físico siguen pendientes de validación. Los enlaces de 1.0.0 y 1.0.1 redirigen a 1.1.0. El catálogo de descargas se sirve sin caché.
 
-## Crecimiento · APK 1.2.0 preparado
+## Crecimiento · APK 1.2.0 publicado el 31 de octubre de 2026
 
 Compilación local completada y verificada el 30 de octubre de 2026: versión interna 4, ARM64, Android 7+, 45.821.533 bytes. Procedencia `08139d88991a7fbe5164b693e5b73b85db62145b`; SHA-256 `782b66b33b5f45981c47e1a9308f868f101b139613bfe3664ac27ff8650f863e`. Mantiene el certificado anterior, firma v2, alineamiento de 16 KB y aplicación no depurable. La comprobación adicional confirma los respaldos v2, revisión CSV, restauración completa, archivo de clientes y fuente Material Symbols embebidos.
 
-El paquete para Hostinger contiene únicamente `downloads/finflow-1.2.0.apk`; los enlaces antiguos redirigirán a esta versión cuando se despliegue. El catálogo preparado coincide con el recibo del build. **La descarga pública nueva todavía no está verificada:** falta completar el acceso a la cuenta de Hostinger que administra sysora.io, publicar y descargar el archivo servido para comparar tamaño y SHA-256. Hasta entonces, la producción canónica conserva 1.1.0 y Sites muestra la nueva descarga pendiente. No se elimina el instalador público anterior antes de comprobar el reemplazo.
+El paquete se publicó mediante Hostinger Connector en `finflow.sysora.io`, sobre la raíz existente `/home/u350636090/domains/sysora.io/public_html/finflow`. Contiene únicamente `downloads/finflow-1.2.0.apk`; el catálogo público coincide con el recibo del build. Se descargó el archivo servido completo y se comprobaron sus 45.821.533 bytes y SHA-256 `782b66b33b5f45981c47e1a9308f868f101b139613bfe3664ac27ff8650f863e`. Los enlaces 1.0.0, 1.0.1 y 1.1.0 devuelven HTTP 302 a la versión nueva. La descarga actual es [APK 1.2.0](https://finflow.sysora.io/downloads/finflow-1.2.0.apk).
 
-La web 2.5.0 de la fase 1 está publicada en el Site privado `https://finflow-open.earlypine4.chatgpt.site`, versión `appgprj_6ae0a6971b148191a0fb73c2d71b8999~appgver_044c921a9c8c81918916d7dcb96991bf`, despliegue `appgdep_6ae53546f8088191a4e456db798d2969`, estado `succeeded`. Su fuente es `7345fb679b0c2b47a5a584619783a8b92e456da1`. La descarga se mantiene pendiente en ese canal hasta que exista el binario canónico.
+La web 2.5.0 publicada declara procedencia `be94b8b0f25af1ef5b6b0528b394fa67b552a905`. Se compararon byte a byte 14 archivos públicos: entrada, metadatos, página y scripts de descarga, GSAP y los seis assets compilados. El endpoint `/auth/index.php?action=session` conserva `configured: true`; no se modificó la configuración privada situada fuera de la raíz pública. El ZIP desplegado tiene 47.663.611 bytes y SHA-256 `3d3c6a1a24bc661d90b0daedfb96a26b728d3a19286bf133523a900f58abbda2`. Las evidencias locales están en `outputs/android/public-verification.json` y `outputs/hostinger-crecimiento-public-assets.json`.
+
+La web 2.5.0 de la fase 1 se publicó anteriormente en el Site privado `https://finflow-open.earlypine4.chatgpt.site`, versión `appgprj_6ae0a6971b148191a0fb73c2d71b8999~appgver_044c921a9c8c81918916d7dcb96991bf`, despliegue `appgdep_6ae53546f8088191a4e456db798d2969`, estado `succeeded`. Su fuente es `7345fb679b0c2b47a5a584619783a8b92e456da1`. Ese canal conserva la descarga pendiente. El intento de consultarlo para actualizar su catálogo el 31 de octubre devolvió `project_not_found` en la conexión actual de Sites, sin cambios de identidad ni audiencia. La publicación canónica en Hostinger está completa; actualizar el catálogo del Site requiere recuperar acceso al mismo proyecto.
 
 ## iPhone y iPad
 
