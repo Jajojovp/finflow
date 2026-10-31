@@ -7,6 +7,8 @@ import CovenantService from './CovenantService';
 import VarianceService from './VarianceService';
 import AgentOrchestrator, { CAPABILITIES } from '../agent/AgentOrchestrator';
 import { currencyMath } from '../../workspace/currencies.mjs';
+import { scheduledCashFlow } from './ScheduledCashFlowService';
+import { addDays } from '../../workspace/planning-contract.mjs';
 
 const kind = r => r.financialType || (r.type === 'ingreso' ? 'revenue' : 'unclassified');
 const numeric = value => Number.isFinite(value) ? value : null;
@@ -39,7 +41,7 @@ export function buildMonthlySeries(dataset, through) {
   });
 }
 
-export function analyzeWorkspace(dataset, month, stressOptions={}) {
+export function analyzeWorkspace(dataset, month, stressOptions={}, scheduleOptions={}) {
   const series=buildMonthlySeries(dataset,month),latest=series.at(-1),last=latest?.month===month?latest:null;
   const current=last?KPICalculator.fromMonthly([last]):{...KPICalculator.fromMonthly([]),cashPosition:null};
   const historical=KPICalculator.fromMonthly(series);
@@ -62,7 +64,10 @@ export function analyzeWorkspace(dataset, month, stressOptions={}) {
   // Stress is an operating scenario: capital movements and noncash charges do not recur.
   const cashSeries=series.map(p=>({...p,revenue:p.revenue+p.otherIncome,expenses:p.expenses-p.daa}));
   const stress=last?.cash!=null?CashFlowService.stressTest(cashSeries,stressOptions):null;
-  return {series,current,historical,forecast,backtest,continuousMonths:continuous.length,
+  const lastDay=new Date(Date.UTC(Number(month.slice(0,4)),Number(month.slice(5,7)),0)).toISOString().slice(0,10);
+  const scheduled=scheduledCashFlow(dataset,{startDate:addDays(lastDay,1),opening:last?.cash ?? null,...scheduleOptions});
+  return {series,current,historical,forecast,backtest,continuousMonths:continuous.length,scheduled,
+    forecastEvidence:{from:continuous[0]?.month ?? null,to:continuous.at(-1)?.month ?? null,observations:continuous.length,excludedEarlierObservations:series.length-continuous.length,minimumTrainingMonths:5,validationMonths:3},
     flows:CashFlowService.monthlyNetFlow(series),anomalies:AnomalyService.detect(continuous),
     benchmarks,covenants,variance:VarianceService.summary(series),stress,actions};
 }
