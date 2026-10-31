@@ -3,11 +3,14 @@ import { validateDebt } from './debts.mjs';
 import { validateValuation } from './net-worth.mjs';
 import { amount, date, fail, linkedRowIds } from './planning-contract.mjs';
 import { currencyMath } from './currencies.mjs';
+import { validateDue, validateDueLinks } from './dues.mjs';
+import {validateAlertPreferences} from './alerts.mjs';
 
 export function validatePlanning(d) {
   const plan=d.planning;if(plan===undefined) return;
   if(!plan||typeof plan!=='object'||Array.isArray(plan)) fail('Revisa los datos de planificación.');
-  for(const [field,validator] of [['recurrences',validateRecurrence],['debts',validateDebt],['assets',validateValuation],['liabilities',validateValuation]]) {
+  if(plan.alerts!==undefined)validateAlertPreferences(plan.alerts);
+  for(const [field,validator] of [['recurrences',validateRecurrence],['debts',validateDebt],['assets',validateValuation],['liabilities',validateValuation],['dues',validateDue]]) {
     if(plan[field]===undefined) continue;
     const items=plan[field];if(!Array.isArray(items)||items.length>500||new Set(items.map(x=>x?.id)).size!==items.length) fail(`Revisa los registros de ${field}; hay identificadores repetidos o demasiados registros.`);
     for(const item of items) { if(!item||typeof item!=='object') fail('Hay un registro de planificación inválido.');validator(item,d.currency); }
@@ -27,4 +30,5 @@ export function validatePlanning(d) {
     for(const id of payment.rowIds) { if(used.has(id)) fail('Un movimiento no puede vincularse dos veces.');used.add(id); }
   }
   if(used.size>linkedRowIds(d).size) fail('Revisa los vínculos de pagos.');
+  validateDueLinks(d);
 }
