@@ -1,10 +1,12 @@
-# Versión integrada · 2.4.0
+# Versión integrada · 2.5.0 · Crecimiento, fase 1
 
 Esta evolución parte del historial original de **Jajojovp/finflow** y conserva su motor financiero. Mantiene el diseño claro, la navegación y los tres perfiles de la aplicación publicada en [finflow.sysora.io](https://finflow.sysora.io).
 
 Web y app admiten 176 monedas ISO 4217, con búsqueda por nombre o código: CLP, ARS, USD y CAD aparecen primero. La elección se guarda por espacio o cliente y se aplica a importes, análisis y metas. Cambiar la moneda no convierte las cifras mediante un tipo de cambio. Consulta [las monedas y su precisión](docs/CURRENCIES.md).
 
-La próxima versión, **[Crecimiento](docs/CRECIMIENTO.md)**, mantiene el diseño claro, la gratuidad y los tres perfiles. Su [plan](tasks/plan.md) y [tareas](tasks/todo.md) documentan la ampliación prevista; las capacidades nuevas todavía no se presentan como publicadas.
+La fase 1 de **[Crecimiento](docs/CRECIMIENTO.md)** está implementada y publicada en [Sites](https://finflow-open.earlypine4.chatgpt.site), conservando su acceso privado. Incorpora respaldo completo compatible web/móvil, restauración recuperable, guardado web transaccional, revisión CSV antes de confirmar y clientes dinámicos. El [plan](tasks/plan.md) y las [tareas](tasks/todo.md) mantienen pendientes los hitos financieros siguientes. [Pruebas y contrato de datos](docs/DATA-BACKUPS.md).
+
+El dominio público `finflow.sysora.io` conserva la versión 2.4.0 hasta completar el acceso a su cuenta de Hostinger. El APK 1.2.0 (código 4) ya está compilado y verificado localmente; su publicación canónica está pendiente. Sites mantiene esa descarga pendiente para evitar enlazar un archivo aún no publicado.
 
 En **Empresa o Asesor → Resultados** se pueden consultar los servicios originales de indicadores, flujo de caja, pronósticos, anomalías, comparaciones, covenants, variaciones y propuestas, alimentados por los movimientos de cada entidad. El balance, presupuesto de ventas y límites se editan en ese mismo panel. La evidencia y los supuestos se pueden exportar.
 

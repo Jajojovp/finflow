@@ -1,4 +1,4 @@
-# FinFlow móvil 1.1.0 · verificación actualizada el 30 de octubre de 2026
+# FinFlow móvil 1.2.0 · verificación actualizada el 30 de octubre de 2026
 
 ## Procedencia y alcance
 
@@ -43,7 +43,7 @@ En navegador se comprobó la selección y persistencia de ARS, la independencia 
 
 No hay emulador ni teléfono disponible en este entorno. Falta validar la instalación, los controles nativos y el retorno de Google en un teléfono físico. No se han solicitado builds de pago, publicado en tiendas ni configurado servicios EAS. La distribución nativa de iOS sigue pendiente de cuenta y firma Apple; la web instalable es la alternativa gratuita.
 
-SQLite en teléfono y almacenamiento del navegador en web; sin sincronización automática, conexión bancaria ni cifrado propio. El acceso opcional con Google abre un espacio separado por cuenta y conserva el modo local anterior. Los respaldos de la app tienen formato propio `finflow-mobile-v1`; CSV permite añadir movimientos. Las proyecciones son hipotéticas y las propuestas son informativas.
+SQLite en teléfono y almacenamiento del navegador en web; sin sincronización automática, conexión bancaria ni cifrado propio. El acceso opcional con Google abre un espacio separado por cuenta y conserva el modo local anterior. Crecimiento utiliza el respaldo portátil `finflow-backup-v2`, compartido con la web y compatible con los respaldos `finflow-mobile-v1` y datos web anteriores. CSV permite añadir movimientos con revisión previa. Las proyecciones son hipotéticas y las propuestas son informativas.
 
 La auditoría móvil registra ocho avisos transitivos en herramientas del SDK; alcance y referencias en `mobile/SECURITY.md`. No se presenta la entrega como certificación de seguridad ni como distribución aprobada para tiendas.
 
@@ -58,3 +58,13 @@ El log del teléfono identificó la dependencia ausente `expo-symbols` en los ic
 ## APK Android 1.1.0
 
 Versión interna 3, firma v2 con el mismo certificado de FinFlow, alineamiento de 16 KB correcto y aplicación no depurable. El verificador del artefacto confirma el selector nuevo, CLP, ARS, USD, CAD, KWD y CLF en el bundle, y la fuente Material Symbols. Se rechazaron las huellas de 1.0.0 y 1.0.1; el archivo nuevo tiene una huella distinta. El código móvil coincide con el commit de procedencia del recibo. La prueba en teléfono físico sigue pendiente.
+
+## Crecimiento · primer hito
+
+Web 2.5.0 y móvil 1.2.0 incorporan respaldo portátil, restauración completa con recuperación, revisión CSV y gestión reversible de clientes. El almacenamiento web usa IndexedDB; Android conserva SQLite. Pasaron 91 pruebas Vitest, 50 pruebas Node, TypeScript y build web. ESLint mantiene cuatro advertencias anteriores, sin errores.
+
+En navegador local se verificaron migración, guardado/recarga, conflicto entre pestañas (1.600 ARS se conserva frente al intento de 1.700), CSV inválido/cancelado/confirmado/repetido, restauración completa y recuperación de los espacios anteriores. En Expo web se probaron revisión CSV, repetición sin duplicados, copia/restauración en CLP y recuperación del respaldo anterior en EUR, y creación/archivo/restauración del cuarto cliente. No se utilizaron datos financieros reales.
+
+El APK 1.2.0 tiene código 4 y se compiló del commit `08139d88991a7fbe5164b693e5b73b85db62145b`. Tiene 45.821.533 bytes y SHA-256 `782b66b33b5f45981c47e1a9308f868f101b139613bfe3664ac27ff8650f863e`. Firma propia v2, certificado esperado, alineamiento de 16 KB y ausencia de depuración comprobados. El verificador se ejecutó en el checkout de compilación `C:/ffn`, que conserva las dependencias nativas, e identificó la fuente Material Symbols y las funciones de Crecimiento en el bundle de 3.494.776 bytes. Rechaza también la huella del APK 1.1.0.
+
+Sites se publicó conservando acceso privado; el dominio canónico y la descarga del APK nuevo esperan acceso a la cuenta de Hostinger de sysora.io. La instalación y apertura en teléfono físico, el retorno nativo de Google y la comprobación actual de Safari/iPhone siguen pendientes. La interfaz Expo web y la firma no sustituyen esas comprobaciones.

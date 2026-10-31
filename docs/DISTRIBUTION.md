@@ -40,6 +40,14 @@ Verificación adicional con Python 3: `python mobile/scripts/verify-android-arti
 
 La instalación, los controles nativos y el retorno de Google en teléfono físico siguen pendientes de validación. Los enlaces de 1.0.0 y 1.0.1 redirigen a 1.1.0. El catálogo de descargas se sirve sin caché.
 
+## Crecimiento · APK 1.2.0 preparado
+
+Compilación local completada y verificada el 30 de octubre de 2026: versión interna 4, ARM64, Android 7+, 45.821.533 bytes. Procedencia `08139d88991a7fbe5164b693e5b73b85db62145b`; SHA-256 `782b66b33b5f45981c47e1a9308f868f101b139613bfe3664ac27ff8650f863e`. Mantiene el certificado anterior, firma v2, alineamiento de 16 KB y aplicación no depurable. La comprobación adicional confirma los respaldos v2, revisión CSV, restauración completa, archivo de clientes y fuente Material Symbols embebidos.
+
+El paquete para Hostinger contiene únicamente `downloads/finflow-1.2.0.apk`; los enlaces antiguos redirigirán a esta versión cuando se despliegue. El catálogo preparado coincide con el recibo del build. **La descarga pública nueva todavía no está verificada:** falta completar el acceso a la cuenta de Hostinger que administra sysora.io, publicar y descargar el archivo servido para comparar tamaño y SHA-256. Hasta entonces, la producción canónica conserva 1.1.0 y Sites muestra la nueva descarga pendiente. No se elimina el instalador público anterior antes de comprobar el reemplazo.
+
+La web 2.5.0 de la fase 1 está publicada en el Site privado `https://finflow-open.earlypine4.chatgpt.site`, versión `appgprj_6ae0a6971b148191a0fb73c2d71b8999~appgver_044c921a9c8c81918916d7dcb96991bf`, despliegue `appgdep_6ae53546f8088191a4e456db798d2969`, estado `succeeded`. Su fuente es `7345fb679b0c2b47a5a584619783a8b92e456da1`. La descarga se mantiene pendiente en ese canal hasta que exista el binario canónico.
+
 ## iPhone y iPad
 
 Un APK no se instala en iOS. La app Expo ya tiene identificador `io.sysora.finflow`, versión y perfiles de compilación; una distribución nativa mediante TestFlight/App Store requiere configurar la cuenta Apple Developer, el proyecto y la firma. No existe una cuenta Expo o Apple Developer del titular en esta entrega y no se contratan servicios.

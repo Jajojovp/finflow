@@ -2,7 +2,7 @@
   AddType application/vnd.android.package-archive .apk
 </IfModule>
 <IfModule mod_alias.c>
-  RedirectMatch 302 ^/downloads/finflow-1\.0\.[01]\.apk$ https://finflow.sysora.io/downloads/finflow-1.1.0.apk
+  RedirectMatch 302 ^/downloads/finflow-(1\.0\.[01]|1\.1\.0)\.apk$ https://finflow.sysora.io/downloads/finflow-1.2.0.apk
 </IfModule>
 <IfModule mod_headers.c>
   <FilesMatch "^(release|releases)\.json$">
