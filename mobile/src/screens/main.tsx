@@ -543,6 +543,7 @@ export function Results() {
             </Copy>
           </Card>
           <Card>
+            {a.backtest?.available && <Copy small muted>Backtest: entrenamiento {a.backtest.training?.from} a {a.backtest.training?.to} ({a.backtest.training?.count} meses); validación {a.backtest.validation?.from} a {a.backtest.validation?.to} ({a.backtest.validation?.count} meses). WAPE {a.backtest.wape===null?'N/D':a.backtest.wape+'%'}. Base cero: sin porcentaje calculable.</Copy>}
             <Title>Resistencia de caja · aproximación mensual</Title>
             {a.stress ? (
               <>
