@@ -297,7 +297,6 @@ function TransactionForm({
         onChange={setDescription}
         maxLength={120}
       />
-      {id && <Copy muted small>ID del movimiento: {id}</Copy>}
       <Field
         label="Categoría"
         value={category}
