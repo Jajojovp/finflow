@@ -3,6 +3,8 @@
 Estado al 31 de octubre de 2026: hito 1 implementado y comprobado en web local y Expo web. Web 2.5.0 y APK 1.2.0 publicados en finflow.sysora.io mediante Hostinger Connector; descarga completa, hash y redirecciones comprobados. Sites conserva su publicación privada anterior de esta fase; habilitar allí la descarga queda pendiente porque la conexión actual no puede acceder al proyecto. Los hitos financieros siguientes siguen pendientes.
 Fuente: [especificación](../docs/CRECIMIENTO.md), [ADR 0011](../docs/adr/0011-crecimiento-evolutivo.md), [tareas](todo.md).
 
+**Instrucción del titular, 31 de octubre de 2026:** continuar todos los hitos pendientes en local. No subir commits, publicar en Hostinger/Sites ni sustituir el APK público hasta terminar y verificar todos los cambios de las fases incluidas. Los commits locales conservan avances. CR-25 sigue condicionado a proveedor y condiciones comerciales; por defecto la publicidad permanece apagada. Las pruebas en dispositivos y cuentas externas se registran por separado, sin declararlas realizadas.
+
 ## Estrategia
 
 Cada tarea entrega un comportamiento comprobable sobre la base existente. Se separan reglas compartidas, integración de pantallas y distribución; una función se considera completa cuando su recorrido está conectado y verificado en los canales incluidos.
