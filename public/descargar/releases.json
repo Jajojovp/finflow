@@ -1,14 +1,14 @@
 {
   "android": {
-    "bytes": 45821533,
+    "version": "1.3.0",
     "certificateSha256": "4420a145b7a3ecb0b505980eb85b400e452b4cb7e37885ad3590d91a96ff1d66",
     "architecture": "arm64-v8a",
-    "versionCode": 4,
-    "version": "1.2.0",
-    "sourceRevision": "08139d88991a7fbe5164b693e5b73b85db62145b",
-    "sha256": "782b66b33b5f45981c47e1a9308f868f101b139613bfe3664ac27ff8650f863e",
+    "sha256": "560e95fc155f17bedb97fbc52fc2b9515cffa6fd5405eaac54e1f4ad6afd9fa0",
+    "sourceRevision": "a2df28b6a8d8e488b42b9ae8b48659c260adfee7",
+    "bytes": 45770561,
+    "versionCode": 5,
     "status": "available",
-    "url": "https://finflow.sysora.io/downloads/finflow-1.2.0.apk"
+    "url": "https://finflow.sysora.io/downloads/finflow-1.3.0.apk"
   },
   "ios": {
     "status": "pending",

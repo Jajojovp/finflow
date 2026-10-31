@@ -26,6 +26,16 @@ La compilación `release` utiliza esa clave y verifica la firma del APK contra e
 
 Para publicar un APK verificado, se copia a `public/downloads/finflow-VERSION.apk` y se actualiza `public/descargar/releases.json` con los datos del recibo, la URL y `status: available`. El archivo binario está excluido de Git, pero debe incluirse en el artefacto estático que se publica. No se activa una descarga para un archivo ausente, sin firma verificada o con metadatos incompletos.
 
+## Crecimiento conjunto · APK 1.3.0 verificado
+
+Candidata conjunta con web 2.6.0, sin publicaciones intermedias. El APK Android tiene código 5, paquete `io.sysora.finflow`, ARM64, Android 7+ y 45.770.561 bytes. Procedencia exacta `a2df28b6a8d8e488b42b9ae8b48659c260adfee7`; SHA-256 `560e95fc155f17bedb97fbc52fc2b9515cffa6fd5405eaac54e1f4ad6afd9fa0`. Conserva el certificado `4420a145b7a3ecb0b505980eb85b400e452b4cb7e37885ad3590d91a96ff1d66` y firma v2. No es depurable.
+
+Se verificaron el APK contra el recibo y revisión exacta, la fuente Material Symbols, las monedas y los módulos de planificación, portafolio, alertas y caja semanal. La comprobación exige también los selectores de pagos existentes y `savingsRate`. `zipalign -c -P 16 4` pasa; las 26 bibliotecas ELF tienen segmentos de carga alineados al menos a 16 KB. Las pruebas del SDK compatible y sus cambios están en [NATIVE-DEPS-2026-10.md](NATIVE-DEPS-2026-10.md).
+
+La distribución se prepara con únicamente `downloads/finflow-1.3.0.apk`. El catálogo usa los importes y huellas del recibo; las rutas 1.0.0, 1.0.1, 1.1.0 y 1.2.0 redirigen a 1.3.0. El paquete anterior se conserva como reversión. La comprobación posterior a publicar debe descargar el APK completo y comparar tamaño y SHA-256, archivos web y configuración de Google, sin alterar la configuración privada externa a la raíz pública. La evidencia efectiva se guarda en `outputs/android/public-verification-1.3.0.json`; su ausencia no se interpreta como una publicación comprobada.
+
+La revisión visual está aplazada por el titular; no se probó instalación/apertura en Android físico ni Safari/iPhone actual. ADB no encontró dispositivos disponibles. CR-24 mantiene esos límites abiertos y CR-25 permanece apagado. El Site existente sigue devolviendo `project_not_found`; no se crea un sustituto ni se amplía su audiencia. Estado del canal canónico en [descargas](https://finflow.sysora.io/descargar/).
+
 ## Histórico · APK 1.1.0 publicado el 30 de octubre de 2026
 
 Android 1.1.0, `io.sysora.finflow`, versión interna 3, ARM64, 45.799.045 bytes. El APK release se compiló del commit `a532493a4e8abf5f149b1025639682bb59a83760`, con firma propia RSA de 3072 bits y esquema v2. Se verificaron la firma, el certificado esperado, el alineamiento de 16 KB, los metadatos y el bundle embebido. No es depurable.
@@ -40,11 +50,11 @@ Verificación adicional con Python 3: `python mobile/scripts/verify-android-arti
 
 La instalación, los controles nativos y el retorno de Google en teléfono físico siguen pendientes de validación. Los enlaces de 1.0.0 y 1.0.1 redirigen a 1.1.0. El catálogo de descargas se sirve sin caché.
 
-## Crecimiento · APK 1.2.0 publicado el 31 de octubre de 2026
+## Histórico · Crecimiento fase 1 · APK 1.2.0 publicado el 31 de octubre de 2026
 
 Compilación local completada y verificada el 30 de octubre de 2026: versión interna 4, ARM64, Android 7+, 45.821.533 bytes. Procedencia `08139d88991a7fbe5164b693e5b73b85db62145b`; SHA-256 `782b66b33b5f45981c47e1a9308f868f101b139613bfe3664ac27ff8650f863e`. Mantiene el certificado anterior, firma v2, alineamiento de 16 KB y aplicación no depurable. La comprobación adicional confirma los respaldos v2, revisión CSV, restauración completa, archivo de clientes y fuente Material Symbols embebidos.
 
-El paquete se publicó mediante Hostinger Connector en `finflow.sysora.io`, sobre la raíz existente `/home/u350636090/domains/sysora.io/public_html/finflow`. Contiene únicamente `downloads/finflow-1.2.0.apk`; el catálogo público coincide con el recibo del build. Se descargó el archivo servido completo y se comprobaron sus 45.821.533 bytes y SHA-256 `782b66b33b5f45981c47e1a9308f868f101b139613bfe3664ac27ff8650f863e`. Los enlaces 1.0.0, 1.0.1 y 1.1.0 devuelven HTTP 302 a la versión nueva. La descarga actual es [APK 1.2.0](https://finflow.sysora.io/downloads/finflow-1.2.0.apk).
+El paquete se publicó mediante Hostinger Connector en `finflow.sysora.io`, sobre la raíz existente `/home/u350636090/domains/sysora.io/public_html/finflow`. Contiene únicamente `downloads/finflow-1.2.0.apk`; el catálogo público coincide con el recibo del build. Se descargó el archivo servido completo y se comprobaron sus 45.821.533 bytes y SHA-256 `782b66b33b5f45981c47e1a9308f868f101b139613bfe3664ac27ff8650f863e`. Los enlaces 1.0.0, 1.0.1 y 1.1.0 devuelven HTTP 302 a la versión nueva. La descarga histórica es [APK 1.2.0](https://finflow.sysora.io/downloads/finflow-1.2.0.apk).
 
 La web 2.5.0 publicada declara procedencia `be94b8b0f25af1ef5b6b0528b394fa67b552a905`. Se compararon byte a byte 14 archivos públicos: entrada, metadatos, página y scripts de descarga, GSAP y los seis assets compilados. El endpoint `/auth/index.php?action=session` conserva `configured: true`; no se modificó la configuración privada situada fuera de la raíz pública. El ZIP desplegado tiene 47.663.611 bytes y SHA-256 `3d3c6a1a24bc661d90b0daedfb96a26b728d3a19286bf133523a900f58abbda2`. Las evidencias locales están en `outputs/android/public-verification.json` y `outputs/hostinger-crecimiento-public-assets.json`.
 

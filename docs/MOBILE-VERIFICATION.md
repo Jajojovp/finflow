@@ -70,3 +70,10 @@ El APK 1.2.0 tiene código 4 y se compiló del commit `08139d88991a7fbe5164b693e
 El 31 de octubre de 2026 se publicó el paquete mediante Hostinger Connector en finflow.sysora.io: web 2.5.0 y APK 1.2.0. Se descargó el APK público completo y coincidieron sus 45.821.533 bytes y SHA-256 con el artefacto firmado local. Los enlaces 1.0.0, 1.0.1 y 1.1.0 responden con redirección a 1.2.0. Los 14 archivos web comprobados coinciden byte a byte con el build; el endpoint de sesión mantiene `configured: true`. La verificación visual pública no pudo repetirse porque el control local de navegador está deshabilitado en Work.
 
 Sites conserva la publicación privada anterior de esta fase, con descarga pendiente; su actualización no se realizó porque la conexión actual devuelve `project_not_found`. La instalación y apertura en teléfono físico, el retorno nativo de Google y la comprobación actual de Safari/iPhone siguen pendientes. La interfaz Expo web y la firma no sustituyen esas comprobaciones.
+
+
+## Crecimiento conjunto · Android 1.3.0
+
+Versión interna 5, ARM64, 45.770.561 bytes; fuente `a2df28b6a8d8e488b42b9ae8b48659c260adfee7` y SHA-256 `560e95fc155f17bedb97fbc52fc2b9515cffa6fd5405eaac54e1f4ad6afd9fa0`. La compilación completa del SDK y la recompilación final fueron correctas. Se verificaron firma v2 con el certificado anterior, metadatos, ausencia de depuración, zipalign 16 KB y alineamiento ELF de las 26 bibliotecas. El verificador exige la revisión exacta, las funciones financieras nuevas, los selectores de pagos, `savingsRate` y la fuente de iconos embebida.
+
+Pasaron 98 pruebas Vitest, 75 Node, seis pruebas PHP, TypeScript y compatibilidad Expo. ESLint conserva cuatro advertencias anteriores y cero errores. La revisión visual se aplazó por instrucción del titular. ADB devolvió cero dispositivos listos: no se declara instalación, apertura, retorno nativo de Google ni prueba actual en iPhone. La publicación canónica se comprueba separadamente mediante descarga completa y comparación contra este recibo; Sites sigue sin acceso al proyecto existente.

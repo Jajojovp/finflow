@@ -141,6 +141,7 @@ Estado al 31 de octubre de 2026. Las fases funcionales 2–5 están implementada
   - Archivos: `index.html`, nuevo `src/monetization/slots.mjs`, `src/workspace/styles.css`, pruebas de política.
 
 - [ ] **CR-24 · Verificar y publicar Crecimiento.** Depende de los recorridos incluidos y comprobados de CR-01–23 y CR-26/27; CR-25 no es obligatorio si la publicidad queda apagada.
+  - Entrega local 2.6.0 / Android 1.3.0 verificada: 98 Vitest, 75 Node, seis PHP, TypeScript, SDK, firma, procedencia y alineamiento. Distribución conjunta preparada; revisión visual aplazada y prueba física pendientes. La evidencia pública se registra después del despliegue.
   - Aceptación: suites/build/lint/TypeScript y revisión visual; APK nuevo con firma/código/hash correctos y descarga pública comprobada; prueba física e iPhone web registradas.
   - Verificación: comandos de la especificación, instalación y apertura en Android, CSV/respaldo/monedas, catálogo y redirecciones; documentar límites reales.
   - Archivos: versiones/lockfiles de los canales que se entreguen, catálogo y documentos de distribución; separar el commit de versión de cambios funcionales.

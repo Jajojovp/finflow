@@ -28,6 +28,9 @@ Consulta [DISTRIBUTION.md](../docs/DISTRIBUTION.md) para generar el APK de Andro
 - Alta, edición, archivo y recuperación de ingresos y gastos, con clasificación financiera.
 - Resumen de caja, ahorro y objetivos; estado de resultados, equilibrio, indicadores, proyección, controles y posibles fugas.
 - Configuración de saldo, moneda, presupuesto, balance y límites declarados.
+- Planificación compartida: recurrentes, abonos de deudas, patrimonio, presupuestos por mes y agenda con pagos parciales.
+- Caja de 13 semanas con supuestos y evidencia; portafolio separado por moneda e informes de cada cliente.
+- Alertas locales explicadas, con preferencias y descarte por condición.
 - Simulador de aportaciones y cinco lecciones con progreso local.
 - CSV por texto y respaldos JSON mediante el portapapeles. Las importaciones añaden registros y conservan ajustes existentes; los duplicados exactos se omiten.
 
