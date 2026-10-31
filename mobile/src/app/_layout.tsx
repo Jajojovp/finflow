@@ -32,6 +32,7 @@ function Navigator() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ title }} />
+        <Stack.Screen name="planning" options={{ title: 'Planificar con perspectiva' }} />
         <Stack.Screen
           name="profile"
           options={{

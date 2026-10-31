@@ -18,6 +18,7 @@ import { router } from "expo-router";
 import { searchCurrencies, currencyOptions } from "../../../src/workspace/currencies.mjs";
 import { useFinflow, useWorkspace } from "@/data/provider";
 import { colors, radius, shadow, spacing, type } from "@/theme";
+import {availablePeriods} from '../../../src/workspace/planning-contract.mjs';
 
 export function Copy({
   children,
@@ -358,11 +359,7 @@ export function Frame({ children }: { children?: React.ReactNode }) {
 export function ContextLine() {
   const { state, dataset, commit } = useWorkspace();
   const [error, setError] = useState("");
-  const periods = [
-    ...new Set([state.period, ...dataset.rows.map((r) => r.date.slice(0, 7))]),
-  ]
-    .sort()
-    .reverse();
+  const periods = availablePeriods(dataset,state.period);
   return (
     <Card>
       <Copy muted small>

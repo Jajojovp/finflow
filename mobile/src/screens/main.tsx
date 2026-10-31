@@ -537,13 +537,13 @@ export function Results() {
               </Copy>
             )}
             <Copy muted small>
-              {a.backtest
-                ? `Backtest: error absoluto medio ${money(a.backtest.mae)}; cobertura ${a.backtest.coverage}%.`
+              {a.backtest?.available
+                ? `Backtest: error absoluto medio ${a.backtest.mae===null?'N/D':money(a.backtest.mae)}; cobertura ${a.backtest.coverage ?? 'N/D'}%.`
                 : "El backtest necesita ocho meses consecutivos. Un pronóstico no garantiza resultados."}
             </Copy>
           </Card>
           <Card>
-            <Title>Resistencia de caja · 13 semanas</Title>
+            <Title>Resistencia de caja · aproximación mensual</Title>
             {a.stress ? (
               <>
                 <Row
@@ -577,7 +577,7 @@ export function Results() {
             <Card key={i}>
               <Title>{f.title}</Title>
               <Copy>
-                {f.category} · {money(f.amount)}
+                {f.category} · {f.amount===null?'N/D':money(f.amount)}
               </Copy>
               <Copy muted>{f.evidence}</Copy>
               <Copy muted small>
@@ -805,6 +805,7 @@ export function More() {
           secondary
           onPress={() => router.push("/settings")}
         />
+        <Button title="Planificar recurrentes, deudas y patrimonio" secondary onPress={() => router.push('/planning')} />
       </Card>
       <Card>
         <Title>Tus datos, bajo tu control.</Title>

@@ -12,12 +12,12 @@ import {
   cashPosition,
   incomeStatement,
   breakEven,
-  detectLeaks,
 } from "../../../src/workspace/finance.mjs";
 import { money } from "../../../src/workspace/core.mjs";
 import { storage } from "./storage";
 import { scopeFromStorageKey } from "../../../src/workspace/snapshot.mjs";
 import { restoreSnapshot } from "../../../src/workspace/restore.mjs";
+import {workspaceLeaks} from '../../../src/workspace/budgets.mjs';
 import {
   decodeBackup,
   encodeBackup,
@@ -129,16 +129,9 @@ export function useWorkspace() {
     [dataset, state.period],
   );
   const settings = dataset.finance[state.period] || emptySettings();
-  const previous = useMemo(() => {
-    const d = new Date(`${state.period}-01T00:00:00Z`);
-    d.setUTCMonth(d.getUTCMonth() - 1);
-    return dataset.rows.filter((r) =>
-      r.date.startsWith(d.toISOString().slice(0, 7)),
-    );
-  }, [dataset, state.period]);
   const analysis = useMemo(
-    () => analyzeWorkspace(dataset, state.period),
-    [dataset, state.period],
+    () => analyzeWorkspace(dataset, state.period, {}, {profile:state.profile}),
+    [dataset, state.period, state.profile],
   );
   return {
     ...store,
@@ -149,10 +142,7 @@ export function useWorkspace() {
     cash: cashPosition(rows, settings.opening, dataset.currency),
     statement: incomeStatement(rows, dataset.currency),
     equilibrium: breakEven(rows, settings.unitPrice, dataset.currency),
-    leaks: detectLeaks(rows, previous, {
-      ...dataset.budgets,
-      __total: settings.expenseBudget,
-    }, dataset.currency),
+    leaks: workspaceLeaks(dataset,state.period),
     money: (n: number) => money(n, dataset.currency),
   };
 }

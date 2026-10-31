@@ -3,6 +3,8 @@ import { reviewImport, applyImport } from "../../../src/workspace/import-review.
 import { validateTransaction } from "../../../src/workspace/core.mjs";
 import { CURRENCIES } from "../../../src/workspace/currencies.mjs";
 import { encodeSnapshot, decodeSnapshot } from "../../../src/workspace/snapshot.mjs";
+import type { PlanningData } from './planning';
+import {linkedRowIds} from '../../../src/workspace/planning-contract.mjs';
 
 export type Profile = "personal" | "business" | "advisor";
 export type Currency = (typeof CURRENCIES)[number]["code"];
@@ -24,6 +26,7 @@ export type MonthSettings = {
   unitPrice: number;
 };
 export type Workspace = {
+  planning?: PlanningData;
   archived?: boolean;
   lastMonth?: string;
   name: string;
@@ -258,6 +261,7 @@ export function demoWorkspace(
   return d;
 }
 export function archiveTransaction(d: Workspace, id: string): Workspace {
+  if(linkedRowIds(d).has(id))throw new Error('Desvincula el pago de su deuda o partida antes de archivarlo. Sus datos se conservan.');
   const row = d.rows.find((r) => r.id === id);
   return row
     ? {
