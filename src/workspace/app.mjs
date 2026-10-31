@@ -220,7 +220,7 @@ function openLesson(index){const l=lessons[index];modal(`<span class="overline">
 function download(name,content,type){const url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 document.addEventListener('click',event=>{if(saving){event.preventDefault();event.stopImmediatePropagation();toast('Espera a que termine el guardado actual.');}},true);
 $('#detail-dialog').addEventListener('cancel',event=>{if(saving)event.preventDefault();});
-document.addEventListener('click',async event=>{if(saving){event.preventDefault();toast('Espera a que termine el guardado actual.');return;}try{
+document.addEventListener('click',async event=>{try{
   const b=event.target.closest('button,a');if(!b)return;
   if(b.dataset.profile){route(b.dataset.profile);return;}
   if(b.hasAttribute('data-start'))return showProfiles();
@@ -259,7 +259,8 @@ document.addEventListener('click',async event=>{if(saving){event.preventDefault(
   if(b.dataset.action==='export'){download(`finflow-${state.profile}-${state.month}.csv`,csvExport(currentRows()),'text/csv;charset=utf-8');toast('CSV del periodo exportado.');return;}
 }catch(error){saveError(error);}});
 
-document.addEventListener('submit',async event=>{if(saving){event.preventDefault();toast('Espera a que termine el guardado actual.');return;}try{
+document.addEventListener('submit',event=>{if(saving){event.preventDefault();event.stopImmediatePropagation();toast('Espera a que termine el guardado actual.');}},true);
+document.addEventListener('submit',async event=>{try{
   if(event.target.id==='transaction-form'){
     event.preventDefault();const f=new FormData(event.target);
     try{
