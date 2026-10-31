@@ -132,14 +132,22 @@ describe('ForecastingService', () => {
     expect(bt.coverage).toBeLessThanOrEqual(100);
   });
 
-  it('backtest con datos insuficientes devuelve métricas en cero', () => {
+  it('backtest con datos insuficientes conserva métricas desconocidas', () => {
     const short = MONTHLY_FINANCIALS.slice(0, 5);
     const bt = ForecastingService.backtest(short, { horizon: 3, metric: 'revenue' });
-    expect(bt.mae).toBe(0);
-    expect(bt.rmse).toBe(0);
-    expect(bt.mape).toBe(0);
-    expect(bt.wape).toBe(0);
-    expect(bt.bias).toBe(0);
-    expect(bt.coverage).toBe(0);
+    expect(bt.available).toBe(false);
+    for (const key of ['mae','rmse','mape','wape','bias','coverage']) expect(bt[key]).toBeNull();
+  });
+  it('does not collapse gaps or duplicate months into a monthly forecast',()=>{
+    const gaps=MONTHLY_FINANCIALS.filter((_,i)=>i!==3);
+    expect(ForecastingService.forecast(gaps).points).toEqual([]);
+    expect(ForecastingService.backtest(gaps).available).toBe(false);
+    expect(ForecastingService.forecast([...MONTHLY_FINANCIALS,MONTHLY_FINANCIALS.at(-1)]).points).toEqual([]);
+  });
+  it('zero validation actuals have absolute error but no invented percentage; window and samples are explicit',()=>{
+    const zero=MONTHLY_FINANCIALS.map(x=>({...x,revenue:0}));const bt=ForecastingService.backtest(zero,{horizon:3});
+    expect(bt.available).toBe(true);expect(bt.mae).toBe(0);expect(bt.mape).toBeNull();expect(bt.wape).toBeNull();
+    expect(bt.validation.count).toBe(3);expect(bt.training.count).toBe(9);expect(bt.samples).toHaveLength(3);
+    expect(ForecastingService.forecast(zero).expectedGrowth).toBeNull();
   });
 });

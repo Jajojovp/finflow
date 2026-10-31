@@ -6,3 +6,9 @@ dist/
 *.local
 .vercel
 *.log
+qa/
+outputs/
+__pycache__/
+.agents/skills/
+/public/downloads/*.apk
+/cxx/

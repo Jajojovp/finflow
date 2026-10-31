@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "FinFlow",
+    "slug": "finflow-mobile",
+    "scheme": "finflow",
+    "version": "1.3.0",
+    "orientation": "portrait",
+    "icon": "./assets/finflow-icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "icon": "./assets/finflow-ios-icon.png",
+      "buildNumber": "5",
+      "bundleIdentifier": "io.sysora.finflow"
+    },
+    "android": {
+      "versionCode": 5,
+      "package": "io.sysora.finflow",
+      "softwareKeyboardLayoutMode": "resize",
+      "adaptiveIcon": {
+        "backgroundColor": "#3478ee",
+        "foregroundImage": "./assets/finflow-icon.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/finflow-icon.png",
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-font",
+      "expo-asset"
+    ]
+  }
+}

@@ -10,7 +10,7 @@ export const CashFlowService = {
     return (series || []).map((d) => ({
       label: d.month?.slice(5),
       month: d.month,
-      net: (d.revenue || 0) - (d.expenses || 0),
+      net: Number.isFinite(d.cashNet) ? d.cashNet : (d.revenue || 0) - (d.expenses || 0),
     }));
   },
 

@@ -48,19 +48,26 @@ const EMPTY_FORECAST = {
   points: [],
   method: 'insufficient-data',
   reason: 'Need at least 5 monthly observations for reliable forecasting',
-  expectedGrowth: 0,
-  sigma: 0,
-  slope: 0,
+  expectedGrowth: null,
+  sigma: null,
+  slope: null,
 };
 
 const EMPTY_BACKTEST = {
-  mae: 0,
-  rmse: 0,
-  mape: 0,
-  wape: 0,
-  bias: 0,
-  coverage: 0,
+  available: false,
+  reason: 'Se necesitan al menos cinco meses de entrenamiento y el horizonte de validación, todos consecutivos.',
+  mae: null,
+  rmse: null,
+  mape: null,
+  wape: null,
+  bias: null,
+  coverage: null,
+  training: null,
+  validation: null,
+  samples: [],
 };
+const index = month => Number(month.slice(0,4))*12+Number(month.slice(5,7));
+const consecutive = (series,metric) => Array.isArray(series) && series.every((point,i)=>point && Number.isFinite(point[metric]) && /^\d{4}-(0[1-9]|1[0-2])$/.test(point.month) && (!i || index(point.month)-index(series[i-1].month)===1));
 
 export const ForecastingService = {
   /**
@@ -75,16 +82,18 @@ export const ForecastingService = {
    * @returns {{
    *   points: Array<{ month: string, value: number, lower: number, upper: number }>,
    *   method: string,
-   *   expectedGrowth: number,
-   *   sigma: number,
-   *   slope: number,
+   *   expectedGrowth: number|null,
+   *   sigma: number|null,
+   *   slope: number|null,
    * }}
    */
   forecast(series, options = {}) {
-    const horizon = Math.max(1, options.horizon || 6);
+    const horizon = options.horizon ?? 6;
     const metric = options.metric || 'revenue';
 
-    const data = (series || []).filter((d) => d && Number.isFinite(d[metric]));
+    if(!Number.isInteger(horizon)||horizon<1||horizon>60) return {...EMPTY_FORECAST,reason:'El horizonte debe ser de 1 a 60 meses.'};
+    if(!consecutive(series ?? [],metric)) return {...EMPTY_FORECAST,reason:'Se requieren meses consecutivos y valores declarados; no se rellenan ni comprimen los meses ausentes.'};
+    const data = series || [];
     const n = data.length;
     if (n < MIN_POINTS) {
       return { ...EMPTY_FORECAST };
@@ -155,14 +164,17 @@ export const ForecastingService = {
 
     // expectedGrowth: pctChange sobre el ULTIMO valor del metric (no revenue fijo).
     const growth = MathUtils.pctChange(last[metric], points[0]?.value);
-    const expectedGrowth = growth == null ? 0 : growth;
+    const expectedGrowth = growth == null ? null : growth;
 
     return {
       points,
       method: 'linear-trend + monthly seasonality',
-      expectedGrowth: MathUtils.round(expectedGrowth, 4),
+      expectedGrowth: expectedGrowth===null?null:MathUtils.round(expectedGrowth, 4),
       sigma: MathUtils.round(sigma),
       slope: MathUtils.round(slope),
+      observations:n,
+      training:{from:data[0].month,to:last.month,count:n},
+      confidence:0.95,
     };
   },
 
@@ -173,15 +185,20 @@ export const ForecastingService = {
    * @param {Array<{ month: string, [metric]: number }>} series
    * @param {{ horizon?: number, metric?: string }} options
    * @returns {{
-   *   mae: number, rmse: number, mape: number, wape: number,
-   *   bias: number, coverage: number,
+   *   available:boolean, reason:string|null,
+   *   mae:number|null, rmse:number|null, mape:number|null, wape:number|null,
+   *   bias:number|null, coverage:number|null,
+   *   training:{from:string,to:string,count:number}|null,
+   *   validation:{from:string,to:string,count:number}|null,
+   *   samples:Array<{month:string,actual:number,predicted:number,error:number,lower:number,upper:number}>,
    * }}
    */
   backtest(series, options = {}) {
-    const horizon = Math.max(1, options.horizon || 3);
+    const horizon = options.horizon ?? 3;
     const metric = options.metric || 'revenue';
 
-    const data = (series || []).filter((d) => d && Number.isFinite(d[metric]));
+    if(!Number.isInteger(horizon)||horizon<1||horizon>24||!consecutive(series ?? [],metric)) return {...EMPTY_BACKTEST,reason:'Horizonte inválido o historial con meses ausentes/valores desconocidos.'};
+    const data = series || [];
     if (data.length < MIN_POINTS + horizon) {
       return { ...EMPTY_BACKTEST };
     }
@@ -190,7 +207,7 @@ export const ForecastingService = {
     const fc = this.forecast(truncated, { horizon, metric });
     const points = fc.points || [];
 
-    // Sin banda (insufficient-data) => coverage 0 y métricas vacías.
+    // Sin banda no existe una evaluación calculable: métricas desconocidas.
     if (points.length === 0) {
       return { ...EMPTY_BACKTEST };
     }
@@ -212,8 +229,8 @@ export const ForecastingService = {
       absErrors.push(Math.abs(err));
       squaredErrors.push(err * err);
       absActuals.push(Math.abs(actual));
-      // actual == 0 contribuye 0 al MAPE (evita división por cero).
-      mapeTerms.push(actual === 0 ? 0 : Math.abs(err) / Math.abs(actual));
+      // El error porcentual no existe con base cero; se conserva el error absoluto.
+      if(actual!==0) mapeTerms.push(Math.abs(err) / Math.abs(actual));
       // Coverage: actual dentro de [pred - band, pred + band] via lower/upper.
       if (actual >= points[i].lower && actual <= points[i].upper) covered += 1;
     }
@@ -222,10 +239,15 @@ export const ForecastingService = {
     const coverage = covered / points.length * 100;
 
     return {
+      available:true,
+      reason:null,
+      training:{from:truncated[0].month,to:truncated.at(-1).month,count:truncated.length},
+      validation:{from:data.at(-horizon).month,to:data.at(-1).month,count:points.length},
+      samples:points.map((p,i)=>({month:p.month,actual:actuals[i],predicted:p.value,error:errors[i],lower:p.lower,upper:p.upper})),
       mae: MathUtils.round(MathUtils.mean(absErrors), 4),
       rmse: MathUtils.round(Math.sqrt(MathUtils.mean(squaredErrors)), 4),
-      mape: MathUtils.round(MathUtils.mean(mapeTerms) * 100, 4),
-      wape: MathUtils.round(denomWape ? MathUtils.sum(absErrors) / denomWape * 100 : 0, 4),
+      mape: mapeTerms.length?MathUtils.round(MathUtils.mean(mapeTerms) * 100, 4):null,
+      wape: denomWape?MathUtils.round(MathUtils.sum(absErrors) / denomWape * 100, 4):null,
       bias: MathUtils.round(MathUtils.mean(errors), 4),
       coverage: MathUtils.round(coverage, 1),
     };

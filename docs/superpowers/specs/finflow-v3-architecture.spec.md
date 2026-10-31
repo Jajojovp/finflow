@@ -7,7 +7,7 @@ mandatory: true
 
 # FinFlow V3 — Especificación de Arquitectura
 
-> Documento normativo. En conflicto entre este spec y el código de V2, este spec gana hasta enmienda. Toda decisión material adicional se registra como ADR en `docs/adr/NNNN-titulo.md` (ver §13).
+> Enmienda de alcance, 30-10-2026: este documento conserva la propuesta V3 histórica. Para la versión **Crecimiento** prevalecen [su especificación](../../CRECIMIENTO.md) y [ADR 0011](../../adr/0011-crecimiento-evolutivo.md): continuidad del código, diseño claro confirmado, gratuidad y expansión progresiva. Las reescrituras, eliminaciones, backend obligatorio y cambios de infraestructura aquí propuestos no son instrucciones de ejecución de Crecimiento. Toda decisión material adicional se registra en `docs/adr/NNNN-titulo.md`.
 > Referencia obligatoria previa: `docs/audit/analysis-report.md` (auditoría V2 con 75 funcionalidades clasificadas y 41 hallazgos `archivo:línea`).
 
 ---

@@ -1,0 +1,9 @@
+{
+  "cli": { "version": ">=23.2.0", "appVersionSource": "remote" },
+  "build": {
+    "apk": { "distribution": "internal", "android": { "buildType": "apk" } },
+    "ios-preview": { "distribution": "internal" },
+    "production": { "distribution": "store", "autoIncrement": true }
+  },
+  "submit": { "production": {} }
+}

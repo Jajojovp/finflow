@@ -1,0 +1,5 @@
+.account-dialog{width:min(440px,calc(100% - 40px));border:1px solid var(--border,#e5eaf0);border-radius:24px;padding:30px;color:var(--ink,#26364a);background:var(--surface,#fff);box-shadow:0 24px 90px #172b4d26}
+.account-dialog::backdrop{background:#18263c55;backdrop-filter:blur(8px)}
+.account-dialog h2{font-size:28px;letter-spacing:-1px;margin:0 0 14px}.account-dialog p{line-height:1.6}.account-dialog .account-note{color:var(--muted,#627083);font-size:14px}.account-dialog .button{margin:12px 8px 0 0}.account-dialog [aria-disabled=true]{opacity:.55;cursor:default}.account-dialog [role=status]{font-size:14px;color:#627083}.account-nav{border:0;background:none;font:inherit;color:inherit;cursor:pointer}
+.account-privacy{font-size:14px;color:#3478ee}
+.user-avatar{border:0;padding:0;cursor:pointer}

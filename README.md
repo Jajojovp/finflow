@@ -1,3 +1,29 @@
+# Versión integrada · 2.6.0 · Crecimiento
+
+Esta evolución parte del historial original de **Jajojovp/finflow** y conserva su motor financiero. Mantiene el diseño claro, la navegación y los tres perfiles de la aplicación publicada en [finflow.sysora.io](https://finflow.sysora.io).
+
+Web y app admiten 176 monedas ISO 4217, con búsqueda por nombre o código: CLP, ARS, USD y CAD aparecen primero. La elección se guarda por espacio o cliente y se aplica a importes, análisis y metas. Cambiar la moneda no convierte las cifras mediante un tipo de cambio. Consulta [las monedas y su precisión](docs/CURRENCIES.md).
+
+**[Crecimiento](docs/CRECIMIENTO.md)** amplía la base de datos protegidos con recurrentes, deudas y abonos, patrimonio fechado, presupuestos por mes, agenda de cobros/pagos y caja de 13 semanas. Asesor incorpora portafolio por moneda, informes individuales y alertas locales. Web y Expo comparten reglas y formularios; vincular pagos existentes no duplica movimientos. [Implementación, comprobaciones y límites](docs/GROWTH-IMPLEMENTATION.md).
+
+La entrega conjunta corresponde a web 2.6.0 y Android 1.3.0 (código 5), sin subidas de fases intermedias. El [catálogo de descargas](https://finflow.sysora.io/descargar/) muestra el estado efectivo de distribución y la huella del APK. El Site privado conserva la fase anterior: la conexión actual devuelve `project_not_found`; no se cambia su identidad ni audiencia.
+
+En **Empresa o Asesor → Resultados** se pueden consultar los servicios originales de indicadores, flujo de caja, pronósticos, anomalías, comparaciones, covenants, variaciones y propuestas, alimentados por los movimientos de cada entidad. El balance, presupuesto de ventas y límites se editan en ese mismo panel. La evidencia y los supuestos se pueden exportar.
+
+El almacenamiento sigue siendo local; la actualización conserva los registros existentes del mismo dominio. El acceso opcional con Google utiliza el proyecto `finflow-513111` y abre un espacio independiente por cuenta, conservando el modo local anterior. No hay sincronización entre dispositivos ni conexiones bancarias. Consulta [el acceso y sus límites](docs/GOOGLE-AUTH.md) y [privacidad](https://finflow.sysora.io/privacidad/). Las referencias de comparación son metas declaradas, no estadísticas sectoriales verificadas. Las propuestas solo registran decisiones locales.
+
+Consulta [la integración y criterios de aceptación](docs/INTEGRATION-2026-10.md) y [la verificación](docs/INTEGRATION-VERIFICATION.md). El código se ofrece bajo MIT; GSAP conserva su licencia propia.
+
+La app para iOS y Android está en [`mobile/`](mobile/README.md), dentro de este mismo historial. Comparte los servicios financieros originales y la paleta clara, con navegación nativa, SQLite local, tres perfiles y movimientos editables. Utiliza las guías oficiales de Expo; consulta [la validación y sus límites](docs/MOBILE-VERIFICATION.md) y [los hallazgos de herramientas](mobile/SECURITY.md). La web publicada y la app guardan datos separados.
+
+El [APK Android 1.3.0 firmado para ARM64](https://finflow.sysora.io/downloads/finflow-1.3.0.apk) tiene procedencia, firma y huella verificadas antes de activar su descarga. La instalación en un teléfono físico sigue pendiente de comprobación.
+
+La página de [descargas e instalación](https://finflow.sysora.io/descargar/) reúne los canales disponibles para Android, iPhone y web. Las descargas nativas solo se habilitan después de verificar sus instaladores; iPhone también dispone de la opción web gratuita desde Safari. La compilación local de Android y la protección de su firma están descritas en [DISTRIBUTION.md](docs/DISTRIBUTION.md).
+
+Para desarrollar esta versión utiliza Node 22.12 o posterior compatible con `package.json`. Los apartados siguientes se conservan como documentación de la versión original; las capacidades publicadas y sus límites se describen arriba.
+
+---
+
 # FinFlow — Financial Intelligence Engine
 
 > **Decision clarity in real-time.** AI-powered financial decision engine for modern businesses.

@@ -1,19 +1,7 @@
 // FinFlow formatting utilities — fintech-grade, locale-aware (en-US by default).
 // Used by MetricCard and other display components.
 
-const FORMATTERS_CACHE = {};
-
-function getCurrencyFormatter(currency = 'USD') {
-  if (!FORMATTERS_CACHE[currency]) {
-    FORMATTERS_CACHE[currency] = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    });
-  }
-  return FORMATTERS_CACHE[currency];
-}
+import { formatMoney } from '../workspace/currencies.mjs';
 
 const CURRENCY_SYMBOLS = {
   USD: '$', EUR: '€', GBP: '£', JPY: '¥', CNY: '¥', KRW: '₩',
@@ -26,20 +14,6 @@ const CURRENCY_SYMBOLS = {
   ARS: 'AR$', COP: 'COL$', CLP: 'CL$', PEN: 'S/',
 };
 
-const USD = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
-
-const USD_COMPACT = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  notation: 'compact',
-  maximumFractionDigits: 1,
-});
-
 const NUMBER = new Intl.NumberFormat('en-US');
 
 const NUMBER_COMPACT = new Intl.NumberFormat('en-US', {
@@ -51,19 +25,7 @@ export const getCurrencySymbol = (currency = 'USD') => CURRENCY_SYMBOLS[currency
 
 export const fmt = {
   // Currency: 1234.5 -> "$1,234" (USD default, parametrizable by currency)
-  currency: (v, { sign = false, currency = 'USD' } = {}) => {
-    if (v == null || Number.isNaN(Number(v))) return '—';
-    const n = Number(v);
-    if (currency === 'USD') {
-      const s = USD.format(Math.abs(n));
-      if (sign && n > 0) return `+${s}`;
-      return n < 0 ? `-${s}` : s;
-    }
-    const formatter = getCurrencyFormatter(currency);
-    const s = formatter.format(Math.abs(n));
-    if (sign && n > 0) return `+${s}`;
-    return n < 0 ? `-${s}` : s;
-  },
+  currency: (v, { sign = false, currency = 'USD' } = {}) => formatMoney(v, currency, { locale: 'en-US', sign }),
 
   // Percent: 0.123 -> "12.30%" (input is a ratio). Pass { raw: true } to treat input as already-percent.
   percent: (v, { decimals = 2, raw = false } = {}) => {
@@ -86,10 +48,7 @@ export const fmt = {
   },
 
   // Compact currency: 1234567 -> "$1.2M"
-  currencyCompact: (v) => {
-    if (v == null || Number.isNaN(Number(v))) return '—';
-    return USD_COMPACT.format(Number(v));
-  },
+  currencyCompact: (v, { currency = 'USD' } = {}) => formatMoney(v, currency, { locale: 'en-US', compact: true }),
 
   // Date: ISO/date -> "MMM d, yyyy"
   date: (v) => {
