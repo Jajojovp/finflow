@@ -1,6 +1,6 @@
 # FinFlow · Crecimiento
 
-Estado: especificación de la próxima versión; funcionalidades nuevas pendientes de implementación.
+Estado al 31 de octubre de 2026: desarrollo funcional de los hitos 0–5 implementado. Entrega conjunta 2.6.0 / Android 1.3.0 en comprobación local, sin subidas intermedias. [Implementación, contratos y límites](GROWTH-IMPLEMENTATION.md). El piloto comercial sigue condicionado; la revisión visual se aplazó por instrucción del titular.
 Fecha: 30 de octubre de 2026. Responsable de producto: Jairo.
 Base: web 2.4.0 y Android 1.1.0, revisión `e9fc95b2e79e58b962e3484ff23b20f6c3d1502c`.
 
@@ -17,7 +17,7 @@ Ampliar FinFlow para comprender, administrar y anticipar las finanzas de persona
 
 El diseño oscuro Dark Luxe citado en el documento de origen corresponde a una etapa histórica del repositorio. Para esta versión rige la confirmación del diseño claro. La opción de apariencia ya existente se conserva.
 
-## Base comprobada frente al documento de origen
+## Base comprobada al iniciar el trabajo, frente al documento de origen
 
 La revisión de código distingue lo existente de lo pendiente; no es una nueva certificación de ejecución en dispositivos.
 
